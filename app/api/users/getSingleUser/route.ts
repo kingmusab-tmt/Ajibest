@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { authOptions } from "@/app/auth";
 import { getServerSession } from "next-auth/next";
 import dbConnect from "../../../../utils/connectDB";
 import User from "../../../../models/user";

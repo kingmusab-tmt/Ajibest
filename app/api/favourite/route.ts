@@ -2,13 +2,13 @@ import { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/utils/connectDB";
 import mongoose from "mongoose";
 import User from "@/models/user";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/app/auth";
 import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
 
 dbConnect();
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
+export async function POST(req) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
