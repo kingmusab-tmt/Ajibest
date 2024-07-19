@@ -5,7 +5,7 @@ import authMiddleware from "../../../../utils/authMiddleware";
 import roleMiddleware from "../../../../utils/roleMiddleware";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { authOptions } from "@/app/auth"
 
 export async function DELETE(req) {
   const _id = req.nextUrl.searchParams.get("id");

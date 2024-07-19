@@ -1,6 +1,6 @@
 // import authMiddleware from "../../../../utils/authMiddleware";
 // import roleMiddleware from "../../../../utils/roleMiddleware";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/auth";
 import { getServerSession } from "next-auth";
 import User from "@/models/user";
 import dbConnect from "@/utils/connectDB";
@@ -16,7 +16,7 @@ export async function PUT(req) {
   } else {
     const session = await getServerSession(authOptions);
     const email = session?.user?.email;
-    
+
     filter = { email };
   }
 
