@@ -4,11 +4,6 @@ import Property from "@/models/properties";
 import User from "@/models/user";
 import Transaction from "@/models/transaction";
 import { NextResponse } from "next/server";
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
 
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
 
