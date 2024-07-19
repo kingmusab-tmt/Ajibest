@@ -80,9 +80,9 @@ const AdminPage = () => {
         return (
           <>
             <DashboardPage
-              transactions={undefined}
-              users={undefined}
-              properties={undefined}
+            // transactions={undefined}
+            // users={undefined}
+            // properties={undefined}
             />
           </>
         );
@@ -99,9 +99,9 @@ const AdminPage = () => {
       default:
         return (
           <DashboardPage
-            transactions={undefined}
-            users={undefined}
-            properties={undefined}
+          // transactions={undefined}
+          // users={undefined}
+          // properties={undefined}
           />
         );
     }
