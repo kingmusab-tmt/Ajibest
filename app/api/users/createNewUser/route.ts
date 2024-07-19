@@ -100,9 +100,3 @@ export async function POST(req: NextRequest, res: NextResponse) {
     );
   }
 }
-
-export const config = {
-  api: {
-    bodyParser: true,
-  },
-};
