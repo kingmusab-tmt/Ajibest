@@ -27,7 +27,7 @@ export interface User {
   dateOfRegistration: Date;
   lastLoginTime?: Date;
   favouriteProperties: string[];
-  walletBalance: number;
+  remainingBalance: number;
   isActive: boolean;
   emailToken: string;
   totalPropertyPurchased: number;

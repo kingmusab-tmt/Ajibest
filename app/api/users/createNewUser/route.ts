@@ -70,7 +70,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       lga,
       address,
       dateOfRegistration: new Date(),
-      walletBalance: 0,
+      remainingBalance: 0,
       emailToken: token,
       isActive: false,
       role: "User",
