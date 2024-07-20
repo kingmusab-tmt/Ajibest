@@ -36,12 +36,36 @@ interface UserProfileProps {
     emailToken: string;
     totalPropertyPurchased: number;
     totalPaymentMade: number;
-    nextPaymentDueDate: Date;
+    totalPaymentToBeMade: number;
     referralEarnings: number;
     numberOfReferrals: number;
-    propertyPurchased: string[];
-    propertyUnderPayment: string[];
-    propertyRented: string[];
+    propertyUnderPayment: {
+      title: string;
+      userEmail: string;
+      propertyId: string;
+      propertyType: "House" | "Land" | "Farm";
+      paymentMethod: "installment" | "payOnce";
+      paymentPurpose: "For Sale" | "For Renting";
+      paymentHisotry: {
+        paymentDate: Date;
+        nextPaymentDate: Date;
+        amount: number;
+        propertyPrice: number;
+        totalPaymentMade: number;
+        remainingBalance: number;
+        paymentCompleted: boolean;
+      };
+    };
+    propertyPurOrRented: {
+      title: string;
+      userEmail: string;
+      propertyId: string;
+      paymentDate: Date;
+      propertyType: "House" | "Land" | "Farm";
+      paymentMethod: "installment" | "payOnce";
+      paymentPurpose: "For Sale" | "For Renting";
+      propertyPrice: number;
+    };
   };
 }
 
@@ -158,15 +182,12 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
             {user.favouriteProperties.join(", ")}
           </p>
           <p>
-            <strong>Purchased Properties:</strong>{" "}
-            {user.propertyPurchased.join(", ")}
+            <strong>Total Purchased/Rented Properties:</strong>{" "}
+            {Object.keys(user.propertyPurOrRented).length}
           </p>
           <p>
             <strong>Properties Under Payment:</strong>{" "}
-            {user.propertyUnderPayment.join(", ")}
-          </p>
-          <p>
-            <strong>Rented Properties:</strong> {user.propertyRented.join(", ")}
+            {Object.keys(user.propertyUnderPayment).length}
           </p>
         </div>
         <div>
@@ -181,7 +202,9 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
           </p>
           <p>
             <strong>Next Payment Due Date:</strong>{" "}
-            {user.nextPaymentDueDate?.toString()}
+            {user.propertyUnderPayment["paymentHistory"]
+              .pop()
+              ?.nextPaymentDate?.toString()}
           </p>
           <p>
             <strong>Referral Earnings:</strong> NGN

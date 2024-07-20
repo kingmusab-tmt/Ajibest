@@ -485,9 +485,11 @@ const categorizeTransactions = (transactions) => {
 
   transactions.forEach((transaction) => {
     const createdAt = new Date(transaction.createdAt);
+    const createdAtDate = new Date(createdAt);
+
     const now = new Date();
 
-    const diffTime = Math.abs(now - createdAt);
+    const diffTime = Math.abs(Number(now) - Number(createdAt));
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays <= 1) {

@@ -156,9 +156,9 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({ propertyId }) => {
         <div>
           <div className="p-2 rounded-lg relative max-w-[150px]">
             <EditableImage link={imageSrc} setLink={handleImageChange} />
-            {errors.image && (
+            {errors["image"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.image.message}
+                {errors["image"].message}
               </p>
             )}
           </div>
@@ -174,9 +174,9 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({ propertyId }) => {
               onChange={handleChange}
               className="w-full mt-1 p-2 border border-gray-300 rounded-md"
             />
-            {errors.title && (
+            {errors["title"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.title.message}
+                {errors["title"].message}
               </p>
             )}
           </div>
@@ -189,9 +189,9 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({ propertyId }) => {
               onChange={handleChange}
               className="w-full mt-1 p-2 border border-gray-300 rounded-md"
             />
-            {errors.description && (
+            {errors["description"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.description.message}
+                {errors["description"].message}
               </p>
             )}
           </div>
@@ -206,9 +206,9 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({ propertyId }) => {
               onChange={handleChange}
               className="w-full mt-1 p-2 border border-gray-300 rounded-md"
             />
-            {errors.location && (
+            {errors["location"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.location.message}
+                {errors["location"].message}
               </p>
             )}
           </div>
@@ -227,9 +227,9 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({ propertyId }) => {
                 </option>
               ))}
             </select>
-            {errors.listingPurpose && (
+            {errors["listingPurpose"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.listingPurpose.message}
+                {errors["listingPurpose"].message}
               </p>
             )}
           </div>
@@ -244,9 +244,9 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({ propertyId }) => {
               onChange={handleChange}
               className="w-full mt-1 p-2 border border-gray-300 rounded-md"
             />
-            {errors.price && (
+            {errors["price"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.price.message}
+                {errors["price"].message}
               </p>
             )}
           </div>
@@ -265,8 +265,10 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({ propertyId }) => {
                 </option>
               ))}
             </select>
-            {errors.size && (
-              <p className="text-red-500 text-sm mt-1">{errors.size.message}</p>
+            {errors["size"] && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors["size"].message}
+              </p>
             )}
           </div>
         </div>
@@ -280,9 +282,9 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({ propertyId }) => {
               onChange={handleChange}
               className="mt-1 block w-full border border-gray-300 rounded-md p-2"
             />
-            {errors.rentalDuration && (
+            {errors["rentalDuration"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.rentalDuration.message}
+                {errors["rentalDuration"].message}
               </p>
             )}
           </div>
@@ -295,9 +297,9 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({ propertyId }) => {
               onChange={handleChange}
               className="w-full mt-1 p-2 border border-gray-300 rounded-md"
             />
-            {errors.amenities && (
+            {errors["amenities"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.amenities.message}
+                {errors["amenities"].message}
               </p>
             )}
           </div>
@@ -312,9 +314,9 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({ propertyId }) => {
               onChange={handleChange}
               className="mt-1"
             />
-            {errors.purchased && (
+            {errors["purchased"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.purchased.message}
+                {errors["purchased"].message}
               </p>
             )}
           </div>
@@ -327,9 +329,9 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({ propertyId }) => {
               onChange={handleChange}
               className="mt-1"
             />
-            {errors.rented && (
+            {errors["rented"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.rented.message}
+                {errors["rented"].message}
               </p>
             )}
           </div>
@@ -350,9 +352,9 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({ propertyId }) => {
                 </option>
               ))}
             </select>
-            {errors.propertyType && (
+            {errors["propertyType"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.propertyType.message}
+                {errors["propertyType"].message}
               </p>
             )}
           </div>
@@ -368,9 +370,9 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({ propertyId }) => {
                   onChange={handleChange}
                   className="w-full mt-1 p-2 border border-gray-300 rounded-md"
                 />
-                {errors.plotNumber && (
+                {errors["plotNumber"] && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors.plotNumber.message}
+                    {errors["plotNumber"].message}
                   </p>
                 )}
               </div>
@@ -391,9 +393,9 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({ propertyId }) => {
                     </option>
                   ))}
                 </select>
-                {errors.bedrooms && (
+                {errors["bedrooms"] && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors.bedrooms.message}
+                    {errors["bedrooms"].message}
                   </p>
                 )}
               </div>

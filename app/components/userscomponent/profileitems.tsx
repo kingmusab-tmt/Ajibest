@@ -60,7 +60,10 @@ const UserInfo: React.FC = () => {
           </span>
           <h3 className="text-lg font-semibold mb-2">Remaining Balance</h3>
           <p className="text-lg">
-            {formatter.format(userData?.remainingBalance)}
+            {formatter.format(
+              userData?.propertyUnderPayment["paymentHistory"].at(-1)
+                .remainingBalance
+            )}
           </p>
         </div>
         <div className="w-1/2 bg-white border rounded-lg p-4 shadow-lg shadow-blue-600">
@@ -106,7 +109,10 @@ const UserInfo: React.FC = () => {
           </span>
           <h3 className="text-lg font-semibold mb-2">Total Payment Made</h3>
           <p className="text-lg">
-            {formatter.format(userData?.totalPaymentMade)}
+            {" "}
+            {userData?.totalPaymentMade
+              ? formatter.format(userData.totalPaymentMade)
+              : ""}{" "}
           </p>
         </div>
         <div className="w-1/2 bg-white border rounded-lg p-4 shadow-lg shadow-yellow-600">
@@ -129,9 +135,8 @@ const UserInfo: React.FC = () => {
           <h3 className="text-lg font-semibold mb-2">
             Total Payment To be Made
           </h3>
-          <p className="text-lg">
-            {formatter.format(userData?.totalPaymentToBeMade)}
-          </p>
+          <p className="text-lg"> {userData?.totalPaymentToBeMade ? formatter.format(userData.totalPaymentToBeMade) : ''} </p>
+
         </div>
         {session?.user.role === "Agent" && (
           <>

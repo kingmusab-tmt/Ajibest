@@ -80,7 +80,7 @@ const ProfileTopNavBar: React.FC<ProfileTopNavBarProps> = ({
         )}
         <div className="relative">
           <Image
-            src={imageSrc}
+            src={`${imageSrc}`}
             alt="Profile"
             width={40}
             height={40}

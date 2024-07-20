@@ -22,6 +22,7 @@ export interface User {
   isActive: boolean;
   emailToken: string;
   totalPropertyPurchased: number;
+  totalPaymentToBeMade: number;
   totalPaymentMade: number;
   isLoggedIn: boolean;
   nextPaymentDueDate: Date;

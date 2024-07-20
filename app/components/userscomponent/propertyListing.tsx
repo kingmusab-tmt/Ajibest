@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -20,6 +20,7 @@ import {
   InputLabel,
   FormControl,
   CircularProgress,
+  SelectChangeEvent,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useTheme } from "@mui/material/styles";
@@ -138,9 +139,16 @@ const PropertyListing = () => {
     applyFilters();
   }, [filters, properties]);
 
-  const handleFilterChange = (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>
-  ) => {
+  // const handleFilterChange = (
+  //   event: React.ChangeEvent<{ name?: string; value: unknown }>
+  // ) => {
+  //   const { name, value } = event.target;
+  //   setFilters((prevFilters) => ({
+  //     ...prevFilters,
+  //     [name as string]: value as string,
+  //   }));
+  // };
+  const handleFilterChange = (event: SelectChangeEvent<string>) => {
     const { name, value } = event.target;
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -271,12 +279,12 @@ const PropertyListing = () => {
               ))}
             </Select>
           </FormControl>
-          <TextField
+          {/* <TextField
             label="Location"
             name="location"
             value={filters.location}
             onChange={handleFilterChange}
-          />
+          /> */}
         </Box>
         <Box
           sx={{
