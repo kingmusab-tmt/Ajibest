@@ -10,6 +10,7 @@ import TransactionHistory from "../components/generalcomponents/transactionhisto
 import UpdateProfile from "../components/userscomponent/updateProfile";
 import PropertyListing from "../components/userscomponent/propertyListing";
 import MyProperty from "../components/userscomponent/userproperties";
+import ProtectedRoute from "../components/generalcomponents/ProtectedRoute";
 
 interface Notification {
   id: number;
@@ -108,55 +109,57 @@ const Userprofile = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      {isClient ? (
-        <>
-          <UserDashboardSidebar
-            user={user}
-            isOpen={isSidebarOpen}
-            toggleSidebar={toggleSidebar}
-            setSelectedComponent={setSelectedComponent}
-          />
-          <div
-            className={`flex flex-col flex-grow transition-margin duration-300 ${
-              isSidebarOpen ? "ml-64" : "ml-0 sm:ml-24"
-            }`}
-          >
-            <ProfileTopNavBar
+    <ProtectedRoute roles={["User", "Agent", "Admin"]}>
+      <div className="flex h-screen overflow-hidden">
+        {isClient ? (
+          <>
+            <UserDashboardSidebar
               user={user}
-              notifications={notifications}
+              isOpen={isSidebarOpen}
+              toggleSidebar={toggleSidebar}
               setSelectedComponent={setSelectedComponent}
             />
-            <main className=" flex-grow bg-white overflow-auto max-h-svh">
-              {renderComponent()}
-            </main>
-          </div>
-        </>
-      ) : (
-        <>
-          <UserDashboardSidebar
-            user={user}
-            isOpen={isSidebarOpen}
-            toggleSidebar={toggleSidebar}
-            setSelectedComponent={setSelectedComponent}
-          />
-          <div
-            className={`flex flex-col flex-grow transition-margin duration-300 ${
-              isSidebarOpen ? "ml-64" : "ml-0 sm:ml-24"
-            }`}
-          >
-            <ProfileTopNavBar
+            <div
+              className={`flex flex-col flex-grow transition-margin duration-300 ${
+                isSidebarOpen ? "ml-64" : "ml-0 sm:ml-24"
+              }`}
+            >
+              <ProfileTopNavBar
+                user={user}
+                notifications={notifications}
+                setSelectedComponent={setSelectedComponent}
+              />
+              <main className=" flex-grow bg-white overflow-auto max-h-svh">
+                {renderComponent()}
+              </main>
+            </div>
+          </>
+        ) : (
+          <>
+            <UserDashboardSidebar
               user={user}
-              notifications={notifications}
+              isOpen={isSidebarOpen}
+              toggleSidebar={toggleSidebar}
               setSelectedComponent={setSelectedComponent}
             />
-            <main className=" flex-grow bg-white overflow-auto max-h-svh">
-              {renderComponent()}
-            </main>
-          </div>
-        </>
-      )}
-    </div>
+            <div
+              className={`flex flex-col flex-grow transition-margin duration-300 ${
+                isSidebarOpen ? "ml-64" : "ml-0 sm:ml-24"
+              }`}
+            >
+              <ProfileTopNavBar
+                user={user}
+                notifications={notifications}
+                setSelectedComponent={setSelectedComponent}
+              />
+              <main className=" flex-grow bg-white overflow-auto max-h-svh">
+                {renderComponent()}
+              </main>
+            </div>
+          </>
+        )}
+      </div>
+    </ProtectedRoute>
   );
 };
 
