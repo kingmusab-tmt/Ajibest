@@ -10,6 +10,7 @@ import ManageTransactions from "../components/admincomponents/manageTransactions
 import ManagePayments from "../components/admincomponents/managePayment";
 import UpdateProfile from "../components/userscomponent/updateProfile";
 import DashboardPage from "../components/admincomponents/admindashboard";
+import ProtectedRoute from "../components/generalcomponents/ProtectedRoute";
 
 interface Notification {
   _id: string;
@@ -108,28 +109,30 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <UserDashboardSidebar
-        user={user}
-        isOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
-        setSelectedComponent={setSelectedComponent}
-      />
-      <div
-        className={`flex flex-col flex-grow transition-margin duration-300 ${
-          isSidebarOpen ? "ml-64" : "ml-0 sm:ml-24"
-        }`}
-      >
-        <ProfileTopNavBar
+    <ProtectedRoute roles={["Admin"]}>
+      <div className="flex h-screen overflow-hidden">
+        <UserDashboardSidebar
           user={user}
-          notifications={notifications}
+          isOpen={isSidebarOpen}
+          toggleSidebar={toggleSidebar}
           setSelectedComponent={setSelectedComponent}
         />
-        <main className="flex-grow p-4 bg-white overflow-auto">
-          {renderComponent()}
-        </main>
+        <div
+          className={`flex flex-col flex-grow transition-margin duration-300 ${
+            isSidebarOpen ? "ml-64" : "ml-0 sm:ml-24"
+          }`}
+        >
+          <ProfileTopNavBar
+            user={user}
+            notifications={notifications}
+            setSelectedComponent={setSelectedComponent}
+          />
+          <main className="flex-grow p-4 bg-white overflow-auto">
+            {renderComponent()}
+          </main>
+        </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 };
 
