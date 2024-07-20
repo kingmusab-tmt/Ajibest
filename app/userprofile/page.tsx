@@ -32,6 +32,10 @@ const Userprofile = () => {
   const [selectedComponent, setSelectedComponent] = useState("UserInfo");
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -42,12 +46,18 @@ const Userprofile = () => {
       try {
         const response = await fetch("/api/notify");
         const fetchedNotifications = await response.json();
-        const filteredNotifications = fetchedNotifications.filter(
-          (notification) =>
-            notification.recipient === "all" ||
-            notification.recipient === session?.user?.email
-        );
-        setNotifications(filteredNotifications);
+        if (Array.isArray(fetchedNotifications)) {
+          const filteredNotifications = fetchedNotifications.filter(
+            (notification) =>
+              notification.recipient === "all" ||
+              notification.recipient === session?.user?.email
+          );
+          setNotifications(filteredNotifications);
+        } else {
+          console.error(
+            "Expected an array of notifications, but received something else"
+          );
+        }
       } catch (error) {
         throw error;
       }
@@ -100,26 +110,53 @@ const Userprofile = () => {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <UserDashboardSidebar
-        user={user}
-        isOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
-        setSelectedComponent={setSelectedComponent}
-      />
-      <div
-        className={`flex flex-col flex-grow transition-margin duration-300 ${
-          isSidebarOpen ? "ml-64" : "ml-0 sm:ml-24"
-        }`}
-      >
-        <ProfileTopNavBar
-          user={user}
-          notifications={notifications}
-          setSelectedComponent={setSelectedComponent}
-        />
-        <main className=" flex-grow bg-white overflow-auto max-h-svh">
-          {renderComponent()}
-        </main>
-      </div>
+      {isClient ? (
+        <>
+          <UserDashboardSidebar
+            user={user}
+            isOpen={isSidebarOpen}
+            toggleSidebar={toggleSidebar}
+            setSelectedComponent={setSelectedComponent}
+          />
+          <div
+            className={`flex flex-col flex-grow transition-margin duration-300 ${
+              isSidebarOpen ? "ml-64" : "ml-0 sm:ml-24"
+            }`}
+          >
+            <ProfileTopNavBar
+              user={user}
+              notifications={notifications}
+              setSelectedComponent={setSelectedComponent}
+            />
+            <main className=" flex-grow bg-white overflow-auto max-h-svh">
+              {renderComponent()}
+            </main>
+          </div>
+        </>
+      ) : (
+        <>
+          <UserDashboardSidebar
+            user={user}
+            isOpen={isSidebarOpen}
+            toggleSidebar={toggleSidebar}
+            setSelectedComponent={setSelectedComponent}
+          />
+          <div
+            className={`flex flex-col flex-grow transition-margin duration-300 ${
+              isSidebarOpen ? "ml-64" : "ml-0 sm:ml-24"
+            }`}
+          >
+            <ProfileTopNavBar
+              user={user}
+              notifications={notifications}
+              setSelectedComponent={setSelectedComponent}
+            />
+            <main className=" flex-grow bg-white overflow-auto max-h-svh">
+              {renderComponent()}
+            </main>
+          </div>
+        </>
+      )}
     </div>
   );
 };

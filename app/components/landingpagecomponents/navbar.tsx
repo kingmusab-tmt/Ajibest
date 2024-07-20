@@ -6,8 +6,6 @@ import {
   AiOutlineClose,
   AiOutlineInstagram,
   AiOutlineFacebook,
-  // AiOutlineTwitter,
-  // AiOutlineLinkedin,
   AiOutlineGoogle,
 } from "react-icons/ai";
 import { useSession, signOut } from "next-auth/react";
@@ -113,7 +111,7 @@ const Navbar = () => {
                       session.user.role === "Admin" ? "/admin" : "/userprofile"
                     }
                   >
-                    <a>Dashboard</a>
+                    Dashboard
                   </Link>
                 </li>
                 <li>
@@ -123,7 +121,7 @@ const Navbar = () => {
                     }
                   >
                     <Image
-                      src={imageSrc}
+                      src={`${imageSrc}`}
                       alt="Profile picture"
                       width={30}
                       height={30}

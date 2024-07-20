@@ -8,6 +8,29 @@ declare module "next-auth" {
     user: {
       role?: string | null;
       image: string | null;
+      isActive: boolean | null;
+      id: string | null;
     } & DefaultSession["user"];
+  }
+  interface Session {
+    id: string | null;
+    role: string | null;
+    image: string | null;
+    isActive: boolean | null;
+  }
+
+  interface User {
+    id: string | null;
+    role: string | null;
+    image: string | null;
+    isActive: boolean | null;
+  }
+}
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string | null;
+    role: string | null;
+    image: string | null;
+    isActive: boolean | null;
   }
 }

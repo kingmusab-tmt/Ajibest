@@ -57,6 +57,7 @@ export interface Property {
   title: string;
   description: string;
   location: string;
+  createdAt: Date;
   image: string;
   propertyType: "House" | "Farm" | "Land";
   price: number;
@@ -72,7 +73,7 @@ export interface Property {
 }
 
 export interface Transaction {
-  title: ReactNode;
+  title: string;
   createdAt: string | number | Date;
   _id;
   userName: string;
