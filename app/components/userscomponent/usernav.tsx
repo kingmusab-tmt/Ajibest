@@ -1,4 +1,3 @@
-// components/UserDashboardSidebar.tsx
 import React from "react";
 import Image from "next/image";
 import companyimage from "@/public/ajibestlogo.jpg";
@@ -12,10 +11,10 @@ import {
   FaSignOutAlt,
   FaCreditCard,
 } from "react-icons/fa";
+import { signOut } from "next-auth/react";
 
 interface User {
   name: string;
-  // accountBalance: string;
   isLoggedIn: boolean;
 }
 
@@ -96,15 +95,25 @@ const UserDashboardSidebar: React.FC<UserDashboardSidebarProps> = ({
               { icon: FaSignOutAlt, label: "Logout", component: "" },
             ].map(({ icon: Icon, label, component }, index) => (
               <li key={index}>
-                <button
-                  onClick={() => handleLinkClick(component)}
-                  className="w-full sm:py-5 flex items-center px-4 py-2 text-white hover:bg-gray-700 hover:text-white rounded"
-                  title={label}
-                  // data-tooltip-target="tooltip-right" data-tooltip-placement="right" type="button" class="ms-3 mb-2 md:mb-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  <Icon className="mr-3" />
-                  {isOpen && label}
-                </button>
+                {label === "Logout" ? (
+                  <button
+                    title={label}
+                    className="w-full sm:py-5 flex items-center px-4 py-2 text-white hover:bg-gray-700 hover:text-white rounded"
+                    onClick={() => signOut()}
+                  >
+                    <Icon className="mr-3" />
+                    {isOpen && label}
+                  </button>
+                ) : (
+                  <button
+                    title={label}
+                    className="w-full sm:py-5 flex items-center px-4 py-2 text-white hover:bg-gray-700 hover:text-white rounded"
+                    onClick={() => handleLinkClick(component)}
+                  >
+                    <Icon className="mr-3" />
+                    {isOpen && label}
+                  </button>
+                )}
               </li>
             ))}
           </ul>

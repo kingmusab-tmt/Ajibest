@@ -6,6 +6,8 @@ import {
 } from "react-icons/fa";
 import logo from "../../../public/ajibestlogo.png";
 import Image from "next/image";
+import Link from "next/link";
+import { Link2Icon } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -18,29 +20,29 @@ const Footer = () => {
             <h3 className="font-bold text-lg mb-2">Useful Links</h3>
             <ul>
               <li>
-                <a href="#" className="hover:underline">
+                <Link href="#" className="hover:underline">
                   Buy Property
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:underline">
+                <Link href="#" className="hover:underline">
                   Sell Property
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:underline">
+                <Link href="#" className="hover:underline">
                   Rent Property
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:underline">
+                <Link href="#" className="hover:underline">
                   Listings
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:underline">
+                <Link href="#" className="hover:underline">
                   Newsletter
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -50,24 +52,24 @@ const Footer = () => {
             <h3 className="font-bold text-lg mb-2">About</h3>
             <ul>
               <li>
-                <a href="#" className="hover:underline">
+                <Link href="#" className="hover:underline">
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:underline">
+                <Link href="#" className="hover:underline">
                   How it Works
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:underline">
+                <Link href="#" className="hover:underline">
                   Testimonies
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:underline">
+                <Link href="#" className="hover:underline">
                   Contact Us
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -76,24 +78,24 @@ const Footer = () => {
           <h3 className="font-bold text-lg mb-2">Useful Links</h3>
           <ul>
             <li>
-              <a href="#" className="hover:underline">
+              <Link href="#" className="hover:underline">
                 Privacy Policy
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="hover:underline">
+              <Link href="#" className="hover:underline">
                 Terms and Conditions
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="hover:underline">
+              <Link href="#" className="hover:underline">
                 Copyright Policy
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="hover:underline">
+              <Link href="#" className="hover:underline">
                 Fees and Charges
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -113,9 +115,12 @@ const Footer = () => {
             Borno State
           </p>
           <p>
-            <a href="mailto:emailaddress@gmail.com" className="hover:underline">
+            <Link
+              href="mailto:emailaddress@gmail.com"
+              className="hover:underline"
+            >
               emailaddress@gmail.com
-            </a>
+            </Link>
           </p>
         </div>
       </div>
@@ -126,18 +131,18 @@ const Footer = () => {
           </p>
         </div>
         <div className="flex space-x-4 mt-4 md:mt-0">
-          <a href="#" className="hover:text-gray-300">
+          <Link href="#" className="hover:text-gray-300">
             <FaFacebookF />
-          </a>
-          <a href="#" className="hover:text-gray-300">
+          </Link>
+          <Link href="#" className="hover:text-gray-300">
             <FaTwitter />
-          </a>
-          <a href="#" className="hover:text-gray-300">
+          </Link>
+          <Link href="#" className="hover:text-gray-300">
             <FaLinkedinIn />
-          </a>
-          <a href="#" className="hover:text-gray-300">
+          </Link>
+          <Link href="#" className="hover:text-gray-300">
             <FaInstagram />
-          </a>
+          </Link>
         </div>
       </div>
     </footer>

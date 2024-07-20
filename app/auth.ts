@@ -5,7 +5,8 @@ import User from "@/models/user";
 import connectDB from "@/utils/connectDB";
 import clientPromise from "@/utils/mongoConnect";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import { SessionStrategy } from "next-auth";
+import NextAuth from "next-auth";
+import { NextAuthOptions, SessionStrategy } from "next-auth";
 
 export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET!,
@@ -73,21 +74,21 @@ export const authOptions = {
     updateAge: 1 * 60,
   },
   callbacks: {
-    // async redirect({ url, baseUrl }) {
-    //   return baseUrl;
-    // },
-    async redirect({ url, baseUrl, user }) {
-      if (!user) {
-        // User is not authenticated, redirect to login page
-        return baseUrl + "/login";
-      } else if (user.role === "Admin") {
-        // User is an admin, redirect to admin page
-        return baseUrl + "/admin";
-      } else {
-        // User is not an admin, redirect to user profile page
-        return baseUrl + "/userprofile";
-      }
+    async redirect({ url, baseUrl }) {
+      return baseUrl;
     },
+    // async redirect({ url, baseUrl, user }) {
+    //   if (!user) {
+    //     // User is not authenticated, redirect to login page
+    //     return baseUrl + "/login";
+    //   } else if (user.role === "Admin") {
+    //     // User is an admin, redirect to admin page
+    //     return baseUrl + "/admin";
+    //   } else {
+    //     // User is not an admin, redirect to user profile page
+    //     return baseUrl + "/userprofile";
+    //   }
+    // },
 
     async jwt({ token, trigger, session, user }) {
       if (user) {
@@ -98,18 +99,18 @@ export const authOptions = {
         token.isActive = user.isActive;
         token.role = user.role;
       } else if (trigger === "update" && session?.name) {
-        token.email = user.email;
-        token.name = user.name;
-        token.id = user.id;
-        token.image = user.image;
-        token.isActive = user.isActive;
-        token.role = user.role;
+        token.email = user["email"];
+        token.name = user["name"];
+        token.id = user["id"];
+        token.image = user["image"];
+        token.isActive = user["isActive"];
+        token.role = user["role"];
       }
       return token;
     },
     async session({ session, token }) {
       await connectDB();
-      const userEmail = session.user.email;
+      const userEmail = session?.user?.email;
       const dbUser = await User.findOne({ email: userEmail });
 
       if (dbUser) {
@@ -130,4 +131,4 @@ export const authOptions = {
       return session;
     },
   },
-};
+} as NextAuthOptions;
