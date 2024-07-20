@@ -2,6 +2,7 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 
 interface ITransaction extends Document {
   userName: string;
+  title: string;
   email: string;
   transactionId: string;
   referenceId?: string;
@@ -19,6 +20,7 @@ const transactionSchema = new Schema<ITransaction>(
   {
     userName: { type: String },
     email: { type: String },
+    title: { type: String },
     transactionId: { type: String, unique: true, required: true },
     referenceId: { type: String, unique: true },
     propertyPrice: { type: Number },

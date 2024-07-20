@@ -1,34 +1,69 @@
 import mongoose from "mongoose";
 
+interface INextOfKin {
+  name: string;
+  phoneNumber: string;
+  address: string;
+  image: string;
+  email: string;
+  userAccountNumber: string;
+  userBankName: string;
+  userAccountName: string;
+}
 export interface User {
   id: string;
   username: string;
-  firstName: string;
-  middleName?: string;
-  lastName: string;
+  name: string;
   email: string;
   phoneNumber: string;
   password: string;
   bvnOrNin: string;
   role: string;
+  country: string;
   state: string;
   lga: string;
   address: string;
+  nextOfKin: INextOfKin;
+  userAccountNumber: string;
+  userBankName: string;
+  userAccountName: string;
   image: string;
   dateOfRegistration: Date;
   lastLoginTime?: Date;
   favouriteProperties: mongoose.Types.ObjectId[];
-  walletBalance: number;
+  remainingBalance: number;
   isActive: boolean;
   emailToken: string;
   totalPropertyPurchased: number;
-  totalPaymentToBeMade: number;
   totalPaymentMade: number;
-  isLoggedIn: boolean;
-  nextPaymentDueDate: Date;
+  totalPaymentToBeMade: number;
+  propertyUnderPayment: {
+    title: string;
+    userEmail: string;
+    propertyId: mongoose.Types.ObjectId;
+    propertyType: "House" | "Land" | "Farm";
+    paymentMethod: "installment" | "payOnce";
+    paymentPurpose: "For Sale" | "For Renting";
+    paymentHisotry: {
+      paymentDate: Date;
+      nextPaymentDate: Date;
+      amount: number;
+      propertyPrice: number;
+      totalPaymentMade: number;
+      remainingBalance: number;
+      paymentCompleted: boolean;
+    }[];
+  }[];
+  propertyPurOrRented: {
+    title: string;
+    userEmail: string;
+    propertyId: mongoose.Types.ObjectId;
+    paymentDate: Date;
+    propertyType: "House" | "Land" | "Farm";
+    paymentMethod: "installment" | "payOnce";
+    paymentPurpose: "For Sale" | "For Renting";
+    propertyPrice: number;
+  }[];
   referralEarnings: number;
   numberOfReferrals: number;
-  propertyPurchased: mongoose.Types.ObjectId[];
-  propertyUnderPayment: mongoose.Types.ObjectId[];
-  propertyRented: mongoose.Types.ObjectId[];
 }

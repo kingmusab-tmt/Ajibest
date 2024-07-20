@@ -36,12 +36,12 @@ export async function POST(req) {
         status: 404,
         success: false,
       });
-    } else if (property.rented === true || property.purchased === true) {
-      return Response.json({
-        message: "Property Sold/Rented already",
-        status: 200,
-        success: false,
-      });
+      // } else if (property.rented === true || property.purchased === true) {
+      //   return Response.json({
+      //     message: "Property Sold/Rented already",
+      //     status: 200,
+      //     success: false,
+      //   });
     }
 
     const transactionId = uuidv4();
@@ -50,12 +50,12 @@ export async function POST(req) {
     if (propertyPrice) {
       // New transaction
       const transaction = await Transaction.create({
-        userName: user.name,
+        userName: user?.name,
         email,
         transactionId,
         referenceId,
-        userId: user._id,
-        title: property.title,
+        userId: user?._id,
+        title: property?.title,
         propertyId,
         propertyType,
         paymentMethod,
@@ -73,11 +73,12 @@ export async function POST(req) {
           : { purchased: true };
       await Property.findByIdAndUpdate(propertyId, propertyUpdate);
 
-      const newTotalPaymentMade = user.totalPaymentMade + amount;
-      const newTotalPaymentToBeMade = user.totalPaymentToBeMade + propertyPrice;
+      const newTotalPaymentMade = user?.totalPaymentMade + amount;
+      const newTotalPaymentToBeMade =
+        user?.totalPaymentToBeMade + propertyPrice;
 
       if (paymentMethod === "payOnce") {
-        await User.findByIdAndUpdate(user._id, {
+        await User.findByIdAndUpdate(user?._id, {
           $inc: { totalPropertyPurchased: 1 },
           $set: {
             totalPaymentMade: newTotalPaymentMade,
