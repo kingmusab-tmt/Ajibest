@@ -35,20 +35,32 @@ export interface User {
   totalPaymentToBeMade: number;
   referralEarnings: number;
   numberOfReferrals: number;
-  propertyPurOrRented: {
-    propertyId: string;
-    date: Date;
-    propertyType: string;
-    paymentMethod: string;
-    propertyPrice: number;
-  };
   propertyUnderPayment: {
+    title: string;
+    userEmail: string;
     propertyId: string;
-    nextPaymentDate: Date;
-    propertyType: string;
-    paymentMethod: string;
+    propertyType: "House" | "Land" | "Farm";
+    paymentMethod: "installment" | "payOnce";
+    paymentPurpose: "For Sale" | "For Renting";
+    paymentHisotry: {
+      paymentDate: Date;
+      nextPaymentDate: Date;
+      amount: number;
+      propertyPrice: number;
+      totalPaymentMade: number;
+      remainingBalance: number;
+      paymentCompleted: boolean;
+    };
+  };
+  propertyPurOrRented: {
+    title: string;
+    userEmail: string;
+    propertyId: string;
+    paymentDate: Date;
+    propertyType: "House" | "Land" | "Farm";
+    paymentMethod: "installment" | "payOnce";
+    paymentPurpose: "For Sale" | "For Renting";
     propertyPrice: number;
-    amount: number;
   };
 }
 

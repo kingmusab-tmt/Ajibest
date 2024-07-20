@@ -129,7 +129,7 @@ const MyProperty = () => {
   };
 
   const config = (property: Property, amount: number) => ({
-    email: session?.user.email,
+    email: session?.user.email as string,
     amount: amount * 100,
     publicKey: "pk_test_f6a081e9fa564f361f3a9a63de5cd4dc789cfc73",
   });

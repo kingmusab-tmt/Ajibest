@@ -93,8 +93,11 @@ const FeaturedProperties: React.FC = () => {
     );
   }
 
-  const getSlides = (properties: IProperty[], itemsPerSlide: number) => {
-    const slides = [];
+  const getSlides = (
+    properties: IProperty[],
+    itemsPerSlide: number
+  ): IProperty[][] => {
+    const slides: IProperty[][] = [];
     for (let i = 0; i < properties.length; i += itemsPerSlide) {
       slides.push(properties.slice(i, i + itemsPerSlide));
     }
@@ -107,6 +110,7 @@ const FeaturedProperties: React.FC = () => {
     } else {
       try {
         const response = await axios.post("/api/favourite", { propertyId });
+        // Uncomment and update favoriteProperties state if necessary
         // setFavoriteProperties((prevFavorites) => [
         //   ...prevFavorites,
         //   propertyId,
@@ -118,6 +122,7 @@ const FeaturedProperties: React.FC = () => {
   };
 
   const itemsPerSlide = isLargeScreen ? 3 : isMediumScreen ? 2 : 1;
+
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "NGN",

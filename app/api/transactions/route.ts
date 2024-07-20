@@ -7,7 +7,6 @@ import { getServerSession } from "next-auth";
 export async function GET(req) {
   await dbConnect();
   const session = await getServerSession(authOptions);
-  console.log(session);
   const body = await req.nextUrl.searchParams;
   const sortField = body.get("sortField") || "date";
   const sortOrder = body.get("sortOrder") || "desc";

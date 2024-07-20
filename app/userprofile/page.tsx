@@ -8,7 +8,6 @@ import AccountTabs from "../components/userscomponent/accounttab";
 import UserInfo from "../components/userscomponent/profileitems";
 import TransactionHistory from "../components/generalcomponents/transactionhistory";
 import UpdateProfile from "../components/userscomponent/updateProfile";
-import { getNotifications } from "@/utils/notification";
 import PropertyListing from "../components/userscomponent/propertyListing";
 import MyProperty from "../components/userscomponent/userproperties";
 

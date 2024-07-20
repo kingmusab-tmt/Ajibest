@@ -127,7 +127,7 @@ const NewProperty = () => {
         // setErrors(data.details.errors);
       }
     } catch (error) {
-      setErrorWithTimeout(error);
+      console.log(error);
     }
   };
 
@@ -157,9 +157,9 @@ const NewProperty = () => {
         <div>
           <div className="p-2 rounded-lg relative max-w-[150px]">
             <EditableImage link={imageSrc} setLink={handleImageChange} />
-            {errors.image && (
+            {errors["image"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.image.message}
+                {errors["image"].message}
               </p>
             )}
           </div>
@@ -175,9 +175,9 @@ const NewProperty = () => {
               onChange={handleChange}
               className="w-full mt-1 p-2 border border-gray-300 rounded-md"
             />
-            {errors.title && (
+            {errors["title"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.title.message}
+                {errors["title"].message}
               </p>
             )}
           </div>
@@ -190,9 +190,9 @@ const NewProperty = () => {
               onChange={handleChange}
               className="w-full mt-1 p-2 border border-gray-300 rounded-md"
             />
-            {errors.description && (
+            {errors["description"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.description.message}
+                {errors["description"].message}
               </p>
             )}
           </div>
@@ -205,9 +205,9 @@ const NewProperty = () => {
               onChange={handleChange}
               className="w-full mt-1 p-2 border border-gray-300 rounded-md"
             />
-            {errors.location && (
+            {errors["location"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.location.message}
+                {errors["location"].message}
               </p>
             )}
           </div>
@@ -226,9 +226,9 @@ const NewProperty = () => {
                 </option>
               ))}
             </select>
-            {errors.listingPurpose && (
+            {errors["listingPurpose"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.listingPurpose.message}
+                {errors["listingPurpose"].message}
               </p>
             )}
           </div>
@@ -243,9 +243,9 @@ const NewProperty = () => {
               onChange={handleChange}
               className="w-full mt-1 p-2 border border-gray-300 rounded-md"
             />
-            {errors.price && (
+            {errors["price"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.price.message}
+                {errors["price"].message}
               </p>
             )}
           </div>
@@ -264,8 +264,10 @@ const NewProperty = () => {
                 </option>
               ))}
             </select>
-            {errors.size && (
-              <p className="text-red-500 text-sm mt-1">{errors.size.message}</p>
+            {errors["size"] && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors["size"].message}
+              </p>
             )}
           </div>
         </div>
@@ -285,9 +287,9 @@ const NewProperty = () => {
                 </option>
               ))}
             </select>
-            {errors.propertyType && (
+            {errors["propertyType"] && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.propertyType.message}
+                {errors["propertyType"].message}
               </p>
             )}
           </div>
@@ -303,9 +305,9 @@ const NewProperty = () => {
                   onChange={handleChange}
                   className="w-full mt-1 p-2 border border-gray-300 rounded-md"
                 />
-                {errors.plotNumber && (
+                {errors["plotNumber"] && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors.plotNumber.message}
+                    {errors["plotNumber"].message}
                   </p>
                 )}
               </div>
@@ -326,9 +328,9 @@ const NewProperty = () => {
                     </option>
                   ))}
                 </select>
-                {errors.bedrooms && (
+                {errors["bedrooms"] && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors.bedrooms.message}
+                    {errors["bedrooms"].message}
                   </p>
                 )}
               </div>

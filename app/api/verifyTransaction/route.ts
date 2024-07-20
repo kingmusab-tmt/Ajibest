@@ -160,11 +160,19 @@ export async function POST(req) {
         ) + amount;
 
       const remainingBalanceForProperty =
-        userProperty.paymentHisotry[0].propertyPrice -
-        totalPaymentMadeForProperty;
+        userProperty &&
+        userProperty.paymentHisotry &&
+        userProperty.paymentHisotry[0]
+          ? userProperty.paymentHisotry[0].propertyPrice -
+            totalPaymentMadeForProperty
+          : 0;
+
+      // const remainingBalanceForProperty =
+      //   userProperty.paymentHisotry[0].propertyPrice -
+      //   totalPaymentMadeForProperty;
 
       userProperty?.paymentHisotry.push({
-        paymentDate: Date.now(),
+        paymentDate: new Date(Date.now()),
         nextPaymentDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
         amount,
         propertyPrice: userProperty.paymentHisotry[0].propertyPrice,

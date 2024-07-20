@@ -16,26 +16,13 @@ export default function Home() {
   }, []);
   return (
     <>
-      {isClient ? (
-        <>
-          <Navbar />
-          {/* <Hero />
-          <Diagram />
-          <FeaturedProperties />
-          <WhyChooseUs />
-          <FAQPage />
-          <Footer />{" "} */}
-        </>
-      ) : (
-        "Prerendered"
-      )}
-      <Navbar />
-      <Hero />
-      <Diagram />
-      <FeaturedProperties />
-      <WhyChooseUs />
-      <FAQPage />
-      <Footer />
+      <Navbar key="navbar" />
+      <Hero key="hero" />
+      <Diagram key="diagram" />
+      <FeaturedProperties key="featured-properties" />
+      <WhyChooseUs key="why-choose-us" />
+      <FAQPage key="faq-page" />
+      <Footer key="footer" />
     </>
   );
 }
