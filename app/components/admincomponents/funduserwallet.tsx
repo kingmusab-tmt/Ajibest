@@ -22,7 +22,7 @@ const FundUserWallet = () => {
           amount,
         });
         const response2 = await axios.put("/api/users/" + userId, {
-          walletBalance: amount,
+          remainingBalance: amount,
         });
         if (response1.data.success && response2.data.success) {
           setError(null);
