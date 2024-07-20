@@ -31,7 +31,7 @@ interface UserProfileProps {
     dateOfRegistration: Date;
     lastLoginTime?: Date;
     favouriteProperties: string[];
-    walletBalance: number;
+    remainingBalance: number;
     isActive: boolean;
     emailToken: string;
     totalPropertyPurchased: number;
@@ -104,29 +104,29 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
             <strong>Username: </strong> {user.username}
           </p>
           <p>
-            <strong>Email:</strong> {user.email}
+            <strong>Email: </strong> {user.email}
           </p>
           <p>
-            <strong>Phone Number:</strong> {user.phoneNumber}
+            <strong>Phone Number: </strong> {user.phoneNumber}
           </p>
           <p>
-            <strong>BVN/NIN:</strong> {user.bvnOrNin}
+            <strong>BVN/NIN: </strong> {user.bvnOrNin}
           </p>
           <p>
-            <strong>Location:</strong> {user.address}, {user.lga}, {user.state},{" "}
-            {user.country}
+            <strong>Location: </strong> {user.address}, {user.lga}, {user.state}
+            , {user.country}
           </p>
         </div>
         <div>
           <h3 className="text-lg font-semibold">Account Information</h3>
           <p>
-            <strong>Account Number:</strong> {user.userAccountNumber}
+            <strong>Account Number: </strong> {user.userAccountNumber}
           </p>
           <p>
-            <strong>Bank Name:</strong> {user.userBankName}
+            <strong>Bank Name: </strong> {user.userBankName}
           </p>
           <p>
-            <strong>Account Name:</strong> {user.userAccountName}
+            <strong>Account Name: </strong> {user.userAccountName}
           </p>
           <p>
             <strong>Date of Registration:</strong>{" "}
@@ -134,14 +134,14 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
           </p>
           {user.lastLoginTime && (
             <p>
-              <strong>Last Login Time:</strong> {user.lastLoginTime.toString()}
+              <strong>Last Login Time: </strong> {user.lastLoginTime.toString()}
             </p>
           )}
           <p>
-            <strong>Wallet Balance:</strong> ${user.walletBalance.toFixed(2)}
+            <strong>Remaining: </strong> ${user.remainingBalance.toFixed(2)}
           </p>
           <p>
-            <strong>Active:</strong> {user.isActive ? "Yes" : "No"}
+            <strong>Active: </strong> {user.isActive ? "Yes" : "No"}
           </p>
         </div>
         <div>
@@ -154,25 +154,26 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
             className="rounded-full"
           />
           <p>
-            <strong>Name:</strong> {user.nextOfKin?.name}
+            <strong>Name: </strong> {user.nextOfKin?.name}
           </p>
           <p>
-            <strong>Phone Number:</strong> {user.nextOfKin?.phoneNumber}
+            <strong>Phone Number: </strong> {user.nextOfKin?.phoneNumber}
           </p>
           <p>
-            <strong>Address:</strong> {user.nextOfKin?.address}
+            <strong>Address: </strong> {user.nextOfKin?.address}
           </p>
           <p>
-            <strong>Email:</strong> {user.nextOfKin?.email}
+            <strong>Email: </strong> {user.nextOfKin?.email}
           </p>
           <p>
-            <strong>Account Number:</strong> {user.nextOfKin?.userAccountNumber}
+            <strong>Account Number: </strong>{" "}
+            {user.nextOfKin?.userAccountNumber}
           </p>
           <p>
-            <strong>Bank Name:</strong> {user.nextOfKin?.userBankName}
+            <strong>Bank Name: </strong> {user.nextOfKin?.userBankName}
           </p>
           <p>
-            <strong>Account Name:</strong> {user.nextOfKin?.userAccountName}
+            <strong>Account Name: </strong> {user.nextOfKin?.userAccountName}
           </p>
         </div>
         <div>
