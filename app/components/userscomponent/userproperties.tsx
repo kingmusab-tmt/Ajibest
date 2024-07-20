@@ -232,7 +232,7 @@ const MyProperty = () => {
               <TableRow key={property.propertyId}>
                 <TableCell>
                   <Button onClick={() => handleDetailOpen(property)}>
-                    {String(property.propertyId).substring(0, 3) + "..."}
+                    {String(property?.title).substring(0, 3) + "..."}
                   </Button>
                 </TableCell>
                 <TableCell>
@@ -255,7 +255,7 @@ const MyProperty = () => {
               <TableRow key={property.propertyId}>
                 <TableCell>
                   <Button onClick={() => handleDetailOpen(property)}>
-                    {property.propertyId}
+                    {String(property?.title).substring(0, 3) + "..."}
                   </Button>
                 </TableCell>
                 {property.paymentHisotry?.slice(-1).map((history, index) => (

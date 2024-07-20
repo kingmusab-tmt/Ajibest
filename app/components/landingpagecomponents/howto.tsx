@@ -36,7 +36,7 @@ const Diagram = () => {
   };
 
   return (
-    <div className="mt-10 p-4 flex flex-col justify-center items-center">
+    <div className="mt-10 sm:mt-16 p-4 flex flex-col justify-center items-center">
       <h1 className="text-3xl font-bold mb-4">How It Works</h1>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {" "}

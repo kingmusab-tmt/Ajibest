@@ -84,7 +84,7 @@ const PaymentPage = ({ propertyId, type, price, listingPurpose, onClose }) => {
 
   const config = {
     email,
-    amount: (amount * 100) as number,
+    amount: (amount * 100).toFixed(0) as unknown as number,
     publicKey,
   };
   const paystackProps = {
