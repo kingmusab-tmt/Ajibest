@@ -3,6 +3,7 @@ import Image from "next/image";
 
 interface UserCardProps {
   user: {
+    isActive: boolean;
     _id: string;
     name: string;
     role: string;
@@ -77,6 +78,9 @@ const UserCard: FC<UserCardProps> = ({
 
       <h2 className="text-center font-bold">{user.name}</h2>
       <p className="text-center text-gray-500">{user.role}</p>
+      <p className="text-center text-red-600-500">
+        {user.isActive ? "Active" : "Not Active"}
+      </p>
       <div className="flex justify-between mt-4">
         <p className="text-sm text-gray-600">
           <strong>Location:</strong> {user.address}

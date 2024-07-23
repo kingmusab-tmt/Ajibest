@@ -101,7 +101,6 @@ const Navbar = () => {
           <div className="hidden sm:flex space-x-6">
             {session ? (
               <>
-                {/* <h1>Welcome, {session.user?.name}</h1> */}
                 <ul className="flex justify-center space-x-10">
                   <Link href="/">
                     <li className="uppercase hover:hover:border-b-2 hover:border-b-blue-800">
@@ -252,27 +251,68 @@ const Navbar = () => {
                   </li>
                 </Link>
               </div>
-              <div>
-                <Link href="/login">
-                  <li
-                    onClick={() => setMenuOpen(false)}
-                    className="py-4 cursor-pointer text-red-600 font-bold"
-                  >
-                    Login
-                  </li>
-                </Link>
-              </div>
-              <div>
-                <Link href="/signup">
-                  <li
-                    onClick={() => setMenuOpen(false)}
-                    className="py-4 cursor-pointer text-red-600 font-bold"
-                  >
-                    Signup
-                  </li>
-                </Link>
-              </div>
             </ul>
+            <div className="flex-col py-4">
+              {session ? (
+                <>
+                  <ul>
+                    <Link href="/">
+                      <li className="uppercase hover:hover:border-b-2 hover:border-b-blue-800">
+                        <button onClick={() => signOut()}>Sign out</button>
+                      </li>
+                    </Link>
+                    <li className="uppercase hover:hover:border-b-2 hover:border-b-blue-800">
+                      <Link
+                        href={
+                          session.user.role === "Admin"
+                            ? "/admin"
+                            : "/userprofile"
+                        }
+                      >
+                        Dashboard
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href={
+                          session.user.role === "Admin"
+                            ? "/admin"
+                            : "/userprofile"
+                        }
+                      >
+                        <Image
+                          src={`${imageSrc}`}
+                          alt="Profile picture"
+                          width={30}
+                          height={30}
+                          className="rounded-full cursor-pointer"
+                          priority
+                        />
+                      </Link>
+                    </li>
+                  </ul>
+                </>
+              ) : (
+                <>
+                  <ul className="flex flex-col space-y-6">
+                    <div>
+                      <Link href="/login">
+                        <li className="uppercase hover:hover:border-b-2 hover:border-b-blue-800">
+                          Login
+                        </li>
+                      </Link>
+                    </div>
+                    <div>
+                      <Link href="/signup">
+                        <li className="uppercase hover:hover:border-b-2 hover:border-b-blue-800">
+                          Signup
+                        </li>
+                      </Link>
+                    </div>
+                  </ul>
+                </>
+              )}
+            </div>
           </div>
           <div className="flex flex-row justify-around pt-10 items-center cursor-pointer">
             <Link href="https://www.instagram.com/barebykristen/?hl=en">
@@ -289,7 +329,7 @@ const Navbar = () => {
             <Image
               src={logo}
               alt="logo"
-              width="200"
+              width="100"
               height="100"
               className="cursor-pointer pt-10 w-auto h-auto"
               priority

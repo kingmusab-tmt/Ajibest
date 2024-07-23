@@ -75,20 +75,8 @@ export const authOptions = {
   },
   callbacks: {
     async redirect({ url, baseUrl }) {
-      return baseUrl;
+      return baseUrl + "/userprofile";
     },
-    // async redirect({ url, baseUrl, user }) {
-    //   if (!user) {
-    //     // User is not authenticated, redirect to login page
-    //     return baseUrl + "/login";
-    //   } else if (user.role === "Admin") {
-    //     // User is an admin, redirect to admin page
-    //     return baseUrl + "/admin";
-    //   } else {
-    //     // User is not an admin, redirect to user profile page
-    //     return baseUrl + "/userprofile";
-    //   }
-    // },
 
     async jwt({ token, trigger, session, user }) {
       if (user) {

@@ -65,6 +65,7 @@ export interface User {
 }
 
 export interface Property {
+  instalmentAllowed: boolean;
   _id: string;
   title: string;
   description: string;

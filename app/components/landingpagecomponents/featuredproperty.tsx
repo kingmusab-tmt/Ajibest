@@ -1,4 +1,3 @@
-// components/FeaturedProperties.tsx
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Carousel from "react-material-ui-carousel";
@@ -66,23 +65,6 @@ const FeaturedProperties: React.FC = () => {
     fetchProperties();
   }, []);
 
-  useEffect(() => {
-    const fetchFavoriteProperties = async () => {
-      try {
-        const response = await axios.get("/api/favourite");
-        const favoriteProperties = response.data.data;
-        if (Array.isArray(favoriteProperties)) {
-          setFavoriteProperties(favoriteProperties);
-        } else {
-          console.error("API response is not as expected:", favoriteProperties);
-        }
-      } catch (error) {
-        console.error("Failed to fetch favorite properties:", error);
-      }
-    };
-    fetchFavoriteProperties();
-  }, []);
-
   if (properties.length === 0) {
     return (
       <Typography variant="h6">
@@ -104,23 +86,6 @@ const FeaturedProperties: React.FC = () => {
     return slides;
   };
 
-  const handleFavoriteClick = async (propertyId: string) => {
-    if (!session) {
-      router.push("/login");
-    } else {
-      try {
-        const response = await axios.post("/api/favourite", { propertyId });
-        // Uncomment and update favoriteProperties state if necessary
-        // setFavoriteProperties((prevFavorites) => [
-        //   ...prevFavorites,
-        //   propertyId,
-        // ]);
-      } catch (error) {
-        console.error("Failed to add favorite:", error);
-      }
-    }
-  };
-
   const itemsPerSlide = isLargeScreen ? 3 : isMediumScreen ? 2 : 1;
 
   const formatter = new Intl.NumberFormat("en-US", {
@@ -128,11 +93,26 @@ const FeaturedProperties: React.FC = () => {
     currency: "NGN",
     minimumFractionDigits: 2,
   });
+  const isUrl = (str) => {
+    if (typeof str !== "string") {
+      return false;
+    }
+    try {
+      new URL(str);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  };
 
   return (
     <div className="mt-5 p-4 justify-center items-center">
       <Box sx={{ textAlign: "center", padding: 2 }}>
-        <Typography variant="h4" gutterBottom>
+        <Typography
+          variant="h4"
+          sx={{ marginBottom: 4, textColor: "blue" }}
+          gutterBottom
+        >
           Featured Properties
         </Typography>
         <Carousel
@@ -146,27 +126,34 @@ const FeaturedProperties: React.FC = () => {
             <Grid container spacing={2} key={index} justifyContent="center">
               {slide.map((property) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={property._id}>
-                  <Card>
+                  <Card
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      height: "100%",
+                    }}
+                  >
                     <Box position="relative">
                       <CardMedia
                         component="img"
                         height="200"
-                        image={`/uploads/${property.image}`}
-                        alt={property.title}
-                      />
-                      <IconButton
-                        color={
-                          favoriteProperties.includes(property._id)
-                            ? "primary"
-                            : "error"
+                        image={
+                          isUrl(property.image)
+                            ? property.image
+                            : `/uploads/${property.image}`
                         }
-                        sx={{ position: "absolute", top: 8, right: 8 }}
-                        onClick={() => handleFavoriteClick(property._id)}
-                      >
-                        <FavoriteIcon />
-                      </IconButton>
+                        alt={property.title}
+                        sx={{ objectFit: "cover", height: "200px" }}
+                      />
                     </Box>
-                    <CardContent sx={{ textAlign: "left" }}>
+                    <CardContent
+                      sx={{
+                        textAlign: "left",
+                        flexGrow: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
                       <Typography variant="h5" component="div">
                         Title: {property.title}
                       </Typography>
@@ -201,10 +188,24 @@ const FeaturedProperties: React.FC = () => {
                           Size: {property.size}
                         </Typography>
                       )}
-                      <Typography variant="h6" color="text.primary">
+                      <Typography
+                        variant="h6"
+                        color="text.primary"
+                        sx={{ marginTop: "auto" }}
+                      >
                         Price: {formatter.format(property.price)}
                       </Typography>
-                      <Button variant="contained" color="primary">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          if (!session) {
+                            router.push("/login");
+                          } else {
+                            router.push("/userprofile");
+                          }
+                        }}
+                      >
                         {property.listingPurpose === "For Renting"
                           ? "Rent Now"
                           : "Buy Now"}

@@ -11,6 +11,7 @@ import UpdateProfile from "../components/userscomponent/updateProfile";
 import PropertyListing from "../components/userscomponent/propertyListing";
 import MyProperty from "../components/userscomponent/userproperties";
 import ProtectedRoute from "../components/generalcomponents/ProtectedRoute";
+import SupportTab from "../components/userscomponent/SupportTab";
 
 interface Notification {
   id: number;
@@ -103,6 +104,8 @@ const Userprofile = () => {
         return <TransactionHistory />;
       case "UpdateProfile":
         return <UpdateProfile />;
+      case "SupportTab":
+        return <SupportTab />;
       default:
         return <UserInfo />;
     }

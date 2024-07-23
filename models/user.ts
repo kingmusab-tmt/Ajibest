@@ -45,6 +45,7 @@ interface IUser extends Document {
     propertyType: "House" | "Land" | "Farm";
     paymentMethod: "installment" | "payOnce";
     paymentPurpose: "For Sale" | "For Renting";
+    initialPayment: number;
     paymentHisotry: {
       paymentDate: Date;
       nextPaymentDate: Date;
@@ -171,6 +172,7 @@ const userSchema = new Schema<IUser>(
         propertyType: { type: String, enum: ["House", "Land", "Farm"] },
         paymentMethod: { type: String, enum: ["installment", "payOnce"] },
         paymentPurpose: { type: String, enum: ["For Sale", "For Renting"] },
+        initialPayment: { type: Number },
         paymentHisotry: [
           {
             paymentDate: { type: Date },

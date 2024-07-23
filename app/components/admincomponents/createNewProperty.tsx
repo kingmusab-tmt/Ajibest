@@ -27,7 +27,12 @@ const NewProperty = () => {
     bedrooms: "",
     rentalDuration: "",
     bathrooms: "",
+    amenities: "",
     plotNumber: "",
+    utilities: "",
+    purchased: false,
+    rented: false,
+    instamentAllowed: true,
     size: "",
   });
   const [changedFields, setChangedFields] = useState({});
@@ -62,8 +67,11 @@ const NewProperty = () => {
   const { errors, setErrorWithTimeout } = useErrorHandling();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProperty((prevProperty) => ({ ...prevProperty, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setProperty((prevProperty) => ({
+      ...prevProperty,
+      [name]: type === "checkbox" ? checked : value,
+    }));
     setChangedFields((prevChangedFields) => ({
       ...prevChangedFields,
       [name]: true,
@@ -99,7 +107,6 @@ const NewProperty = () => {
       const data = await response.json();
       if (response.ok) {
         handleSuccess("Property Listed Successfully", "Close to Continue");
-        // alert("Property listed successfully");
         if (action === "createAnother") {
           setProperty({
             title: "",
@@ -112,19 +119,22 @@ const NewProperty = () => {
             bedrooms: "",
             rentalDuration: "",
             bathrooms: "",
+            amenities: "",
             plotNumber: "",
+            utilities: "",
+            purchased: false,
+            rented: false,
+            instamentAllowed: true,
             size: "",
           });
           setChangedFields({});
           setImageChanged(false);
           setErrorWithTimeout("");
-          // setErrors({});
         } else if (action === "exit") {
-          router.push("/dashboard");
+          router.push("/admin");
         }
       } else {
         setErrorWithTimeout(data.details.errors);
-        // setErrors(data.details.errors);
       }
     } catch (error) {
       console.log(error);
@@ -233,6 +243,23 @@ const NewProperty = () => {
             )}
           </div>
         </div>
+        {property.listingPurpose === "For Renting" && (
+          <div className="mb-6">
+            <label className="block text-gray-700">Rental Duration</label>
+            <input
+              type="text"
+              name="rentalDuration"
+              value={property.rentalDuration}
+              onChange={handleChange}
+              className="w-full mt-1 p-2 border border-gray-300 rounded-md"
+            />
+            {errors["rentalDuration"] && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors["rentalDuration"].message}
+              </p>
+            )}
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="mb-4">
             <label className="block text-gray-700">Property Price</label>
@@ -250,7 +277,7 @@ const NewProperty = () => {
             )}
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700">Property Plot Size </label>
+            <label className="block text-gray-700">Property Plot Size</label>
             <select
               name="size"
               value={property.size}
@@ -300,7 +327,7 @@ const NewProperty = () => {
                 <label className="block text-gray-700">Plot Number</label>
                 <input
                   type="number"
-                  name="price"
+                  name="plotNumber"
                   value={property.plotNumber}
                   onChange={handleChange}
                   className="w-full mt-1 p-2 border border-gray-300 rounded-md"
@@ -313,40 +340,117 @@ const NewProperty = () => {
               </div>
             )}
             {property.propertyType === "House" && (
-              <div className="mb-6">
-                <label className="block text-gray-700">No of Bedrooms</label>
-                <select
-                  name="bedrooms"
-                  value={property.bedrooms}
-                  onChange={handleChange}
-                  className="w-full mt-1 p-2 border border-gray-300 rounded-md"
-                >
-                  <option value="">Select No of Bedroom(s)</option>
-                  {bedrooms.map((bedroom) => (
-                    <option key={bedroom} value={bedroom}>
-                      {bedroom}
-                    </option>
-                  ))}
-                </select>
-                {errors["bedrooms"] && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors["bedrooms"].message}
-                  </p>
-                )}
-              </div>
+              <>
+                <div className="mb-6">
+                  <label className="block text-gray-700">No of Bedrooms</label>
+                  <select
+                    name="bedrooms"
+                    value={property.bedrooms}
+                    onChange={handleChange}
+                    className="w-full mt-1 p-2 border border-gray-300 rounded-md"
+                  >
+                    <option value="">Select No of Bedroom(s)</option>
+                    {bedrooms.map((bedroom) => (
+                      <option key={bedroom} value={bedroom}>
+                        {bedroom}
+                      </option>
+                    ))}
+                  </select>
+                  {errors["bedrooms"] && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors["bedrooms"].message}
+                    </p>
+                  )}
+                </div>
+                <div className="mb-6">
+                  <label className="block text-gray-700">No of Bathrooms</label>
+                  <input
+                    type="number"
+                    name="bathrooms"
+                    value={property.bathrooms}
+                    onChange={handleChange}
+                    className="w-full mt-1 p-2 border border-gray-300 rounded-md"
+                  />
+                  {errors["bathrooms"] && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors["bathrooms"].message}
+                    </p>
+                  )}
+                </div>
+                <div className="mb-6">
+                  <label className="block text-gray-700">Amenities</label>
+                  <input
+                    type="text"
+                    name="amenities"
+                    value={property.amenities}
+                    onChange={handleChange}
+                    className="w-full mt-1 p-2 border border-gray-300 rounded-md"
+                  />
+                  {errors["amenities"] && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors["amenities"].message}
+                    </p>
+                  )}
+                </div>
+                <div className="mb-6">
+                  <label className="block text-gray-700">Utilities</label>
+                  <input
+                    type="text"
+                    name="utilities"
+                    value={property.utilities}
+                    onChange={handleChange}
+                    className="w-full mt-1 p-2 border border-gray-300 rounded-md"
+                  />
+                  {errors["utilities"] && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors["utilities"].message}
+                    </p>
+                  )}
+                </div>
+              </>
             )}
           </div>
+        </div>
+        <div className="mb-6">
+          <label className="block text-gray-700">Purchased</label>
+          <input
+            type="checkbox"
+            name="purchased"
+            checked={property.purchased}
+            onChange={handleChange}
+            className="mr-2 leading-tight"
+          />
+        </div>
+        <div className="mb-6">
+          <label className="block text-gray-700">Rented</label>
+          <input
+            type="checkbox"
+            name="rented"
+            checked={property.rented}
+            onChange={handleChange}
+            className="mr-2 leading-tight"
+          />
+        </div>
+        <div className="mb-6">
+          <label className="block text-gray-700">Instalment Allowed</label>
+          <input
+            type="checkbox"
+            name="instamentAllowed"
+            checked={property.instamentAllowed}
+            onChange={handleChange}
+            className="mr-2 leading-tight"
+          />
         </div>
         <div className="flex gap-4">
           <button
             onClick={() => handleSave("createAnother")}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md"
+            className="w-full bg-blue-500 hover:bg-blue-800 text-white p-2 rounded-md"
           >
             Save and Create Another
           </button>
           <button
             onClick={() => handleSave("exit")}
-            className="w-full bg-green-500 hover:bg-green-600 text-white p-2 rounded-md"
+            className="w-full bg-blue-500 hover:bg-blue-800 text-white p-2 rounded-md"
           >
             Save and Exit
           </button>

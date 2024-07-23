@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 
-const Login = () => {
+function Login() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [error, setError] = useState("");
@@ -21,9 +21,12 @@ const Login = () => {
   if (session) {
     if (session.user.role === "Admin") {
       router.push("/admin");
+      return null; // Ensure no further code is executed
     }
     router.push("/userprofile");
+    return null; // Ensure no further code is executed
   }
+
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
     return setUser((prevInfo) => ({ ...prevInfo, [name]: value }));
@@ -34,12 +37,29 @@ const Login = () => {
     setLoading(true);
     try {
       if (!user.email || !user.password) {
-        setError("please fill all the fields");
+        setError("Please fill all the fields");
+        setLoading(false);
         return;
       }
+
       const emailRegex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
       if (!emailRegex.test(user.email)) {
-        setError("invalid email id");
+        setError("Invalid email id");
+        setLoading(false);
+        return;
+      }
+
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
+      if (!passwordRegex.test(user.password)) {
+        setError(
+          [
+            "Password must be at least 8 characters long",
+            "and contain at least one uppercase letter,",
+            "one lowercase letter, and one special character.",
+          ].join("\n")
+        );
+
+        setLoading(false);
         return;
       }
 
@@ -50,41 +70,36 @@ const Login = () => {
       });
 
       if (res?.error) {
-        setError("error");
+        setError("Invalid email or password");
+      } else {
+        setError("");
+        router.push("/userprofile");
       }
-      setError("");
-      if (session?.user.role === "Admin") {
-        router.push("/admin");
-      }
-      router.push("/userprofile");
     } catch (error) {
-      setError("");
+      setError("An unexpected error occurred");
     } finally {
       setLoading(false);
-
       setUser({
         email: "",
         password: "",
       });
+
+      // Clear error message after 5 seconds
+      setTimeout(() => {
+        setError("");
+      }, 3000);
     }
   };
+
   return (
-    <div
-      className="min-h-screen"
-      // style={{
-      //   backgroundImage: `url("/background.png")`,
-      //   backgroundRepeat: "no-repeat",
-      //   backgroundSize: "cover",
-      // }}
-    >
+    <div className="min-h-screen">
       <div className="grid place-items-center mx-auto max-w-4xl w-full py-10 min-h-screen">
         <div className="flex justify-center items-center lg:flex-row flex-col gap-6 lg:gap-0 w-full shadow-md rounded-2xl">
-          <div className=" w-full flex flex-col justify-center items-center py-6 bg-[#eff1f6]">
+          <div className="w-full flex flex-col justify-center items-center py-6 bg-[#eff1f6]">
             <div className="rounded px-4 py-2 shadow bg-[#90a5ef]">
               <Image
                 src={logo}
                 alt="bg"
-                // width={"w-auto"}
                 height={100}
                 className="w-auto, h-auto"
               />
@@ -131,9 +146,12 @@ const Login = () => {
                     disabled={loading}
                     className="bg-[#5D7DF3] text-white text-lg w-full px-8 py-3 rounded-md uppercase font-semibold"
                   >
-                    {loading ? "Signning in..." : "Login"}
+                    {loading ? "Signing in..." : "Login"}
                   </button>
                 </div>
+                {error && (
+                  <p className="text-red-500 text-center max-w-sm">{error}</p>
+                )}
                 <div className="flex justify-center w-full items-center gap-3 py-3">
                   <div className="border-b border-gray-800 py-2 w-full px-6" />
                   <div className="mt-3">or</div>
@@ -198,6 +216,6 @@ const Login = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Login;

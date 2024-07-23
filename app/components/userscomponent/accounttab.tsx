@@ -1,31 +1,5 @@
-import { Tab, TabPanels, TabPanel, TabGroup, TabList } from "@headlessui/react";
 import { useContext } from "react";
 import LayoutContext from "../generalcomponents/LayoutContext";
-import Image from "next/image";
-import bank1 from "@/public/images/monipoint.png";
-import bank2 from "@/public/images/Sterling new logo.png";
-import bank3 from "@/public/images/GTBank_logo.svg.png";
-
-const banks = [
-  {
-    name: "Monipoint",
-    logo: bank1,
-    accountNumber: "1234567890",
-    username: "john_doe",
-  },
-  {
-    name: "Sterling",
-    logo: bank2,
-    accountNumber: "2345678901",
-    username: "john_doe",
-  },
-  {
-    name: "GT",
-    logo: bank3,
-    accountNumber: "3456789012",
-    username: "john_doe",
-  },
-];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -34,57 +8,7 @@ function classNames(...classes) {
 const AccountTabs = () => {
   const { openModal } = useContext(LayoutContext);
   return (
-    <div className="flex flex-col lg:flex-row lg:space-x-4">
-      <div className="w-full lg:w-3/4 mb-4 lg:mb-0">
-        <TabGroup>
-          <TabList className="flex p-1 space-x-1 bg-gray-200 rounded-xl">
-            {banks.map((bank) => (
-              <Tab
-                key={bank.name}
-                className={({ selected }) =>
-                  classNames(
-                    "w-full py-2.5 text-sm leading-5 font-medium text-gray-700",
-                    "rounded-lg focus:outline-none",
-                    selected
-                      ? "bg-white shadow"
-                      : "text-gray-500 hover:bg-white/[0.12] hover:text-gray-700"
-                  )
-                }
-              >
-                {bank.name}
-              </Tab>
-            ))}
-          </TabList>
-          <TabPanels className="mt-2">
-            {banks.map((bank) => (
-              <TabPanel
-                key={bank.name}
-                className={classNames(
-                  "bg-white p-3 rounded-lg shadow",
-                  "focus:outline-none"
-                )}
-              >
-                <div className="flex flex-col items-start">
-                  <Image
-                    src={bank.logo}
-                    alt={`${bank.name} logo`}
-                    className="h-14 mb-4 w-14"
-                  />
-                  <p>
-                    <strong>Bank Name:</strong> {bank.name}
-                  </p>
-                  <p>
-                    <strong>Account Number:</strong> {bank.accountNumber}
-                  </p>
-                  <p>
-                    <strong>Username:</strong> {bank.username}
-                  </p>
-                </div>
-              </TabPanel>
-            ))}
-          </TabPanels>
-        </TabGroup>
-      </div>
+    <div className="flex flex-col lg:flex-row lg:space-x-4 m-4">
       <div className="w-full lg:w-1/4 bg-blue-300 p-4 rounded-lg shadow">
         <div className="flex flex-col items-center">
           <svg

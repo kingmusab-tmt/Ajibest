@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { FaBell, FaUserEdit, FaHeadset, FaSignOutAlt } from "react-icons/fa";
-// import SearchBox from "./searchbox";
+
 import { signOut } from "next-auth/react";
 
 interface ProfileTopNavBarProps {
@@ -97,7 +97,7 @@ const ProfileTopNavBar: React.FC<ProfileTopNavBarProps> = ({
                 Edit Profile
               </button>
               <button
-                onClick={() => handleLinkClick("ContactSupport")}
+                onClick={() => handleLinkClick("SupportTab")}
                 className="flex items-center p-2 w-full hover:bg-gray-100"
               >
                 <FaHeadset className="mr-2" />

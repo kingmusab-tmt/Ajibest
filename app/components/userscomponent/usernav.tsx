@@ -8,8 +8,9 @@ import {
   FaHouseUser,
   FaLandmark,
   FaHistory,
-  FaSignOutAlt,
   FaCreditCard,
+  FaSignOutAlt,
+  FaHeadset,
 } from "react-icons/fa";
 import { signOut } from "next-auth/react";
 
@@ -47,11 +48,6 @@ const UserDashboardSidebar: React.FC<UserDashboardSidebarProps> = ({
           <button onClick={toggleSidebar} className="text-white z-10">
             <FaBars />
           </button>
-          {/* {isOpen && (
-            <h2 className="text-xl text-center font-semibold">
-              A.A Ajibest Land Vendor
-            </h2>
-          )} */}
         </div>
         <div className="flex items-center justify-center mt-4">
           <Image
@@ -70,14 +66,19 @@ const UserDashboardSidebar: React.FC<UserDashboardSidebarProps> = ({
         <nav className="mt-5 flex-1">
           <ul className="space-y-1 px-4">
             {[
-              { icon: FaHome, label: "Dashboard", component: "UserInfo" },
+              {
+                icon: FaHome,
+                label: "Dashboard",
+                component: "UserInfo",
+                url: "/",
+              },
               {
                 icon: FaLandmark,
                 label: "My Properties",
                 component: "MyProperty",
               },
               {
-                icon: FaHouseUser,
+                icon: FaCreditCard,
                 label: "Buy/Rent Property",
                 component: "PropertyListing",
               },
@@ -87,9 +88,9 @@ const UserDashboardSidebar: React.FC<UserDashboardSidebarProps> = ({
                 component: "TransactionHistory",
               },
               {
-                icon: FaCreditCard,
-                label: "Make Payment",
-                component: "AccountTabs",
+                icon: FaHeadset,
+                label: "Contact Support",
+                component: "SupportTab",
               },
               { icon: FaUser, label: "Profile", component: "UpdateProfile" },
               { icon: FaSignOutAlt, label: "Logout", component: "" },
