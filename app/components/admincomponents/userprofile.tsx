@@ -147,7 +147,11 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
         <div>
           <h3 className="text-lg font-semibold">Next of Kin</h3>
           <Image
-            src={`/uploads/${user.nextOfKin?.image}`}
+            src={
+              isUrl(user.nextOfKin?.image)
+                ? user.nextOfKin?.image
+                : `/uploads/${user.nextOfKin?.image}`
+            }
             alt={user.nextOfKin?.name}
             width={64}
             height={64}

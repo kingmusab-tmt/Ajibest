@@ -23,6 +23,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "dumbs/propertyform.text", "dumbs/propertylisting.text"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "dumbs/propertyform.text", "dumbs/propertylisting.text", "app/api/newupload"],
   "exclude": ["node_modules"]
 }

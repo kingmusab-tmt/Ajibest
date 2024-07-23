@@ -39,7 +39,7 @@ const UserInfo: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-xl font-bold mb-4">User Information</h2>
+      {/* <h2 className="text-xl font-bold mb-4">User Information</h2> */}
       <div className="flex space-x-5 w-full mb-10">
         <div className="w-1/2 bg-white border rounded-lg p-4 shadow-lg shadow-green-600">
           <span>
@@ -58,8 +58,10 @@ const UserInfo: React.FC = () => {
               />
             </svg>
           </span>
-          <h3 className="text-lg font-semibold mb-2">Remaining Balance</h3>
-          <p className="text-lg">
+          <h3 className="text-base sm:text-lg font-semibold mb-2">
+            Remaining Balance
+          </h3>
+          <p className="text-sm sm:text-lg">
             {formatter.format(userData?.remainingBalance ?? 0)}
           </p>
         </div>
@@ -80,7 +82,7 @@ const UserInfo: React.FC = () => {
               />
             </svg>
           </span>
-          <h3 className="text-lg font-semibold mb-2">
+          <h3 className="text-base sm:text-lg font-semibold mb-2">
             Total Property Purchased
           </h3>
           <p className="text-lg">{userData?.totalPropertyPurchased}</p>
@@ -104,12 +106,14 @@ const UserInfo: React.FC = () => {
               />
             </svg>
           </span>
-          <h3 className="text-lg font-semibold mb-2">Total Payment Made</h3>
-          <p className="text-lg">
+          <h3 className="text-base sm:text-lg font-semibold mb-2">
+            Total Payment Made
+          </h3>
+          <p className="text-sm sm:text-lg">
             {" "}
             {userData?.totalPaymentMade
               ? formatter.format(userData.totalPaymentMade)
-              : 0}{" "}
+              : formatter.format(0)}{" "}
           </p>
         </div>
         <div className="w-1/2 bg-white border rounded-lg p-4 shadow-lg shadow-yellow-600">
@@ -129,14 +133,14 @@ const UserInfo: React.FC = () => {
               />
             </svg>
           </span>
-          <h3 className="text-lg font-semibold mb-2">
+          <h3 className="text-base sm:text-lg font-semibold mb-2">
             Total Payment To be Made
           </h3>
-          <p className="text-lg">
+          <p className="text-sm sm:text-lg">
             {" "}
             {userData?.totalPaymentToBeMade
               ? formatter.format(userData.totalPaymentToBeMade)
-              : 0}{" "}
+              : formatter.format(0)}{" "}
           </p>
         </div>
         {session?.user.role === "Agent" && (

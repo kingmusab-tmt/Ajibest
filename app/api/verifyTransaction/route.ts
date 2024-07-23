@@ -114,6 +114,7 @@ export async function POST(req) {
               propertyType,
               paymentMethod,
               paymentPurpose,
+              initialPayment: amount,
               paymentHisotry: [
                 {
                   paymentDate: Date.now(),

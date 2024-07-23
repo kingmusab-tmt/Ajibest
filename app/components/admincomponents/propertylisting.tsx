@@ -90,6 +90,17 @@ export default function Properties() {
     setSelectedPropertyForEditById(propertyId);
     setShowForm(true);
   };
+  const isUrl = (str) => {
+    if (typeof str !== "string") {
+      return false;
+    }
+    try {
+      new URL(str);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  };
 
   return (
     <div className="shadow rounded-md container mx-auto h-screen flex flex-col">
@@ -160,7 +171,11 @@ export default function Properties() {
             className="flex flex-col sm:flex-row border rounded-md p-4"
           >
             <Image
-              src={`/uploads/${property.image}`}
+              src={
+                isUrl(property.image)
+                  ? property.image
+                  : `/uploads/${property.image}`
+              }
               alt={property.title}
               width={100}
               height={100}

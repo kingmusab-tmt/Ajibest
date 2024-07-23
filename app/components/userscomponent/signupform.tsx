@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import LoadingSpinner from "../generalcomponents/loadingSpinner";
 import { useRouter } from "next/navigation";
@@ -49,6 +49,26 @@ const StepOne: React.FC<StepProps> = ({
 }) => {
   const { error, setErrorWithTimeout } = useErrorHandling();
 
+  useEffect(() => {
+    const checkIfExists = async (field: string, value: string) => {
+      const response = await fetch(
+        `/api/users/checkexituser?${field}=${value}`
+      );
+      const { success } = await response.json();
+      console.log(success);
+      if (success) {
+        setErrorWithTimeout(` ${field} already exists`);
+      }
+    };
+
+    if (formData.username) {
+      checkIfExists("username", formData.username);
+    }
+
+    if (formData.email) {
+      checkIfExists("email", formData.email);
+    }
+  }, [formData.email, formData.username, setErrorWithTimeout]);
   const handleNext = () => {
     let valid = true;
 
@@ -65,6 +85,15 @@ const StepOne: React.FC<StepProps> = ({
     if (!formData.email) {
       setErrorWithTimeout("Email is required");
       valid = false;
+    } else {
+      const emailRegex =
+        /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|hotmail\.com)$/;
+      if (!emailRegex.test(formData.email)) {
+        setErrorWithTimeout(
+          "Email must be a valid Gmail, Yahoo, or Hotmail address"
+        );
+        valid = false;
+      }
     }
 
     if (!formData.confirmEmail) {
@@ -113,12 +142,48 @@ const StepOne: React.FC<StepProps> = ({
         className="input"
       />
       {error && <p className="text-red-500">{error}</p>}
-      <button onClick={handleNext} className="button">
+      <button onClick={handleNext} className="button bg-blue-600">
         Next
       </button>
-      <div className="divider"> </div>
-      <button onClick={() => signIn("google")} className="button">
-        Sign in with Google
+      <div className="flex justify-center w-full items-center gap-3 py-3">
+        <div className="border-b border-gray-800 py-2 w-full px-6" />
+        <div className="mt-3">or</div>
+        <div className="border-b border-gray-800 py-2 w-full px-6" />
+      </div>
+      <button className="gsi-material-button" onClick={() => signIn("google")}>
+        <div className="gsi-material-button-state"></div>
+        <div className="gsi-material-button-content-wrapper">
+          <div className="gsi-material-button-icon">
+            <svg
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 48 48"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
+              style={{ display: "block" }}
+            >
+              <path
+                fill="#EA4335"
+                d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
+              ></path>
+              <path
+                fill="#4285F4"
+                d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
+              ></path>
+              <path
+                fill="#FBBC05"
+                d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"
+              ></path>
+              <path
+                fill="#34A853"
+                d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
+              ></path>
+              <path fill="none" d="M0 0h48v48H0z"></path>
+            </svg>
+          </div>
+          <span className="gsi-material-button-contents">
+            Sign up with Google
+          </span>
+        </div>
       </button>
       <div>
         Already have an account?{" "}
@@ -149,6 +214,22 @@ const StepTwo: React.FC<StepProps> = ({
 
     setStep(3);
   };
+  useEffect(() => {
+    const checkIfExists = async (field: string, value: string) => {
+      const response = await fetch(
+        `/api/users/checkexituser?${field}=${value}`
+      );
+      const { success } = await response.json();
+      console.log(success);
+      if (success) {
+        setErrorWithTimeout(` ${field} already exists`);
+      }
+    };
+
+    if (formData.bvnOrNin) {
+      checkIfExists("bvnOrNin", formData.bvnOrNin);
+    }
+  }, [formData.bvnOrNin, setErrorWithTimeout]);
 
   return (
     <div
@@ -162,7 +243,7 @@ const StepTwo: React.FC<StepProps> = ({
         className="input"
       />
       {error && <p className="text-red-500">{error}</p>}
-      <div className="flex justify-between">
+      <div className="flex justify-between gap-5">
         <button onClick={() => setStep(1)} className="button">
           Back
         </button>
@@ -179,8 +260,6 @@ const StepThree: React.FC<
     setIsLoading: (isLoading: boolean) => void;
     handleSuccess: (title: string, message: string) => void;
     handleError: (title: string, message: string) => void;
-    //   handleInfo: (title: string, message: string) => void;
-    // handleWarning: (title: string, message: string) => void;
   }
 > = ({
   step,
@@ -193,6 +272,23 @@ const StepThree: React.FC<
 }) => {
   const { error, setErrorWithTimeout } = useErrorHandling();
   const router = useRouter();
+
+  useEffect(() => {
+    const checkIfExists = async (field: string, value: string) => {
+      const response = await fetch(
+        `/api/users/checkexituser?${field}=${value}`
+      );
+      const { success } = await response.json();
+      console.log(success);
+      if (success) {
+        setErrorWithTimeout(` ${field} already exists`);
+      }
+    };
+
+    if (formData.phoneNumber) {
+      checkIfExists("bvnOrNin", formData.phoneNumber);
+    }
+  }, [formData.phoneNumber, setErrorWithTimeout]);
 
   const handleSubmit = async () => {
     let valid = true;
@@ -220,6 +316,14 @@ const StepThree: React.FC<
     if (!formData.password) {
       setErrorWithTimeout("Password is required");
       valid = false;
+    } else {
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+      if (!passwordRegex.test(formData.password)) {
+        setErrorWithTimeout(
+          "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a number, and a special character"
+        );
+        valid = false;
+      }
     }
 
     if (!formData.confirmPassword) {
@@ -231,7 +335,7 @@ const StepThree: React.FC<
     }
 
     if (valid) {
-      setIsLoading(true); // Show loading spinner
+      setIsLoading(true);
       try {
         const response = await fetch("/api/users/createNewUser", {
           method: "POST",
@@ -268,10 +372,8 @@ const StepThree: React.FC<
       } catch (error) {
         handleError("Registration Failed", "Submission failed");
       } finally {
-        setIsLoading(false); // Hide loading spinner
+        setIsLoading(false);
       }
-    } else {
-      setErrorWithTimeout("Form Submission Failed");
     }
   };
 
@@ -321,6 +423,7 @@ const StepThree: React.FC<
         onChange={(e) => setFormData({ password: e.target.value })}
         className="input"
       />
+      {error && <p className="text-red-500">{error}</p>}
       <input
         type="password"
         placeholder="Confirm Password"
@@ -329,7 +432,7 @@ const StepThree: React.FC<
         className="input"
       />
       {error && <p className="text-red-500">{error}</p>}
-      <div className="flex justify-between">
+      <div className="flex justify-between gap-6">
         <button onClick={() => setStep(2)} className="button">
           Back
         </button>
@@ -384,20 +487,6 @@ const SignupForm: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  // const handleInfo = (title: string, message: string) => {
-  //   setModalType('info');
-  //   setModalTitle(title);
-  //   setModalMessage(message);
-  //   setIsModalOpen(true);
-  // };
-
-  // const handleWarning = (title: string, message: string) => {
-  //   setModalType('warning');
-  //   setModalTitle(title);
-  //   setModalMessage(message);
-  //   setIsModalOpen(true);
-  // };
-
   return (
     <div className="w-full max-w-md mx-auto mt-10 p-8 border rounded-lg shadow-lg">
       <h1 className="text-2xl font-bold mb-6">Sign Up</h1>
@@ -406,7 +495,7 @@ const SignupForm: React.FC = () => {
           <div
             key={s}
             className={`w-8 h-8 rounded-full flex items-center justify-center ${
-              step === s ? "bg-green-500 text-white" : "bg-gray-200"
+              step === s ? "bg-blue-500 text-white" : "bg-gray-200"
             }`}
           >
             {s}
@@ -437,8 +526,6 @@ const SignupForm: React.FC = () => {
             setIsLoading={setIsLoading}
             handleSuccess={handleSuccess}
             handleError={handleError}
-            // handleInfo={handleInfo}
-            // handleWarning={handleWarning}
           />
         </>
       )}

@@ -4,13 +4,9 @@ import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import Container from "@mui/material/Container";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { PaystackButton } from "react-paystack";
@@ -46,6 +42,7 @@ interface Property {
   paymentHisotry?: PaymentHisotry[];
   description: string;
   location: string;
+  initialPayment: number;
   listingPurpose: string;
   bedrooms: number;
   amenities: string[];
@@ -72,6 +69,7 @@ const MyProperty = () => {
   const [userData, setUserData] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [amountError, setAmountError] = useState<string | null>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(
     null
@@ -88,7 +86,6 @@ const MyProperty = () => {
         setUserData(response.data.user);
       } catch (error) {
         setError("Error fetching user properties");
-        console.error("Error fetching user properties:", error);
       } finally {
         setLoading(false);
       }
@@ -121,10 +118,10 @@ const MyProperty = () => {
       if (response.status === 200) {
         router.push("/userprofile");
       } else {
-        alert("Transaction Failed. Please try again.");
+        setError("Transaction Failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error processing payment:", error);
+      setError(`Error processing payment: ${error}`);
     }
   };
 
@@ -152,6 +149,7 @@ const MyProperty = () => {
 
   const handleClickOpen = (property: Property) => {
     setSelectedProperty(property);
+    setAmountError(null);
     if (property.paymentHisotry && property.paymentHisotry.length > 0) {
       setAmount(
         property.paymentHisotry[property.paymentHisotry.length - 1].amount || 0
@@ -166,6 +164,7 @@ const MyProperty = () => {
     setOpen(false);
     setSelectedProperty(null);
     setAmount(null);
+    setAmountError(null);
   };
 
   const handleDetailOpen = (property: Property) => {
@@ -204,99 +203,103 @@ const MyProperty = () => {
   });
 
   return (
-    // <Container>
     <div className="pt-4 pr-4 pl-2 w-96 sm:w-full ">
       <Typography variant="h4" gutterBottom>
         My Properties
       </Typography>
-      <TableContainer
-        component={Paper}
-        sx={{ overflowX: "auto", paddingRight: 2, marginLeft: 1 }}
-      >
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Property</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Next Payment Date</TableCell>
-              <TableCell>Property Type</TableCell>
-              <TableCell>Payment Method</TableCell>
-              <TableCell>Property Price</TableCell>
-              <TableCell>Remaining Balance</TableCell>
-              <TableCell>Amount</TableCell>
-              <TableCell>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {userProperties?.propertyPurOrRented.map((property) => (
-              <TableRow key={property.propertyId}>
-                <TableCell>
-                  <Button onClick={() => handleDetailOpen(property)}>
-                    {String(property?.title).substring(0, 3) + "..."}
-                  </Button>
-                </TableCell>
-                <TableCell>
-                  {property.paymentDate
-                    ? new Date(property.paymentDate).toLocaleDateString()
-                    : "N/A"}
-                </TableCell>
-                <TableCell>N/A</TableCell>
-                <TableCell>{property.propertyType}</TableCell>
-                <TableCell>{property.paymentMethod}</TableCell>
-                <TableCell>
-                  {formatter.format(property.propertyPrice)}
-                </TableCell>
-                <TableCell>N/A</TableCell>
-                <TableCell>N/A</TableCell>
-                <TableCell>N/A</TableCell>
-              </TableRow>
-            ))}
-            {userProperties?.propertyUnderPayment.map((property) => (
-              <TableRow key={property.propertyId}>
-                <TableCell>
-                  <Button onClick={() => handleDetailOpen(property)}>
-                    {String(property?.title).substring(0, 3) + "..."}
-                  </Button>
-                </TableCell>
-                {property.paymentHisotry?.slice(-1).map((history, index) => (
-                  <React.Fragment key={index}>
-                    <TableCell>
-                      {new Date(history.paymentDate).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>
-                      {new Date(history.nextPaymentDate).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>{property.propertyType}</TableCell>
-                    <TableCell>{property.paymentMethod}</TableCell>
-                    <TableCell>
-                      {formatter.format(history.propertyPrice)}
-                    </TableCell>
-                    <TableCell>
-                      {formatter.format(history.remainingBalance)}
-                    </TableCell>
-                    <TableCell>{formatter.format(history.amount)}</TableCell>
-                    <TableCell>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => handleClickOpen(property)}
-                      >
-                        Pay Now
-                      </Button>
-                    </TableCell>
-                  </React.Fragment>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {userProperties?.propertyPurOrRented.map((property) => (
+          <Card key={property.propertyId}>
+            <CardContent>
+              <Typography variant="h5">Title: {property.title}</Typography>
+              <Typography color="textSecondary">
+                Date:{" "}
+                {property.paymentDate
+                  ? new Date(property.paymentDate).toLocaleDateString()
+                  : "N/A"}
+              </Typography>
+              <Typography color="textSecondary">
+                Next Payment Date: N/A
+              </Typography>
+              <Typography color="textSecondary">
+                Property Type: {property.propertyType}
+              </Typography>
+              <Typography color="textSecondary">
+                Payment Method: {property.paymentMethod}
+              </Typography>
+              <Typography color="textSecondary">
+                Property Price: {formatter.format(property.propertyPrice)}
+              </Typography>
+              <Typography color="textSecondary">
+                Remaining Balance: N/A
+              </Typography>
+              <Typography color="textSecondary">Amount: N/A</Typography>
+            </CardContent>
+            <CardActions>
+              <Button size="small" onClick={() => handleDetailOpen(property)}>
+                Details
+              </Button>
+            </CardActions>
+          </Card>
+        ))}
+        {userProperties?.propertyUnderPayment.map((property) => (
+          <Card key={property.propertyId}>
+            <CardContent>
+              <Typography variant="h5">{property.title}</Typography>
+              {property.paymentHisotry?.slice(-1).map((history, index) => (
+                <div key={index}>
+                  <Typography color="textSecondary">
+                    Date: {new Date(history.paymentDate).toLocaleDateString()}
+                  </Typography>
+                  <Typography color="textSecondary">
+                    Next Payment Date:{" "}
+                    {new Date(history.nextPaymentDate).toLocaleDateString()}
+                  </Typography>
+                  <Typography color="textSecondary">
+                    Property Type: {property.propertyType}
+                  </Typography>
+                  <Typography color="textSecondary">
+                    Payment Method: {property.paymentMethod}
+                  </Typography>
+                  <Typography color="textSecondary">
+                    Property Price: {formatter.format(history.propertyPrice)}
+                  </Typography>
+                  <Typography color="textSecondary">
+                    Remaining Balance:{" "}
+                    {formatter.format(history.remainingBalance)}
+                  </Typography>
+                  <Typography color="textSecondary">
+                    Amount: {formatter.format(history.amount)}
+                  </Typography>
+                </div>
+              ))}
+            </CardContent>
+            <CardActions>
+              <Button
+                size="small"
+                variant="contained"
+                color="primary"
+                onClick={() => handleClickOpen(property)}
+              >
+                Pay Now
+              </Button>
+              <Button
+                size="small"
+                variant="contained"
+                color="primary"
+                onClick={() => handleDetailOpen(property)}
+              >
+                View Detail
+              </Button>
+            </CardActions>
+          </Card>
+        ))}
+      </div>
       {!userProperties && (
         <Typography variant="h6" className="my-4">
           No properties found.
         </Typography>
       )}
-
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Pay Now</DialogTitle>
         <DialogContent>
@@ -311,15 +314,40 @@ const MyProperty = () => {
             fullWidth
             variant="outlined"
             value={amount || ""}
-            onChange={(e) => setAmount(Number(e.target.value))}
+            onChange={(e) => {
+              const value = Number(e.target.value);
+              setAmount(value);
+              setAmountError(null);
+            }}
           />
+          {amountError && <Alert severity="error">{amountError}</Alert>}
         </DialogContent>
+
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
+          <Button
+            onClick={() => {
+              const property = userProperties?.propertyUnderPayment.find(
+                (property) =>
+                  property.propertyId === selectedProperty?.propertyId
+              );
+              if (property && amount! < property.initialPayment) {
+                setAmountError("Amount cannot be less than initial payment");
+              } else {
+                setAmountError(null);
+                (
+                  document.querySelector(".paystack-button") as HTMLElement
+                ).click();
+              }
+            }}
+            color="primary"
+          >
+            Pay Now
+          </Button>
           <PaystackButton
-            className="bg-blue-700 p-2 text-white rounded hover:bg-red-600"
+            className="paystack-button text-white"
             {...componentProps(selectedProperty!, amount!)}
           />
         </DialogActions>
