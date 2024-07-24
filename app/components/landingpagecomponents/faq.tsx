@@ -38,7 +38,10 @@ const FAQPage = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row justify-between items-center md:items-start px-4 py-16 bg-blue-300">
+    <div
+      id="faq"
+      className="flex flex-col md:flex-row justify-between items-center md:items-start px-4 py-16 bg-blue-300"
+    >
       <div className="w-full md:w-1/2 mb-8 md:mb-0">
         <h2 className="text-3xl font-bold mb-8">Frequently Asked Questions</h2>
         {faqs.map((faq, index) => (

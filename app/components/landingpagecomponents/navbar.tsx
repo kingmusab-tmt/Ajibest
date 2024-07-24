@@ -62,24 +62,24 @@ const Navbar = () => {
                   Our Services
                 </span>
                 <ul className="absolute hidden group-hover:block bg-white shadow-lg mt-2 w-52">
-                  <Link href="/services/buysell-house">
+                  <Link href="/userprofile">
                     <li className="px-4 py-2 hover:bg-gray-100">
                       Buy/Sell-House
                     </li>
                   </Link>
-                  <Link href="/services/rent">
+                  <Link href="/userprofile">
                     <li className="px-4 py-2 hover:bg-gray-100">
                       Rent-House/Farm
                     </li>
                   </Link>
-                  <Link href="/services/buysell-land">
+                  <Link href="/userprofile">
                     <li className="px-4 py-2 hover:bg-gray-100">
                       Buy/Sell-Land
                     </li>
                   </Link>
                 </ul>
               </li>
-              <Link href="/faq">
+              <Link href="/#faq" scroll={true}>
                 <li className="uppercase hover:hover:border-b-2 hover:border-b-blue-800">
                   FAQs
                 </li>
@@ -204,11 +204,11 @@ const Navbar = () => {
                     className="py-4 cursor-pointer text-red-600 font-bold"
                   >
                     <span className="uppercase hover:hover:border-b-2 hover:border-b-blue-800 cursor-pointer">
-                      Our Services
+                      Services
                     </span>
                     <ul className="absolute hidden group-hover:block bg-white shadow-lg mt-2 w-52">
                       <div>
-                        <Link href="/services/buysell-house">
+                        <Link href="/userprofile">
                           <li
                             onClick={() => setMenuOpen(false)}
                             className="px-4 py-2 hover:bg-gray-100"
@@ -218,7 +218,7 @@ const Navbar = () => {
                         </Link>
                       </div>
                       <div>
-                        <Link href="/services/rent">
+                        <Link href="/userprofile">
                           <li
                             onClick={() => setMenuOpen(false)}
                             className="px-4 py-2 hover:bg-gray-100"
@@ -228,7 +228,7 @@ const Navbar = () => {
                         </Link>
                       </div>
                       <div>
-                        <Link href="/services/buysell-land">
+                        <Link href="/userProfile">
                           <li
                             onClick={() => setMenuOpen(false)}
                             className="px-4 py-2 hover:bg-gray-100"
