@@ -6,6 +6,12 @@
   --foreground-rgb: 0, 0, 0;
 }
 
+@layer base {
+  body {
+    @apply dark:bg-slate-800 bg-gray-50;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;

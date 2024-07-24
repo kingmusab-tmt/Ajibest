@@ -33,7 +33,9 @@ const steps: Step[] = [
 const WhyChooseUs = () => {
   return (
     <div className="mt-10 why-choose-us bg-blue-100 py-16 px-4">
-      <h2 className="text-3xl font-bold text-center mb-8">Why Choose Us?</h2>
+      <h2 className="text-3xl font-bold text-center mb-8 dark:text-black">
+        Why Choose Us?
+      </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:grid-cols-4">
         {steps.map((step, index) => (
           <div
@@ -41,7 +43,9 @@ const WhyChooseUs = () => {
             className="flex flex-col items-center p-6 border rounded-lg shadow-md bg-white text-center"
           >
             <div className="mb-4">{step.icon}</div>
-            <div className="text-xl font-bold mb-2">{step.title}</div>
+            <div className="text-xl font-bold mb-2 dark:text-black">
+              {step.title}
+            </div>
             <p className="text-gray-600">{step.description}</p>
           </div>
         ))}

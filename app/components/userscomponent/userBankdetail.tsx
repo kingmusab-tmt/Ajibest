@@ -113,12 +113,14 @@ const BankAccountDetail: React.FC = () => {
   ];
 
   return (
-    <div className="p-6 bg-white shadow rounded-md">
+    <div className="p-6 bg-white dark:bg-slate-800 shadow rounded-md">
       <h2 className="text-2xl font-bold mb-6">Bank Account Detail</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-gray-700">Account Name</label>
+          <label className="block text-gray-700 dark:text-white">
+            Account Name
+          </label>
           <input
             type="text"
             name="userAccountName"
@@ -135,7 +137,9 @@ const BankAccountDetail: React.FC = () => {
           )}
         </div>
         <div>
-          <label className="block text-gray-700">Account Number</label>
+          <label className="block text-gray-700 dark:text-white">
+            Account Number
+          </label>
           <input
             type="text"
             name="userAccountNumber"
@@ -154,7 +158,7 @@ const BankAccountDetail: React.FC = () => {
       </div>
 
       <div className="mb-6">
-        <label className="block text-gray-700">Bank Name</label>
+        <label className="block text-gray-700 dark:text-white">Bank Name</label>
         <select
           name="userBankName"
           value={account.userBankName}

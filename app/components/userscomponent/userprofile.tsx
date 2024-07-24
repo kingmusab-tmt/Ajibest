@@ -93,8 +93,8 @@ const PersonalInformation = () => {
   const imageSrc = isUrl(image) ? image : `/uploads/${image}`;
 
   return (
-    <div className="p-4 bg-white shadow rounded-md overflow-y-auto sm:overflow-y-auto sm:max-h-full">
-      <div className="max-w-lg mx-auto mt-4 p-6 bg-white rounded-lg shadow-md overflow-auto">
+    <div className="p-4 bg-white dark:bg-slate-800 shadow rounded-md overflow-y-auto sm:overflow-y-auto sm:max-h-full">
+      <div className="max-w-lg mx-auto mt-4 p-6 bg-white dark:bg-slate-800 dark:shadow-white  rounded-lg shadow-lg overflow-auto">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold">Profile</h2>
         </div>
@@ -106,7 +106,9 @@ const PersonalInformation = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="mb-4">
-            <label className="block text-gray-700">Fullname</label>
+            <label className="block text-gray-700 dark:text-white">
+              Fullname
+            </label>
             <input
               type="text"
               name="name"
@@ -116,7 +118,9 @@ const PersonalInformation = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Username</label>
+            <label className="block text-gray-700 dark:text-white">
+              Username
+            </label>
             <input
               type="text"
               name="username"
@@ -128,7 +132,9 @@ const PersonalInformation = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="mb-4">
-            <label className="block text-gray-700">Phone Number</label>
+            <label className="block text-gray-700 dark:text-white">
+              Phone Number
+            </label>
             <input
               type="text"
               name="phoneNumber"
@@ -138,7 +144,7 @@ const PersonalInformation = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Email</label>
+            <label className="block text-gray-700 dark:text-white">Email</label>
             <input
               type="email"
               disabled
@@ -151,7 +157,9 @@ const PersonalInformation = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="mb-4">
-            <label className="block text-gray-700">BVN/NIN</label>
+            <label className="block text-gray-700 dark:text-white">
+              BVN/NIN
+            </label>
             <input
               type="text"
               name="bvnOrNin"
@@ -161,7 +169,9 @@ const PersonalInformation = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Country</label>
+            <label className="block text-gray-700 dark:text-white">
+              Country
+            </label>
             <input
               type="text"
               name="country"
@@ -173,7 +183,7 @@ const PersonalInformation = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="mb-4">
-            <label className="block text-gray-700">State</label>
+            <label className="block text-gray-700 dark:text-white">State</label>
             <input
               type="text"
               name="state"
@@ -183,7 +193,9 @@ const PersonalInformation = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Local Government Area</label>
+            <label className="block text-gray-700 dark:text-white">
+              Local Government Area
+            </label>
             <input
               type="text"
               name="lga"
@@ -194,7 +206,7 @@ const PersonalInformation = () => {
           </div>
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700">Address</label>
+          <label className="block text-gray-700 dark:text-white">Address</label>
           <input
             type="text"
             name="address"

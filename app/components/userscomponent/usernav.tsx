@@ -40,7 +40,7 @@ const UserDashboardSidebar: React.FC<UserDashboardSidebarProps> = ({
   return (
     <div className="flex">
       <div
-        className={`h-screen bg-blue-800 text-white flex flex-col transition-width duration-300 fixed ${
+        className={`h-screen bg-blue-800 dark:bg-slate-800 dark:shadow-white dark:shadow-xl text-white flex flex-col transition-width duration-300 fixed ${
           isOpen ? "w-64" : "w-0 sm:w-24"
         }`}
       >

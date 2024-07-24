@@ -95,8 +95,8 @@ function Login() {
     <div className="min-h-screen">
       <div className="grid place-items-center mx-auto max-w-4xl w-full py-10 min-h-screen">
         <div className="flex justify-center items-center lg:flex-row flex-col gap-6 lg:gap-0 w-full shadow-md rounded-2xl">
-          <div className="w-full flex flex-col justify-center items-center py-6 bg-[#eff1f6]">
-            <div className="rounded px-4 py-2 shadow bg-[#90a5ef]">
+          <div className="w-full flex flex-col justify-center items-center py-6 bg-white dark:bg-slate-800 shadow-lg shadow-blue-600">
+            <div className="rounded px-4 py-2">
               <Image
                 src={logo}
                 alt="bg"
@@ -104,7 +104,7 @@ function Login() {
                 className="w-auto, h-auto"
               />
             </div>
-            <div className="text-slate-900 font-medium text-xl py-5">
+            <div className="text-blue-900 dark:text-white font-medium text-xl py-5">
               Hello! Welcome Back
             </div>
 
@@ -115,12 +115,12 @@ function Login() {
               <div className="flex flex-col w-full lg:px-5">
                 <label className="text-sm">Email</label>
                 <div className="bg-white flex justify-start items-start py-3 px-4 rounded text-slate-600 text-lg mt-1">
-                  <Mail className="w-7 h-7 text-[#A1BDFD]" />
+                  <Mail className="w-7 h-7 text-blue-700" />
                   <input
                     type={"email"}
                     placeholder="example@123.com"
                     name="email"
-                    className="outline-none w-full px-4"
+                    className="outline-none w-full px-4 bg-white"
                     value={user.email}
                     onChange={handleInputChange}
                   />
@@ -129,12 +129,12 @@ function Login() {
               <div className="flex flex-col w-full lg:px-5">
                 <label className="text-sm">Password</label>
                 <div className="bg-white flex justify-start items-start py-3 px-4 rounded text-slate-600 text-lg mt-1">
-                  <Lock className="w-7 h-7 text-[#A1BDFD]" />
+                  <Lock className="w-7 h-7 text-blue-700" />
                   <input
                     type={"password"}
                     placeholder="**********"
                     name="password"
-                    className="outline-none w-full px-4"
+                    className="outline-none w-full px-4 bg-white"
                     value={user.password}
                     onChange={handleInputChange}
                   />
@@ -153,9 +153,9 @@ function Login() {
                   <p className="text-red-500 text-center max-w-sm">{error}</p>
                 )}
                 <div className="flex justify-center w-full items-center gap-3 py-3">
-                  <div className="border-b border-gray-800 py-2 w-full px-6" />
+                  <div className="border-b border-gray-800 dark:border-white py-2 w-full px-6" />
                   <div className="mt-3">or</div>
-                  <div className="border-b border-gray-800 py-2 w-full px-6" />
+                  <div className="border-b border-gray-800 dark:border-white py-2 w-full px-6" />
                 </div>
                 <div className="flex justify-center items-center w-full gap-8 pb-8">
                   <button

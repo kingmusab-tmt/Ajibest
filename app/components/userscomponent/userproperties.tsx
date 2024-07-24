@@ -209,7 +209,10 @@ const MyProperty = () => {
       </Typography>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {userProperties?.propertyPurOrRented.map((property) => (
-          <Card key={property.propertyId}>
+          <Card
+            key={property.propertyId}
+            className="dark:bg-slate-800 dark:shadow-white"
+          >
             <CardContent>
               <Typography variant="h5">Title: {property.title}</Typography>
               <Typography color="textSecondary">
@@ -243,32 +246,37 @@ const MyProperty = () => {
           </Card>
         ))}
         {userProperties?.propertyUnderPayment.map((property) => (
-          <Card key={property.propertyId}>
+          <Card
+            key={property.propertyId}
+            className="dark:bg-slate-800 dark:shadow-white dark:shadow-lg"
+          >
             <CardContent>
-              <Typography variant="h5">{property.title}</Typography>
+              <Typography variant="h5" className="dark:text-white">
+                {property.title}
+              </Typography>
               {property.paymentHisotry?.slice(-1).map((history, index) => (
                 <div key={index}>
-                  <Typography color="textSecondary">
+                  <Typography color="textSecondary" className="dark:text-white">
                     Date: {new Date(history.paymentDate).toLocaleDateString()}
                   </Typography>
-                  <Typography color="textSecondary">
+                  <Typography color="textSecondary" className="dark:text-white">
                     Next Payment Date:{" "}
                     {new Date(history.nextPaymentDate).toLocaleDateString()}
                   </Typography>
-                  <Typography color="textSecondary">
+                  <Typography color="textSecondary" className="dark:text-white">
                     Property Type: {property.propertyType}
                   </Typography>
-                  <Typography color="textSecondary">
+                  <Typography color="textSecondary" className="dark:text-white">
                     Payment Method: {property.paymentMethod}
                   </Typography>
-                  <Typography color="textSecondary">
+                  <Typography color="textSecondary" className="dark:text-white">
                     Property Price: {formatter.format(history.propertyPrice)}
                   </Typography>
-                  <Typography color="textSecondary">
+                  <Typography color="textSecondary" className="dark:text-white">
                     Remaining Balance:{" "}
                     {formatter.format(history.remainingBalance)}
                   </Typography>
-                  <Typography color="textSecondary">
+                  <Typography color="textSecondary" className="dark:text-white">
                     Amount: {formatter.format(history.amount)}
                   </Typography>
                 </div>
@@ -296,14 +304,16 @@ const MyProperty = () => {
         ))}
       </div>
       {!userProperties && (
-        <Typography variant="h6" className="my-4">
+        <Typography variant="h6" className="my-4 dark:text-white">
           No properties found.
         </Typography>
       )}
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Pay Now</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
+        <DialogTitle className="dark:bg-slate-800 dark:text-white">
+          Pay Now
+        </DialogTitle>
+        <DialogContent className="dark:bg-slate-800 dark:text-white">
+          <DialogContentText className="dark:text-white">
             Please enter the amount you want to pay or use the default amount.
           </DialogContentText>
           <TextField
@@ -313,6 +323,7 @@ const MyProperty = () => {
             type="number"
             fullWidth
             variant="outlined"
+            className=" dark:text-white dark:border-white dark:border-solid"
             value={amount || ""}
             onChange={(e) => {
               const value = Number(e.target.value);
@@ -323,8 +334,12 @@ const MyProperty = () => {
           {amountError && <Alert severity="error">{amountError}</Alert>}
         </DialogContent>
 
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
+        <DialogActions className="dark:bg-slate-800">
+          <Button
+            onClick={handleClose}
+            color="primary"
+            className="dark:text-white"
+          >
             Cancel
           </Button>
           <Button
@@ -343,11 +358,12 @@ const MyProperty = () => {
               }
             }}
             color="primary"
+            className="dark:text-white"
           >
             Pay Now
           </Button>
           <PaystackButton
-            className="paystack-button text-white"
+            className="paystack-button text-white dark:text-slate-800"
             {...componentProps(selectedProperty!, amount!)}
           />
         </DialogActions>
