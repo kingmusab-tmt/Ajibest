@@ -1,9 +1,16 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import { FaBell, FaUserEdit, FaHeadset, FaSignOutAlt } from "react-icons/fa";
+import {
+  FaBell,
+  FaUserEdit,
+  FaHeadset,
+  FaSignOutAlt,
+  FaUser,
+} from "react-icons/fa";
 // import SearchBox from "./searchbox";
-import { signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
+import Link from "next/link";
 
 interface ProfileTopNavBarProps {
   user: {
@@ -22,6 +29,7 @@ const ProfileTopNavBar: React.FC<ProfileTopNavBarProps> = ({
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const { data: session } = useSession();
 
   const handleProfileClick = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -103,6 +111,14 @@ const ProfileTopNavBar: React.FC<ProfileTopNavBarProps> = ({
                 <FaHeadset className="mr-2" />
                 Provide Support
               </button>
+              {session && session.user.role === "Admin" && (
+                <Link href="/userprofile">
+                  <button className="flex items-center p-2 w-full hover:bg-gray-100">
+                    <FaUser className="mr-2" />
+                    User Profile
+                  </button>
+                </Link>
+              )}
               <button
                 className="flex items-center p-2 w-full hover:bg-gray-100"
                 onClick={() => signOut()}

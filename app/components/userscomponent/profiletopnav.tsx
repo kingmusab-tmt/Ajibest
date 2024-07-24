@@ -1,9 +1,17 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import { FaBell, FaUserEdit, FaHeadset, FaSignOutAlt } from "react-icons/fa";
+import {
+  FaBell,
+  FaUserEdit,
+  FaHeadset,
+  FaSignOutAlt,
+  FaUser,
+} from "react-icons/fa";
+import { useSession } from "next-auth/react";
 
 import { signOut } from "next-auth/react";
+import Link from "next/link";
 
 interface ProfileTopNavBarProps {
   user: {
@@ -22,6 +30,7 @@ const ProfileTopNavBar: React.FC<ProfileTopNavBarProps> = ({
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const { data: session } = useSession();
 
   const handleProfileClick = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -49,7 +58,7 @@ const ProfileTopNavBar: React.FC<ProfileTopNavBarProps> = ({
 
   const imageSrc = isUrl(user?.image) ? user.image : `/uploads/${user.image}`;
   return (
-    <div className="w-full bg-blue-800 dark:bg-slate-800 dark:shadow-white dark:shadow-md text-white flex items-center p-4 shadow-lg relative">
+    <div className="w-full bg-blue-800 dark:bg-slate-800 dark:shadow-white dark:shadow-md text-white flex items-center p-4 shadow-lg relative z-50">
       <div className="flex items-center">
         <h1 className="font-bold pl-6">Profile</h1>
       </div>
@@ -103,6 +112,15 @@ const ProfileTopNavBar: React.FC<ProfileTopNavBarProps> = ({
                 <FaHeadset className="mr-2" />
                 Contact Support
               </button>
+              {session && session.user.role === "Admin" && (
+                <Link href="/admin">
+                  <button className="flex items-center p-2 w-full hover:bg-gray-100">
+                    <FaHeadset className="mr-2" />
+                    Admin
+                  </button>
+                </Link>
+              )}
+
               <button
                 className="flex items-center p-2 w-full hover:bg-gray-100"
                 onClick={() => signOut()}
