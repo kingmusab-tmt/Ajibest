@@ -29,7 +29,9 @@ const steps: Step[] = [
 const Diagram = () => {
   return (
     <div className="mt-10 sm:mt-24 p-4 flex flex-col justify-center items-center">
-      <h1 className="text-3xl font-bold mb-4 text-blue-700">How It Works</h1>
+      <h1 className="text-3xl font-bold mb-4 text-blue-700 dark:text-white">
+        How It Works
+      </h1>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {steps.map((step, index) => (
           <div
@@ -43,18 +45,22 @@ const Diagram = () => {
             }} // White background and blue shadow
           >
             <div className="flex items-center mb-2">
-              <step.icon className="w-6 h-6 mr-2 text-blue-500" />{" "}
+              <step.icon className="w-6 h-6 mr-2 text-blue-500 dark:text-black" />{" "}
               {/* Blue color for icons */}
-              <div className="text-xl font-bold">Step {index + 1}</div>
+              <div className="text-xl font-bold dark:text-black">
+                Step {index + 1}
+              </div>
             </div>
-            <div className="text-center">{step.title}</div>
+            <div className="text-center dark:text-black">{step.title}</div>
             {step.description && (
-              <p className="text-sm text-gray-500 mt-2">{step.description}</p>
+              <p className="text-sm text-gray-500 dark:text-black mt-2">
+                {step.description}
+              </p>
             )}
             {index < steps.length - 1 && (
               <div className="mt-2">
                 <svg
-                  className="h-5 w-5 text-primary"
+                  className="h-5 w-5 text-primary dark:text-black"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >

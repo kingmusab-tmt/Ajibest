@@ -132,7 +132,7 @@ const Userprofile = () => {
                 notifications={notifications}
                 setSelectedComponent={setSelectedComponent}
               />
-              <main className=" flex-grow bg-white overflow-auto max-h-svh">
+              <main className=" flex-grow bg-white dark:bg-slate-800 overflow-auto max-h-svh">
                 {renderComponent()}
               </main>
             </div>

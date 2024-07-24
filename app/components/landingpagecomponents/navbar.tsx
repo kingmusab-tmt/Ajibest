@@ -38,7 +38,7 @@ const Navbar = () => {
     : `/uploads/${session?.user?.image}`;
   return (
     <div>
-      <nav className="fixed w-full h-16 shadow-2xl bg-white z-50">
+      <nav className="fixed w-full h-16 shadow-2xl bg-white dark:bg-slate-800 z-50">
         <div className="flex justify-between items-center h-full w-full px-4 2xl:px-16">
           <Link href="/">
             <Image

@@ -50,17 +50,17 @@ const FAQPage = () => {
           />
         ))}
       </div>
-      <div className="w-full md:w-1/2 flex flex-col items-center">
+      <div className="w-full md:w-2/4 flex flex-col items-center">
         <Image
           src={cutstomer}
           alt="Customer Care"
-          width={500}
-          height={400}
-          className="rounded-lg shadow-lg mb-8"
+          width="300"
+          height="500"
+          className="object-contain rounded-lg shadow-lg mb-8 w-auto h-auto"
         />
-        <button className="bg-blue-500 text-white py-2 px-6 rounded-lg shadow-lg hover:bg-blue-700">
+        {/* <button className="bg-blue-500 text-white py-2 px-6 rounded-lg shadow-lg hover:bg-blue-700">
           Get in Touch
-        </button>
+        </button> */}
       </div>
     </div>
   );

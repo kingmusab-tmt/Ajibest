@@ -126,9 +126,9 @@ const NextOfKinDetail: React.FC = () => {
   ];
 
   return (
-    <div className="p-4 bg-white shadow rounded-md">
+    <div className="p-4 bg-white dark:bg-slate-800 shadow rounded-md">
       <h2 className="text-2xl font-bold mb-4">Next of Kin Detail</h2>
-      <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+      <div className="max-w-xl mx-auto mt-10 p-6 bg-white dark:bg-slate-800 dark:shadow-white rounded-lg shadow-xl">
         <div>
           <div className="p-2 rounded-lg relative max-w-[150px]">
             <EditableImage link={imageSrc} setLink={handleImageChange} />
@@ -137,7 +137,9 @@ const NextOfKinDetail: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="mb-4">
-            <label className="block text-gray-700">Full Name</label>
+            <label className="block text-gray-700 dark:text-white">
+              Full Name
+            </label>
             <input
               type="text"
               name="name"
@@ -147,7 +149,9 @@ const NextOfKinDetail: React.FC = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Address</label>
+            <label className="block text-gray-700 dark:text-white">
+              Address
+            </label>
             <input
               type="text"
               name="address"
@@ -159,7 +163,9 @@ const NextOfKinDetail: React.FC = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="mb-4">
-            <label className="block text-gray-700">Phone Number</label>
+            <label className="block text-gray-700 dark:text-white">
+              Phone Number
+            </label>
             <input
               type="text"
               name="phoneNumber"
@@ -169,7 +175,7 @@ const NextOfKinDetail: React.FC = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Email</label>
+            <label className="block text-gray-700 dark:text-white">Email</label>
             <input
               type="email"
               name="email"
@@ -181,7 +187,9 @@ const NextOfKinDetail: React.FC = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="mb-4">
-            <label className="block text-gray-700">Account Number</label>
+            <label className="block text-gray-700 dark:text-white">
+              Account Number
+            </label>
             <input
               type="text"
               name="userAccountNumber"
@@ -191,7 +199,9 @@ const NextOfKinDetail: React.FC = () => {
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700">Bank Name</label>
+            <label className="block text-gray-700 dark:text-white">
+              Bank Name
+            </label>
             <select
               name="userBankName"
               value={profile.nextOfKin.userBankName}

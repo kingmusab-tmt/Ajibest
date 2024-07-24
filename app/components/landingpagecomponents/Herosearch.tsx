@@ -2,8 +2,8 @@ import React from "react";
 
 const Herosearch = () => {
   return (
-    <div className="flex flex-wrap items-center bg-blue-100 mt-0 p-4 sm:p-8 space-y-4 sm:space-y-0 sm:space-x-4 rounded-md w-full sm:w-3/4 h-28 sm:h-36">
-      <div className="flex items-center w-full sm:w-auto text-black">
+    <div className="flex flex-wrap items-center bg-blue-100 dark:bg-slate-800 mt-0 p-4 sm:p-8 space-y-4 sm:space-y-0 sm:space-x-4 rounded-md w-full sm:w-3/4 h-28 sm:h-36">
+      <div className="flex items-center w-full sm:w-auto text-black dark:text-white">
         {/* Location dropdown */}
         <select className="w-full sm:w-auto border border-gray-300 rounded-md px-3 py-2 mr-2 sm:mr-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
           <option value="maiduguri">Maiduguri</option>

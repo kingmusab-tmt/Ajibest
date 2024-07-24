@@ -41,7 +41,7 @@ const UserInfo: React.FC = () => {
     <div className="container mx-auto p-4">
       {/* <h2 className="text-xl font-bold mb-4">User Information</h2> */}
       <div className="flex space-x-5 w-full mb-10">
-        <div className="w-1/2 bg-white border rounded-lg p-4 shadow-lg shadow-green-600">
+        <div className="w-1/2 bg-white dark:bg-slate-800 dark:shadow-white border rounded-lg p-4 shadow-lg shadow-green-600 ">
           <span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -65,7 +65,7 @@ const UserInfo: React.FC = () => {
             {formatter.format(userData?.remainingBalance ?? 0)}
           </p>
         </div>
-        <div className="w-1/2 bg-white border rounded-lg p-4 shadow-lg shadow-blue-600">
+        <div className="w-1/2 bg-white dark:bg-slate-800 dark:shadow-white border rounded-lg p-4 shadow-lg shadow-blue-600">
           <span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -89,7 +89,7 @@ const UserInfo: React.FC = () => {
         </div>
       </div>
       <div className="flex space-x-5 w-full mb-10">
-        <div className="w-1/2 bg-white border rounded-lg p-4 shadow-lg shadow-yellow-600">
+        <div className="w-1/2 bg-white dark:bg-slate-800 dark:shadow-white border rounded-lg p-4 shadow-lg shadow-yellow-600">
           <span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -116,7 +116,7 @@ const UserInfo: React.FC = () => {
               : formatter.format(0)}{" "}
           </p>
         </div>
-        <div className="w-1/2 bg-white border rounded-lg p-4 shadow-lg shadow-yellow-600">
+        <div className="w-1/2 bg-white dark:bg-slate-800 dark:shadow-white border rounded-lg p-4 shadow-lg shadow-yellow-600">
           <span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
