@@ -10,12 +10,17 @@ const Hero = () => {
     "/images/img2.webp",
     "/images/img3.webp",
     "/images/img4.webp",
+    "/images/f.webp",
+    "/images/b.jpeg",
+    "/images/c.jpg",
+    "/images/h.jpg",
+    "/images/o.jpg",
   ];
 
   useEffect(() => {
     const interval = setInterval(() => {
       setBackgroundIndex((prevIndex) => (prevIndex + 1) % backgrounds.length);
-    }, 5000);
+    }, 8000);
 
     return () => clearInterval(interval);
   }, [backgrounds.length]);
@@ -30,6 +35,7 @@ const Hero = () => {
           style={{
             backgroundImage: `url('${backgrounds[backgroundIndex]}')`, // Use the current background image from the array
             filter: "contrast(0.6)", // Adjust contrast value as per your preference
+            objectFit: "contain",
           }}
           aria-hidden="true"
         ></div>

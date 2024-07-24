@@ -1,4 +1,3 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
@@ -7,7 +6,9 @@ export const POST = async (req, res) => {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
-  const { email, name, subject, message } = req.body;
+  const body = await req.json();
+  console.log(body);
+  const { email, name, phone, subject, message } = body;
 
   const transporter = nodemailer.createTransport({
     host: "mail.triplemultipurposetechnology.com.ng",
@@ -25,7 +26,7 @@ export const POST = async (req, res) => {
       to: process.env.SUPPORT_EMAIL,
       replyTo: email,
       subject: `Support Request from ${name}: ${subject}`,
-      text: message,
+      text: `My name is ${name} and my phone number is ${phone} kindly provide answer to: ${message}`,
     });
 
     return NextResponse.json(
