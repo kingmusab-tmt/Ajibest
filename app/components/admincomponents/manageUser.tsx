@@ -4,28 +4,29 @@ import { useState } from "react";
 import UsersPage from "./users";
 import UserRole from "./updateUserRole";
 import NotificationForm from "./notification";
+import AdminPayment from "./adminpayment";
 
 type Section =
-  | "User Management"
+  | "Users Details"
   | "Manage User Role"
   | "Notify User(s)"
   | "Change User Password"
-  | "Update User Payment";
+  | "Make Payment for User";
 
 const ManageUsers: React.FC = () => {
   const [currentSection, setCurrentSection] =
-    useState<Section>("User Management");
+    useState<Section>("Users Details");
 
   const renderSection = () => {
     switch (currentSection) {
-      case "User Management":
+      case "Users Details":
         return <UsersPage />;
       case "Manage User Role":
         return <UserRole />;
       case "Notify User(s)":
         return <NotificationForm />;
-      case "Update User Payment":
-        return <p>User</p>;
+      case "Make Payment for User":
+        return <AdminPayment />;
       default:
         return null;
     }
@@ -33,18 +34,18 @@ const ManageUsers: React.FC = () => {
 
   return (
     <div className="p-6">
-      <nav className="mb-6">
+      <nav className="mb-6 flex">
         {[
-          "User Management",
+          "Users Details",
           "Manage User Role",
           "Notify User(s)",
-          "Update User Payment",
+          "Make Payment for User",
         ].map((section) => (
           <button
             key={section}
             onClick={() => setCurrentSection(section as Section)}
             className={classNames(
-              "px-4 py-2 rounded-md mr-2",
+              "px-2 sm:px-4 sm:py-2 rounded-md mr-2 text-xs sm:text-lg",
               {
                 "bg-blue-500 text-white": currentSection === section,
                 "bg-gray-200 text-gray-700": currentSection !== section,

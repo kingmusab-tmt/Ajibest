@@ -23,13 +23,13 @@ const ManageProperty: React.FC = () => {
 
   return (
     <div className="p-6">
-      <nav className="mb-6">
+      <nav className="mb-10 flex">
         {["Create New Property", "Update Property"].map((section) => (
           <button
             key={section}
             onClick={() => setCurrentSection(section as Section)}
             className={classNames(
-              "px-4 py-2 rounded-md mr-2",
+              "p-4 sm:px-4 sm:py-2 rounded-md mr-2 text-xs sm:text-lg",
               {
                 "bg-blue-500 text-white": currentSection === section,
                 "bg-gray-200 text-gray-700": currentSection !== section,

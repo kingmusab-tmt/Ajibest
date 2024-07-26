@@ -3,23 +3,38 @@ import dbConnect from "@/utils/connectDB";
 import { NextResponse } from "next/server";
 
 export async function PUT(req, res) {
-  const { id } = req.query;
-  console.log(id);
+  const body = await req.json();
+  const { transactionId, status } = body;
 
   await dbConnect();
 
   try {
-    const { status } = req.body;
+    console.log(status);
     const transaction = await Transaction.findByIdAndUpdate(
-      id,
-      { status },
+      transactionId,
+      { status: status },
       { new: true }
     );
     if (!transaction) {
-      return res.status(404).json({ message: "Transaction not found" });
+      return NextResponse.json(
+        { success: false, message: "Transaction not found" },
+        { status: 404 }
+      );
     }
-    res.status(200).json(transaction);
+    return NextResponse.json(
+      {
+        success: true,
+        transaction: {
+          _id: transaction._id,
+          status: transaction.status,
+        },
+      },
+      { status: 200 }
+    );
   } catch (error) {
-    res.status(400).json({ message: "Failed to update transaction status" });
+    return NextResponse.json(
+      { success: false, message: "Failed to update Transaction Status" },
+      { status: 400 }
+    );
   }
 }

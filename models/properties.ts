@@ -24,6 +24,7 @@ const propertySchema = new Schema<IProperty>(
   {
     title: {
       type: String,
+      index: true,
       required: [true, "Title is required"],
       maxlength: [100, "Title cannot be more than 100 characters"],
     },

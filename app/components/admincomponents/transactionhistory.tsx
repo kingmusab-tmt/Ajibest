@@ -278,10 +278,11 @@ const TransactionHistory: React.FC = () => {
   const handleUpdateStatus = async (transactionId: string, status: string) => {
     setLoading(true);
     try {
-      await axios.put(
-        `/api/transactions/updateTransaction?id=${transactionId}`,
-        { status }
-      );
+      const data = {
+        transactionId,
+        status,
+      };
+      await axios.put("/api/transactions/updateTransaction", data);
       setTransactions((prev) =>
         prev.map((transaction) =>
           transaction._id === transactionId
