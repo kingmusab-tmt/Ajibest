@@ -5,17 +5,19 @@ import { NextResponse } from "next/server";
 
 export async function GET(req) {
   const id = req.nextUrl.searchParams.get("id");
+  const title = req.nextUrl.searchParams.get("title");
+  console.log(title);
 
-  if (!id) {
-    return NextResponse.json(
-      { error: "No query parameter provided" },
-      { status: 400 }
-    );
+  let filterProperty = {};
+  if (id) {
+    filterProperty = { id };
+  } else if (title) {
+    filterProperty = { title };
   }
 
   await dbConnect();
   try {
-    const property = await Properties.findOne({ _id: id });
+    const property = await Properties.findOne(filterProperty);
     if (!property) {
       return NextResponse.json(
         { success: false, message: "Property not found" },
