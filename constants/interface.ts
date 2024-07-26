@@ -100,6 +100,6 @@ export interface Transaction {
   paymentMethod: "installment" | "payOnce";
   paymentPurpose: "For Sale" | "For Renting";
   amount: number;
-  status: "pending" | "successful" | "failed" | "canceled";
+  status: string;
   date: Date;
 }

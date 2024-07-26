@@ -131,27 +131,27 @@
 //           <MenuItem value="installment">Installment</MenuItem>
 //         </Select>
 //       </FormControl>
-//       {paymentMethod === "installment" && (
-//         <FormControl sx={{ width: 200, marginBottom: 2 }}>
-//           <InputLabel>Months</InputLabel>
-//           <Select
-//             value={months}
-//             onChange={(e) => setMonths(Number(e.target.value))}
-//           >
-//             <MenuItem value={1}>Pay Once</MenuItem>
-//             <MenuItem value={3}>3 Months</MenuItem>
-//             <MenuItem value={6}>6 Months</MenuItem>
-//             <MenuItem value={12}>12 Months</MenuItem>
-//             <MenuItem value={18}>18 Months</MenuItem>
-//             <MenuItem value={24}>24 Months</MenuItem>
-//           </Select>
-//         </FormControl>
-//       )}
-//       {paymentMethod === "installment" && months > 0 && (
-//         <Typography variant="h6" gutterBottom>
-//           Installment Amount: ₦{amount.toFixed(2)}
-//         </Typography>
-//       )}
+// {paymentMethod === "installment" && (
+//   <FormControl sx={{ width: 200, marginBottom: 2 }}>
+//     <InputLabel>Months</InputLabel>
+//     <Select
+//       value={months}
+//       onChange={(e) => setMonths(Number(e.target.value))}
+//     >
+//       <MenuItem value={1}>Pay Once</MenuItem>
+//       <MenuItem value={3}>3 Months</MenuItem>
+//       <MenuItem value={6}>6 Months</MenuItem>
+//       <MenuItem value={12}>12 Months</MenuItem>
+//       <MenuItem value={18}>18 Months</MenuItem>
+//       <MenuItem value={24}>24 Months</MenuItem>
+//     </Select>
+//   </FormControl>
+// )}
+// {paymentMethod === "installment" && months > 0 && (
+//   <Typography variant="h6" gutterBottom>
+//     Installment Amount: ₦{amount.toFixed(2)}
+//   </Typography>
+// )}
 //       <PaystackButton {...paystackProps} />
 //       <Button
 //         variant="contained"
@@ -308,25 +308,26 @@ const PaymentPage = ({
           )}
         </Select>
       </FormControl>
+      {paymentMethod === "installment" && (
+        <FormControl sx={{ width: 200, marginBottom: 2 }}>
+          <InputLabel>Months</InputLabel>
+          <Select
+            value={months}
+            onChange={(e) => setMonths(Number(e.target.value))}
+          >
+            <MenuItem value={1}>Pay Once</MenuItem>
+            <MenuItem value={3}>3 Months</MenuItem>
+            <MenuItem value={6}>6 Months</MenuItem>
+            <MenuItem value={12}>12 Months</MenuItem>
+            <MenuItem value={18}>18 Months</MenuItem>
+            <MenuItem value={24}>24 Months</MenuItem>
+          </Select>
+        </FormControl>
+      )}
       {paymentMethod === "installment" && months > 0 && (
-        <>
-          <FormControl sx={{ width: 200, marginBottom: 2 }}>
-            <InputLabel>Months</InputLabel>
-            <Select
-              value={months}
-              onChange={(e) => setMonths(Number(e.target.value))}
-            >
-              <MenuItem value={3}>3 Months</MenuItem>
-              <MenuItem value={6}>6 Months</MenuItem>
-              <MenuItem value={12}>12 Months</MenuItem>
-              <MenuItem value={18}>18 Months</MenuItem>
-              <MenuItem value={24}>24 Months</MenuItem>
-            </Select>
-          </FormControl>
-          <Typography variant="h6" gutterBottom>
-            Installment Amount: ₦{amount.toFixed(2)}
-          </Typography>
-        </>
+        <Typography variant="h6" gutterBottom>
+          Installment Amount: ₦{amount.toFixed(2)}
+        </Typography>
       )}
       <PaystackButton {...paystackProps} />
       <Button

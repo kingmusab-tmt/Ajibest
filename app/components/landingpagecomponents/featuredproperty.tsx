@@ -86,7 +86,7 @@ const FeaturedProperties: React.FC = () => {
     return slides;
   };
 
-  const itemsPerSlide = isLargeScreen ? 3 : isMediumScreen ? 2 : 1;
+  const itemsPerSlide = isLargeScreen ? 4 : isMediumScreen ? 2 : 1;
 
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -118,7 +118,7 @@ const FeaturedProperties: React.FC = () => {
         <Carousel
           animation="slide"
           autoPlay
-          interval={3000}
+          interval={6000}
           indicators={true}
           navButtonsAlwaysVisible={false}
         >
