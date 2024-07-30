@@ -195,21 +195,32 @@ const FeaturedProperties: React.FC = () => {
                       >
                         Price: {formatter.format(property.price)}
                       </Typography>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          if (!session) {
-                            router.push("/login");
-                          } else {
-                            router.push("/userprofile");
-                          }
-                        }}
-                      >
-                        {property.listingPurpose === "For Renting"
-                          ? "Rent Now"
-                          : "Buy Now"}
-                      </Button>
+                      {property.purchased || property.rented ? (
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          className="dark:text-white"
+                          disabled
+                        >
+                          Not Available
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => {
+                            if (!session) {
+                              router.push("/login");
+                            } else {
+                              router.push("/userprofile");
+                            }
+                          }}
+                        >
+                          {property.listingPurpose === "For Renting"
+                            ? "Rent Now"
+                            : "Buy Now"}
+                        </Button>
+                      )}
                     </CardContent>
                   </Card>
                 </Grid>

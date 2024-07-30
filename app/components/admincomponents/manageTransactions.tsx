@@ -35,7 +35,7 @@ const ManageTransactions: React.FC = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       <nav className="mb-6">
         {[
           // "One Time Payments Transactions",

@@ -16,7 +16,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
-import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import PropertyDetail from "./propertydetail";
@@ -180,9 +179,6 @@ const MyProperty = () => {
   if (loading) {
     return (
       <Container className="flex flex-col justify-center items-center h-screen">
-        <div className="mb-4">
-          <Image src="/logo.png" alt="Company Logo" width={100} height={100} />
-        </div>
         <CircularProgress />
       </Container>
     );
@@ -203,11 +199,11 @@ const MyProperty = () => {
   });
 
   return (
-    <div className="pt-4 pr-4 pl-2 w-96 sm:w-full ">
+    <div className="pt-4 pr-4 pl-2 w-80 sm:w-full ">
       <Typography variant="h4" gutterBottom>
         My Properties
       </Typography>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {userProperties?.propertyPurOrRented.map((property) => (
           <Card
             key={property.propertyId}

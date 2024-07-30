@@ -10,8 +10,8 @@ type Section =
   | "Users Details"
   | "Manage User Role"
   | "Notify User(s)"
-  | "Change User Password"
-  | "Make Payment for User";
+  | "Change User Password";
+// | "Make Payment for User";
 
 const ManageUsers: React.FC = () => {
   const [currentSection, setCurrentSection] =
@@ -25,27 +25,27 @@ const ManageUsers: React.FC = () => {
         return <UserRole />;
       case "Notify User(s)":
         return <NotificationForm />;
-      case "Make Payment for User":
-        return <AdminPayment />;
+      // case "Make Payment for User":
+      //   return <AdminPayment />;
       default:
         return null;
     }
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       <nav className="mb-6 flex">
         {[
           "Users Details",
           "Manage User Role",
           "Notify User(s)",
-          "Make Payment for User",
+          // "Make Payment for User",
         ].map((section) => (
           <button
             key={section}
             onClick={() => setCurrentSection(section as Section)}
             className={classNames(
-              "px-2 sm:px-4 sm:py-2 rounded-md mr-2 text-xs sm:text-lg",
+              "px-2 sm:px-4 py-2 rounded-md mr-2 text-xs sm:text-lg",
               {
                 "bg-blue-500 text-white": currentSection === section,
                 "bg-gray-200 text-gray-700": currentSection !== section,

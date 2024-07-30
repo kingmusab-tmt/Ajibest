@@ -1,41 +1,39 @@
 "use client";
 import classNames from "classnames";
 import { useState } from "react";
+import AdminPayment from "./adminpayment";
 
 type Section =
-  | "Verify User Payment"
-  | "Make Payment for User"
-  | "Update User Payments"
-  | "Change Password";
+  // | "Verify User Payment"
+  "Make Payment for User";
+// | "Update User Payments";
 
 const ManagePayments: React.FC = () => {
   const [currentSection, setCurrentSection] = useState<Section>(
-    "Update User Payments"
+    "Make Payment for User"
   );
 
   const renderSection = () => {
     switch (currentSection) {
-      case "Verify User Payment":
-        return <p>Payment</p>;
+      // case "Verify User Payment":
+      //   return <p>Payment</p>;
       case "Make Payment for User":
-        return <p>Payment</p>;
-      case "Update User Payments":
-        return <p>Payment</p>;
-      case "Change Password":
-        return <p>Payment</p>;
+        return <AdminPayment />;
+      // case "Update User Payments":
+      //   return <p>Payment</p>;
       default:
         return null;
     }
   };
 
   return (
-    <div className="p-6">
+    <div className="p-2">
       <nav className="mb-6">
         {[
-          "Personal Information",
-          "Bank Account Detail",
-          "Next of Kin Detail",
-          "Change Password",
+          // "Personal Information",
+          "Make Payment for User",
+          // "Next of Kin Detail",
+          // "Change Password",
         ].map((section) => (
           <button
             key={section}

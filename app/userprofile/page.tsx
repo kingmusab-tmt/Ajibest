@@ -47,18 +47,12 @@ const Userprofile = () => {
       try {
         const response = await fetch("/api/notify");
         const fetchedNotifications = await response.json();
-        if (Array.isArray(fetchedNotifications)) {
-          const filteredNotifications = fetchedNotifications.filter(
-            (notification) =>
-              notification.recipient === "all" ||
-              notification.recipient === session?.user?.email
-          );
-          setNotifications(filteredNotifications);
-        } else {
-          console.error(
-            "Expected an array of notifications, but received something else"
-          );
-        }
+        const filteredNotifications = fetchedNotifications.data.filter(
+          (notification) =>
+            notification.recipient === "all" ||
+            notification.recipient === session?.user?.email
+        );
+        setNotifications(filteredNotifications);
       } catch (error) {
         throw error;
       }
@@ -74,10 +68,16 @@ const Userprofile = () => {
     }
   }, [status, router]);
 
+  useEffect(() => {
+    const handleComponentChange = () => {
+      router.replace(`/userprofile?#${selectedComponent}`);
+    };
+    handleComponentChange();
+  }, [selectedComponent, router]);
+
   if (!session?.user) {
     return null; // This will never be reached because of the redirection above
   }
-  const role = session.user.role;
   const user: User = {
     name: session.user.name || "Unknown User",
     email: session.user.email || "No Email",
@@ -132,7 +132,7 @@ const Userprofile = () => {
                 notifications={notifications}
                 setSelectedComponent={setSelectedComponent}
               />
-              <main className=" flex-grow bg-white dark:bg-slate-800 overflow-auto max-h-svh">
+              <main className=" flex-grow p-4 bg-white dark:bg-slate-800 overflow-auto max-h-svh">
                 {renderComponent()}
               </main>
             </div>
