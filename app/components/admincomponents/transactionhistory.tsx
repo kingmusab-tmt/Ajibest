@@ -36,6 +36,9 @@ const TransactionHistory: React.FC = () => {
             userId,
             filterUserName,
           },
+          headers: {
+            "Cache-Control": "no-cache, no-store",
+          },
         });
         setTransactions(response.data.transactions);
         setTotal(response.data.total);

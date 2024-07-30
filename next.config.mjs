@@ -1,5 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // cache: {
+  //   // Disable caching for all pages
+  //   etag: false,
+  //   // Disable caching for all pages
+  //   lastModified: false,
+  // },
+
   experimental: {
     // appDir: true,
     serverComponentsExternalPackages: ["mongoose"],

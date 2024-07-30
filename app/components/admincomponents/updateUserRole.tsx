@@ -25,7 +25,12 @@ const UserRoleComponent: React.FC = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("/api/users/getUsers"); // Replace with your API endpoint
+      const response = await axios.get("/api/users/getUsers", {
+        headers: {
+          "Cache-Control": "no-cache, no-store",
+        },
+      }); // Replace with your API endpoint
+
       setUsers(response.data.data); // Assuming response.data contains an array of users
     } catch (error) {
       console.error("Failed to fetch users: ", error);

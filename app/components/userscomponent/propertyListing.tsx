@@ -60,7 +60,12 @@ const PropertyListing = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await axios.get("/api/property/getproperties");
+        const response = await axios.get("/api/property/getproperties", {
+          headers: {
+            "Cache-Control": "no-cache",
+          },
+        });
+
         if (
           response.data &&
           response.data.data &&
@@ -80,22 +85,22 @@ const PropertyListing = () => {
     fetchProperties();
   }, []);
 
-  useEffect(() => {
-    const fetchFavoriteProperties = async () => {
-      try {
-        const response = await axios.get("/api/favourite");
-        const favoriteProperties = response.data.data;
-        if (Array.isArray(favoriteProperties)) {
-          setFavoriteProperties(favoriteProperties);
-        } else {
-          console.error("API response is not as expected:", favoriteProperties);
-        }
-      } catch (error) {
-        console.error("Failed to fetch favorite properties:", error);
-      }
-    };
-    fetchFavoriteProperties();
-  }, []);
+  // useEffect(() => {
+  //   const fetchFavoriteProperties = async () => {
+  //     try {
+  //       const response = await axios.get("/api/favourite");
+  //       const favoriteProperties = response.data.data;
+  //       if (Array.isArray(favoriteProperties)) {
+  //         setFavoriteProperties(favoriteProperties);
+  //       } else {
+  //         console.error("API response is not as expected:", favoriteProperties);
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to fetch favorite properties:", error);
+  //     }
+  //   };
+  //   fetchFavoriteProperties();
+  // }, []);
 
   useEffect(() => {
     const applyFilters = () => {

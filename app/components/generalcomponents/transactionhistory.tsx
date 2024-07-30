@@ -43,13 +43,25 @@ const TransactionHistory: React.FC = () => {
           transactionType,
           transactionStatus,
         };
-        const response = await axios.get("/api/transactions", { params: body });
+        const response = await axios.get("/api/transactions", {
+          params: body,
+          headers: {
+            "Cache-Control": "no-cache, no-store",
+          },
+        });
+
         console.log(response.data.transactions);
         const transactionsData = await Promise.all(
           response.data.transactions.map(async (transaction: Transaction) => {
             const propertyResponse = await axios.get(
-              `/api/property/getsingleproperty?id=${transaction.propertyId}`
+              `/api/property/getsingleproperty?id=${transaction.propertyId}`,
+              {
+                headers: {
+                  "Cache-Control": "no-cache, no-store",
+                },
+              }
             );
+
             console.log("this is the response", propertyResponse.data.data);
             const userResponse =
               session?.user.role === "admin"
