@@ -12,9 +12,9 @@ interface DashboardData {
 const fetchData = async (): Promise<DashboardData> => {
   try {
     const [transactionsRes, usersRes, propertiesRes] = await Promise.all([
-      fetch("/api/transactions"),
-      fetch("/api/users/getUsers"),
-      fetch("/api/property/getproperties"),
+      fetch("/api/transactions", { cache: "no-cache" }),
+      fetch("/api/users/getUsers", { cache: "no-cache" }),
+      fetch("/api/property/getproperties", { cache: "no-cache" }),
     ]);
 
     const [transactions, users, properties] = await Promise.all([

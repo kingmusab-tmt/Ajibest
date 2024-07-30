@@ -48,7 +48,12 @@ const FeaturedProperties: React.FC = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await axios.get("/api/property/getproperties");
+        const response = await axios.get("/api/property/getproperties", {
+          headers: {
+            "Cache-Control": "no-cache, no-store",
+          },
+        });
+
         if (
           response.data &&
           response.data.data &&

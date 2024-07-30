@@ -81,7 +81,12 @@ const MyProperty = () => {
   useEffect(() => {
     const fetchUserProperties = async () => {
       try {
-        const response = await axios.get("/api/users/searchbyemail");
+        const response = await axios.get("/api/users/searchbyemail", {
+          headers: {
+            "Cache-Control": "no-store",
+          },
+        });
+
         setUserData(response.data.user);
       } catch (error) {
         setError("Error fetching user properties");

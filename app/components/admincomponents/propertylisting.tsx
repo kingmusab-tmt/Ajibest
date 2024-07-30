@@ -26,9 +26,15 @@ export default function Properties() {
   const router = useRouter();
 
   useEffect(() => {
-    axios.get("/api/property/getproperties").then((response) => {
-      setProperties(response.data.data);
-    });
+    axios
+      .get("/api/property/getproperties", {
+        headers: {
+          "Cache-Control": "no-cache, no-store",
+        },
+      })
+      .then((response) => {
+        setProperties(response.data.data);
+      });
   }, []);
 
   const filteredProperties = properties

@@ -50,8 +50,14 @@ const AdminPayment: React.FC = () => {
 
     try {
       const response = await axios.get(
-        `/api/property/getsingleproperty?title=${propertyTitle}`
+        `/api/property/getsingleproperty?title=${propertyTitle}`,
+        {
+          headers: {
+            "Cache-Control": "no-cache, no-store",
+          },
+        }
       );
+
       console.log(response);
       if (response.data.success && response.data.data) {
         const property = response.data.data;
