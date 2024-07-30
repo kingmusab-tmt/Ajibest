@@ -78,90 +78,94 @@ const UserRoleComponent: React.FC = () => {
         onChange={handleSearch}
         className="mb-4 px-3 py-2 border border-gray-300 rounded-md w-full sm:w-1/2 lg:w-1/3"
       />
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
-              Name
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
-              User
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
-              Agent
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
-              Admin
-            </th>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {users.map((user) => (
-            <tr key={user._id}>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {user.name}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <input
-                  type="checkbox"
-                  checked={user.role === "User"}
-                  onChange={() => handleRoleChange(user._id, "User")}
-                />
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <input
-                  type="checkbox"
-                  checked={user.role === "Agent"}
-                  onChange={() => handleRoleChange(user._id, "Agent")}
-                />
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <input
-                  type="checkbox"
-                  checked={user.role === "Admin"}
-                  onChange={() => handleRoleChange(user._id, "Admin")}
-                />
-              </td>
+      <div className="overflow-y-auto overflow-x-auto max-h-screen max-w-80 sm:max-w-full ">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Name
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                User
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Agent
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Admin
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <ReactPaginate
-        previousLabel={"Previous"}
-        nextLabel={"Next"}
-        breakLabel={"..."}
-        breakClassName={"break-me"}
-        pageCount={Math.ceil(filteredUsers.length / usersPerPage)}
-        marginPagesDisplayed={2}
-        pageRangeDisplayed={5}
-        onPageChange={handlePageClick}
-        containerClassName={"pagination flex justify-center items-center mt-4"}
-        activeClassName={"active"}
-        pageClassName={"page-item mx-1"}
-        pageLinkClassName={
-          "page-link px-2 py-1 border rounded-md hover:bg-gray-200"
-        }
-        previousClassName={"page-item"}
-        nextClassName={"page-item"}
-        previousLinkClassName={
-          "page-link px-2 py-1 border rounded-md hover:bg-gray-200"
-        }
-        nextLinkClassName={
-          "page-link px-2 py-1 border rounded-md hover:bg-gray-200"
-        }
-      />
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {users.map((user) => (
+              <tr key={user._id}>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  {user.name}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <input
+                    type="checkbox"
+                    checked={user.role === "User"}
+                    onChange={() => handleRoleChange(user._id, "User")}
+                  />
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <input
+                    type="checkbox"
+                    checked={user.role === "Agent"}
+                    onChange={() => handleRoleChange(user._id, "Agent")}
+                  />
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <input
+                    type="checkbox"
+                    checked={user.role === "Admin"}
+                    onChange={() => handleRoleChange(user._id, "Admin")}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          breakClassName={"break-me"}
+          pageCount={Math.ceil(filteredUsers.length / usersPerPage)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName={
+            "pagination flex justify-center items-center mt-4"
+          }
+          activeClassName={"active"}
+          pageClassName={"page-item mx-1"}
+          pageLinkClassName={
+            "page-link px-2 py-1 border rounded-md hover:bg-gray-200"
+          }
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={
+            "page-link px-2 py-1 border rounded-md hover:bg-gray-200"
+          }
+          nextLinkClassName={
+            "page-link px-2 py-1 border rounded-md hover:bg-gray-200"
+          }
+        />
+      </div>
     </div>
   );
 };

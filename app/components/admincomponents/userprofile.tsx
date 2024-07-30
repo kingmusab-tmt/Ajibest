@@ -85,7 +85,10 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
   const imageSrc = isUrl(user.image) ? user.image : `/uploads/${user.image}`;
 
   return (
-    <div className=" h-80 w-auto overflow-auto p-4 mx-auto bg-white shadow-lg rounded-lg">
+    <div
+      className=" h-80 w-auto overflow-auto p-4 mx-auto bg-white shadow-lg rounded-lg"
+      id="UpdateProfile"
+    >
       <div className="flex flex-col items-center">
         <Image
           src={imageSrc}

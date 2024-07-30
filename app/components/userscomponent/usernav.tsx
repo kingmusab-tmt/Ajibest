@@ -44,8 +44,8 @@ const UserDashboardSidebar: React.FC<UserDashboardSidebarProps> = ({
           isOpen ? "w-64" : "w-0 sm:w-24"
         }`}
       >
-        <div className="flex items-center justify-between p-4">
-          <button onClick={toggleSidebar} className="text-white z-10">
+        <div className="flex items-center justify-between p-4 ">
+          <button onClick={toggleSidebar} className="text-white z-30">
             <FaBars />
           </button>
         </div>

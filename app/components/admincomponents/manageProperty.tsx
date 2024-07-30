@@ -22,7 +22,7 @@ const ManageProperty: React.FC = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       <nav className="mb-10 flex">
         {["Create New Property", "Update Property"].map((section) => (
           <button

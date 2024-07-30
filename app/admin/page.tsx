@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+
 import UserDashboardSidebar from "../components/admincomponents/adminnav";
 import ProfileTopNavBar from "../components/admincomponents/profiletopnav";
 import ManageProperty from "../components/admincomponents/manageProperty";
@@ -63,6 +64,13 @@ const AdminPage = () => {
     }
   }, [status, router]);
 
+  useEffect(() => {
+    const handleComponentChange = () => {
+      router.replace(`/admin?#${selectedComponent}`);
+    };
+    handleComponentChange();
+  }, [selectedComponent, router]);
+
   if (!session?.user) {
     return null; // This will never be reached because of the redirection above
   }
@@ -98,13 +106,7 @@ const AdminPage = () => {
       case "UpdateProfile":
         return <UpdateProfile />;
       default:
-        return (
-          <DashboardPage
-          // transactions={undefined}
-          // users={undefined}
-          // properties={undefined}
-          />
-        );
+        return <DashboardPage />;
     }
   };
 
@@ -127,7 +129,7 @@ const AdminPage = () => {
             notifications={notifications}
             setSelectedComponent={setSelectedComponent}
           />
-          <main className="flex-grow p-4 bg-white overflow-auto">
+          <main className="flex-grow p-2 bg-white dark:bg-slate-800 overflow-auto max-h-svh">
             {renderComponent()}
           </main>
         </div>

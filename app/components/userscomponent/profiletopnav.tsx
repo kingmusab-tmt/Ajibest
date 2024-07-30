@@ -8,9 +8,7 @@ import {
   FaSignOutAlt,
   FaUser,
 } from "react-icons/fa";
-import { useSession } from "next-auth/react";
-
-import { signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 
 interface ProfileTopNavBarProps {
@@ -58,7 +56,7 @@ const ProfileTopNavBar: React.FC<ProfileTopNavBarProps> = ({
 
   const imageSrc = isUrl(user?.image) ? user.image : `/uploads/${user.image}`;
   return (
-    <div className="w-full bg-blue-800 dark:bg-slate-800 dark:shadow-white dark:shadow-md text-white flex items-center p-4 shadow-lg relative z-50">
+    <div className="w-full bg-blue-800 dark:bg-slate-800 dark:shadow-white dark:shadow-md text-white flex items-center p-4 shadow-lg relative ">
       <div className="flex items-center">
         <h1 className="font-bold pl-6">Profile</h1>
       </div>
