@@ -12,7 +12,11 @@ const FundUserWallet = () => {
 
   const handleFundWallet = async () => {
     try {
-      const response = await fetch("/api/users/searchbyemail");
+      const response = await fetch("/api/users/searchbyemail", {
+        headers: {
+          "Cache-Control": "no-cache, no-store",
+        },
+      });
 
       if (response.ok) {
         const data = await response.json();

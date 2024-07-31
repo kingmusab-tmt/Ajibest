@@ -41,7 +41,12 @@ const AdminPage = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await fetch("/api/notify");
+        const response = await fetch("/api/notify", {
+          headers: {
+            "Cache-Control": "no-cache, no-store",
+          },
+        });
+
         const fetchedNotifications = await response.json();
         const filteredNotifications = fetchedNotifications.data.filter(
           (notification) =>

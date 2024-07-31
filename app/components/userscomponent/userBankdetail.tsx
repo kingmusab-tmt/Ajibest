@@ -15,7 +15,11 @@ const BankAccountDetail: React.FC = () => {
 
   useEffect(() => {
     if (status === "authenticated") {
-      fetch("/api/users/getSingleUser")
+      fetch("/api/users/getSingleUser", {
+        headers: {
+          "Cache-Control": "no-cache, no-store",
+        },
+      })
         .then((response) => response.json())
         .then((data) => {
           setAccount(data.data);

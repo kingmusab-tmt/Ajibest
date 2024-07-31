@@ -100,6 +100,7 @@ const NewProperty = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Cache-Control": "no-cache, no-store",
         },
         body: JSON.stringify(createProperty),
       });

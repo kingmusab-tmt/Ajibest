@@ -52,8 +52,14 @@ const StepOne: React.FC<StepProps> = ({
   useEffect(() => {
     const checkIfExists = async (field: string, value: string) => {
       const response = await fetch(
-        `/api/users/checkexituser?${field}=${value}`
+        `/api/users/checkexituser?${field}=${value}`,
+        {
+          headers: {
+            "Cache-Control": "no-cache, no-store",
+          },
+        }
       );
+
       const { success } = await response.json();
       console.log(success);
       if (success) {
@@ -217,7 +223,12 @@ const StepTwo: React.FC<StepProps> = ({
   useEffect(() => {
     const checkIfExists = async (field: string, value: string) => {
       const response = await fetch(
-        `/api/users/checkexituser?${field}=${value}`
+        `/api/users/checkexituser?${field}=${value}`,
+        {
+          headers: {
+            "Cache-Control": "no-cache, no-store",
+          },
+        }
       );
       const { success } = await response.json();
       console.log(success);
@@ -276,8 +287,14 @@ const StepThree: React.FC<
   useEffect(() => {
     const checkIfExists = async (field: string, value: string) => {
       const response = await fetch(
-        `/api/users/checkexituser?${field}=${value}`
+        `/api/users/checkexituser?${field}=${value}`,
+        {
+          headers: {
+            "Cache-Control": "no-cache, no-store",
+          },
+        }
       );
+
       const { success } = await response.json();
       console.log(success);
       if (success) {

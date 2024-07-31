@@ -41,11 +41,15 @@ const PropertyDetail: React.FC<PropertyDetailProps> = ({
 
   useEffect(() => {
     if (!property?.propertyId) return;
-
     const fetchPropertyDetails = async () => {
       try {
         const response = await fetch(
-          `/api/property/getsingleproperty?id=${property.propertyId}`
+          `/api/property/getsingleproperty?id=${property.propertyId}`,
+          {
+            headers: {
+              "Cache-Control": "no-cache, no-store",
+            },
+          }
         );
         const data = await response.json();
         setNewProperty(data.data);
@@ -53,7 +57,6 @@ const PropertyDetail: React.FC<PropertyDetailProps> = ({
         console.error("Failed to fetch property details:", error);
       }
     };
-
     fetchPropertyDetails();
   }, [property?.propertyId]);
 

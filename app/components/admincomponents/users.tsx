@@ -9,7 +9,12 @@ const UsersPage = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const res = await fetch("/api/users/getUsers");
+      const res = await fetch("/api/users/getUsers", {
+        headers: {
+          "Cache-Control": "no-cache, no-store",
+        },
+      });
+
       const data = await res.json();
       setUsers(data.data);
     };
