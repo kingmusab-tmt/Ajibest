@@ -23,12 +23,17 @@ const PersonalInformation = () => {
 
   useEffect(() => {
     if (status === "authenticated") {
-      fetch("/api/users/getSingleUser")
+      fetch("/api/users/getSingleUser", {
+        headers: {
+          "Cache-Control": "no-cache, no-store",
+        },
+      })
         .then((response) => response.json())
         .then((data) => {
           setProfile(data.data);
           setImage(data.data.image);
-        });
+        })
+        .catch((error) => console.error("Error fetching user data:", error));
     }
   }, [session, status]);
 

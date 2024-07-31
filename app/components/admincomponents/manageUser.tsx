@@ -4,14 +4,14 @@ import { useState } from "react";
 import UsersPage from "./users";
 import UserRole from "./updateUserRole";
 import NotificationForm from "./notification";
-import AdminPayment from "./adminpayment";
+import SendBulkSMS from "./sendSms";
 
 type Section =
   | "Users Details"
   | "Manage User Role"
   | "Notify User(s)"
-  | "Change User Password";
-// | "Make Payment for User";
+  | "Change User Password"
+  | "Send SMS to User(s)";
 
 const ManageUsers: React.FC = () => {
   const [currentSection, setCurrentSection] =
@@ -25,8 +25,8 @@ const ManageUsers: React.FC = () => {
         return <UserRole />;
       case "Notify User(s)":
         return <NotificationForm />;
-      // case "Make Payment for User":
-      //   return <AdminPayment />;
+      case "Send SMS to User(s)":
+        return <SendBulkSMS />;
       default:
         return null;
     }
@@ -39,7 +39,7 @@ const ManageUsers: React.FC = () => {
           "Users Details",
           "Manage User Role",
           "Notify User(s)",
-          // "Make Payment for User",
+          "Send SMS to User(s)",
         ].map((section) => (
           <button
             key={section}

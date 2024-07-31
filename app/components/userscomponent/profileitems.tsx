@@ -11,12 +11,14 @@ const UserInfo: React.FC = () => {
     const fetchUserData = async () => {
       if (session?.user?.email) {
         try {
-          const response = await fetch("/api/users/searchbyemail");
+          const response = await fetch("/api/users/searchbyemail", {
+            headers: {
+              "Cache-Control": "no-cache, no-store",
+            },
+          });
           if (response.ok) {
             const data = await response.json();
-            setUserData({
-              ...data.user,
-            });
+            setUserData({ ...data.user });
           } else {
             return;
           }
@@ -25,7 +27,6 @@ const UserInfo: React.FC = () => {
         }
       }
     };
-
     if (status === "authenticated") {
       fetchUserData();
     }

@@ -203,7 +203,11 @@ const PaymentPage = ({
       alert("You need to be signed in to view this page");
       onClose();
     } else {
-      fetch("/api/users/searchbyemail")
+      fetch("/api/users/searchbyemail", {
+        headers: {
+          "Cache-Control": "no-cache, no-store",
+        },
+      })
         .then((response) => response.json())
         .then((data) => {
           setPhone(data.user.phoneNumber);
