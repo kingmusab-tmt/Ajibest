@@ -542,7 +542,7 @@ const NotificationForm = () => {
     const senderName = process.env.NEXT_PUBLIC_SMS_SENDER as string;
     const headers = {
       "X-Token": process.env.NEXT_PUBLIC_VT_TOKEN as string,
-      "X-Secret": process.env.NEXT_PUBLIC_VT_SECRET as string,
+      "X-Secret": process.env.NEXT_SECRET_VT_SECRET as string,
     };
 
     try {
