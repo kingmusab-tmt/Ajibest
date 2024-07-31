@@ -81,7 +81,10 @@ const SendBulkSMS: React.FC = () => {
         "https://messaging.vtpass.com/api/sms/sendsms",
         {
           params,
-          headers,
+          headers: {
+            ...headers,
+            "Cache-Control": "no-cache, no-store",
+          },
         }
       );
 
