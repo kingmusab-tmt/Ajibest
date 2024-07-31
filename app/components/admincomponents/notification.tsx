@@ -555,10 +555,12 @@ const NotificationForm = () => {
             message,
             responsetype: "json",
           },
-          headers,
+          headers: {
+            ...headers,
+            "Cache-Control": "no-cache, no-store",
+          },
         }
       );
-
       const responseCode = response.data?.responseCode;
       const responseMessage =
         smsResponseMessages[responseCode] || "Failed to send SMS";
