@@ -73,7 +73,7 @@ const SendBulkSMS: React.FC = () => {
 
     const headers = {
       "X-Token": process.env.NEXT_PUBLIC_VT_TOKEN as string,
-      "X-Secret": process.env.NEXT_SECRET_VT_SECRET as string,
+      "X-Secret": process.env.NEXT_PUBLIC_VT_SECRET as string,
     };
 
     try {
