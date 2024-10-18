@@ -3,6 +3,7 @@ import dbConnect from "../../../../utils/connectDB";
 import Properties from "@/models/properties";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
 export async function GET(req) {
   const id = req.nextUrl.searchParams.get("id");
   const title = req.nextUrl.searchParams.get("title");

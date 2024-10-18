@@ -7,6 +7,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/auth"
 
+export const dynamic = 'force-dynamic';
 export async function DELETE(req) {
   const _id = req.nextUrl.searchParams.get("id");
   await dbConnect();

@@ -2,6 +2,8 @@ import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 
+
+export const dynamic = 'force-dynamic';
 export async function POST(request: Request): Promise<NextResponse> {
   const { searchParams } = new URL(request.url);
   const filename = searchParams.get("filename");

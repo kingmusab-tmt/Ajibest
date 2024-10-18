@@ -7,7 +7,7 @@ import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
 
 dbConnect();
-
+export const dynamic = 'force-dynamic';
 export async function POST(req) {
   const session = await getServerSession(authOptions);
 

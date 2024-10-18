@@ -2,6 +2,7 @@ import dbConnect from "../../../../utils/connectDB";
 import Property from "../../../../models/properties";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
 export async function GET() {
   await dbConnect();
 

@@ -2,6 +2,7 @@ import dbConnect from "../../../../utils/connectDB";
 import Property from "../../../../models/properties";
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
 export async function PUT(req) {
   await dbConnect();
   const _id = req.nextUrl.searchParams.get("id");
