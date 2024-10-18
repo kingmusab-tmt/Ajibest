@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getNotification } from "@/models/notification";
 
+
+export const dynamic = 'force-dynamic';
 export async function GET(req: NextRequest, res: NextResponse) {
   const _id = req.nextUrl.searchParams.get("id");
 

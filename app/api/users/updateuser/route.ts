@@ -5,6 +5,8 @@ import { getServerSession } from "next-auth";
 import User from "@/models/user";
 import dbConnect from "@/utils/connectDB";
 
+
+export const dynamic = 'force-dynamic';
 export async function PUT(req) {
   await dbConnect();
   const data = await req.json();

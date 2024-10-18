@@ -2,6 +2,8 @@ import dbConnect from "../../../../utils/connectDB";
 import Property from "../../../../models/properties";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req) {
   await dbConnect();
   const data = await req.json();

@@ -5,6 +5,7 @@ import dbConnect from "@/utils/connectDB";
 import { v4 as uuidv4 } from "uuid";
 import mongoose from "mongoose";
 
+export const dynamic = "force-dynamic";
 export async function POST(req) {
   await dbConnect();
 

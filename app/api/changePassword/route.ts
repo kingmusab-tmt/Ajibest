@@ -4,6 +4,7 @@ import dbConnect from "@/utils/connectDB";
 import { getServerSession } from "next-auth";
 import bcrypt from "bcrypt";
 
+export const dynamic = 'force-dynamic';
 export async function PUT(req) {
   await dbConnect();
   const data = await req.json();

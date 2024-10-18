@@ -2,6 +2,8 @@ import Transaction from "../../../../models/transaction";
 import dbConnect from "@/utils/connectDB";
 import { NextResponse } from "next/server";
 
+
+export const dynamic = 'force-dynamic';
 export async function PUT(req, res) {
   const body = await req.json();
   const { transactionId, status } = body;

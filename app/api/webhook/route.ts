@@ -6,7 +6,7 @@ import Transaction from "@/models/transaction";
 import { NextResponse } from "next/server";
 
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
-
+export const dynamic = "force-dynamic";
 export async function POST(req) {
   if (req.method !== "POST") {
     return NextResponse.json(

@@ -7,6 +7,8 @@ import authMiddleware from "../../../../utils/authMiddleware";
 import roleMiddleware from "../../../../utils/roleMiddleware";
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest, res: NextResponse) {
   const username = req.nextUrl.searchParams.get("username");
   const email = req.nextUrl.searchParams.get("email");

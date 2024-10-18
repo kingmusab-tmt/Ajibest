@@ -2,6 +2,8 @@ import dbConnect from "@/utils/connectDB";
 import User from "@/models/user";
 import { NextRequest, NextResponse } from "next/server";
 
+
+export const dynamic = 'force-dynamic';
 export const POST = async (request: NextRequest) => {
   await dbConnect(); // Connect to the database
 
