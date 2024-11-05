@@ -6,7 +6,7 @@ import Subscription from "@/models/subscription";
 import dbConnect from "@/utils/connectDB";
 
 webpush.setVapidDetails(
-  "<mailto:musab.buraimoh@gmail.com>",
+  "mailto:musab.buraimoh@gmail.com",
   process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
   process.env.VAPID_PRIVATE_KEY!
 );
