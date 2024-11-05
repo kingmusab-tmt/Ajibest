@@ -85,15 +85,13 @@
 //     });
 //   }
 // }
-"use server";
-
 import {
   getAllNotifications,
   updateNotification,
   deleteNotification,
   saveNotification,
 } from "@/models/notification";
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { sendNotification } from "@/app/actions";
 import dbConnect from "@/utils/connectDB";
 

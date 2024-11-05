@@ -20,7 +20,7 @@
 //   }
 // }
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getNotification } from "@/models/notification";
 import dbConnect from "@/utils/connectDB";
 
