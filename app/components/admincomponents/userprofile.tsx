@@ -210,9 +210,9 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
           </p>
           <p>
             <strong>Next Payment Due Date:</strong>{" "}
-            {user.propertyUnderPayment["paymentHistory"]
-              .pop()
-              ?.nextPaymentDate?.toString()}
+            {user.propertyUnderPayment[
+              "paymentHisotry"
+            ]?.nextPaymentDate?.toString()}
           </p>
           <p>
             <strong>Referral Earnings:</strong> NGN
