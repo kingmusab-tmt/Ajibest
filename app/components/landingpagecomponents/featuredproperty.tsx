@@ -114,8 +114,8 @@ const FeaturedProperties: React.FC = () => {
     <div className="mt-5 p-4 justify-center items-center">
       <Box sx={{ textAlign: "center", padding: 2 }}>
         <Typography
-          variant="h4"
-          sx={{ marginBottom: 4, textColor: "blue", fontWeight: "800" }}
+          variant="h5"
+          sx={{ marginBottom: 4, color: "blue", fontWeight: "600" }}
           gutterBottom
         >
           Featured Properties

@@ -11,13 +11,14 @@ interface FAQ {
 
 const faqs: FAQ[] = [
   {
-    question: "What is your return policy?",
-    answer: "You can return any item within 30 days of purchase.",
+    question: "Where are your property locations?",
+    answer:
+      "We currently have properties in Borno State. We plan to expand to all 36 states soon.",
   },
   {
-    question: "How can I contact customer service?",
+    question: "Can I pay on Installment Basis",
     answer:
-      "You can reach our customer service at support@example.com or call us at (123) 456-7890.",
+      "Yes you are allowed to pay on Installment basis, but you can also pay a lumpsum or at once.",
   },
   {
     question: "Do you offer international shipping?",
