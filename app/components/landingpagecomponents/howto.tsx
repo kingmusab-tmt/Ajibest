@@ -28,7 +28,10 @@ const steps: Step[] = [
 
 const Diagram = () => {
   return (
-    <div className="mt-10 sm:mt-24 p-4 flex flex-col justify-center items-center">
+    <div
+      id="howitworks"
+      className="mt-10 sm:mt-24 p-4 flex flex-col justify-center items-center"
+    >
       <h1 className="text-3xl font-bold mb-4 text-blue-700 dark:text-white">
         How It Works
       </h1>

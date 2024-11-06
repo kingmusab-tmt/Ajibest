@@ -57,28 +57,11 @@ const Navbar = () => {
                   About Us
                 </li>
               </Link>
-              <li className="relative group">
-                <span className="uppercase hover:hover:border-b-2 hover:border-b-blue-800 cursor-pointer">
-                  Our Services
-                </span>
-                <ul className="absolute hidden group-hover:block bg-white shadow-lg mt-2 w-52">
-                  <Link href="/userprofile">
-                    <li className="px-4 py-2 hover:bg-gray-100">
-                      Buy/Sell-House
-                    </li>
-                  </Link>
-                  <Link href="/userprofile">
-                    <li className="px-4 py-2 hover:bg-gray-100">
-                      Rent-House/Farm
-                    </li>
-                  </Link>
-                  <Link href="/userprofile">
-                    <li className="px-4 py-2 hover:bg-gray-100">
-                      Buy/Sell-Land
-                    </li>
-                  </Link>
-                </ul>
-              </li>
+              <Link href="/#services" scroll={true}>
+                <li className="uppercase hover:hover:border-b-2 hover:border-b-blue-800">
+                  Services
+                </li>
+              </Link>
               <Link href="/#faq" scroll={true}>
                 <li className="uppercase hover:hover:border-b-2 hover:border-b-blue-800">
                   FAQs
@@ -198,7 +181,7 @@ const Navbar = () => {
                 </Link>
               </div>
               <div>
-                <Link href="/services/buy-land">
+                <Link href="/#services">
                   <li
                     onClick={() => setMenuOpen(false)}
                     className="py-4 cursor-pointer text-red-600 font-bold"
