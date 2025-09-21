@@ -19,13 +19,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <Layout>
-          <AuthProvider>
-            <Providers>{children}</Providers>
-          </AuthProvider>
-        </Layout>
+        <Providers>
+          <Layout>
+            <AuthProvider>{children}</AuthProvider>
+          </Layout>
+        </Providers>
       </body>
     </html>
   );

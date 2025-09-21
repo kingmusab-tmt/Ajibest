@@ -1,7 +1,6 @@
 "use server";
 
 import webpush from "web-push";
-import image from "../public/favicon-32x32.png";
 import Subscription from "@/models/subscription";
 import dbConnect from "@/utils/connectDB";
 
@@ -68,7 +67,7 @@ export async function sendNotification(message) {
         JSON.stringify({
           title: "New Notification",
           body: message,
-          icon: image,
+          icon: "/favicon-32x32.png",
         })
       );
     }

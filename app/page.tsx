@@ -13,20 +13,41 @@ import CustomerStats from "./components/landingpagecomponents/customerstat";
 
 export default function Home() {
   const [isClient, setIsClient] = useState(false);
+
   useEffect(() => {
     setIsClient(true);
   }, []);
+
   return (
     <>
+      {/* Notification / subscription manager */}
       <PushNotificationManager />
+
+      {/* Navigation */}
       <Navbar key="navbar" />
+
+      {/* Hero section: immediately shows the value proposition */}
       <Hero key="hero" />
-      <Diagram key="diagram" />
-      <Services />
-      <FeaturedProperties key="featured-properties" />
-      <WhyChooseUs key="why-choose-us" />
-      <FAQPage key="faq-page" />
+
+      {/* Customer stats: social proof early */}
       <CustomerStats />
+
+      {/* Services offered */}
+      <Services />
+
+      {/* How it works / Diagram */}
+      <Diagram key="diagram" />
+
+      {/* Why choose us: credibility & trust */}
+      <WhyChooseUs key="why-choose-us" />
+
+      {/* Featured properties: highlights specific offerings */}
+      <FeaturedProperties key="featured-properties" />
+
+      {/* FAQ: handle objections or common questions */}
+      <FAQPage key="faq-page" />
+
+      {/* Footer with contact, links, social media */}
       <Footer key="footer" />
     </>
   );
