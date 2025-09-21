@@ -1,140 +1,396 @@
+"use client";
 import {
   FaFacebookF,
   FaTwitter,
   FaLinkedinIn,
   FaInstagram,
+  FaShieldAlt,
+  FaMobileAlt,
+  FaAccessibleIcon,
 } from "react-icons/fa";
+import { SiAppstore, SiGoogleplay } from "react-icons/si";
 import logo from "../../../public/ajibestlogo.png";
 import Image from "next/image";
 import Link from "next/link";
 
+// Material UI imports
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+  Link as MuiLink,
+  Divider,
+  useTheme,
+  useMediaQuery,
+  Button,
+  TextField,
+  Paper,
+  Chip,
+  Alert,
+} from "@mui/material";
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <footer className="bg-white dark:bg-slate-800 text-blue-700 dark:text-white py-8">
-      <div className="container mx-auto">
-        <div className="pl-10 sm:pl-0 flex flex-wrap justify-between items-start md:flex-nowrap">
-          <div className="w-full md:w-auto mb-6 md:mb-0 md:mr-8">
-            <h3 className="font-bold text-lg mb-2">Useful Links</h3>
-            <ul>
-              <li>
-                <Link href="/login" className="hover:underline">
-                  Buy Property
-                </Link>
-              </li>
-              <li>
-                <Link href="/login" className="hover:underline">
-                  Sell Property
-                </Link>
-              </li>
-              <li>
-                <Link href="/login" className="hover:underline">
-                  Rent Property
-                </Link>
-              </li>
-              <li>
-                <Link href="/login" className="hover:underline">
-                  Listings
-                </Link>
-              </li>
-            </ul>
-          </div>
+    <Box
+      component="footer"
+      sx={{
+        bgcolor: "background.paper",
+        color: "text.primary",
+        py: 4,
+        borderTop: `1px solid ${theme.palette.divider}`,
+      }}
+    >
+      <Container maxWidth="lg">
+        <Grid container spacing={4}>
+          {/* Services */}
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
+              Our Services
+            </Typography>
+            <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0 }}>
+              {[
+                "Buy Property",
+                "Sell Property",
+                "Rent Property",
+                "Property Listings",
+              ].map((item) => (
+                <li key={item}>
+                  <MuiLink
+                    component={Link}
+                    href="/services"
+                    sx={{
+                      display: "block",
+                      py: 0.5,
+                      color: "text.secondary",
+                      "&:hover": { color: "primary.main" },
+                    }}
+                  >
+                    {item}
+                  </MuiLink>
+                </li>
+              ))}
+            </Box>
+          </Grid>
 
-          <div className="w-full md:w-auto mb-6 md:mb-0 md:mr-8">
-            <h3 className="font-bold text-lg mb-2">About</h3>
-            <ul>
-              <li>
-                <Link href="/about" className="hover:underline">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/#howitworks" className="hover:underline">
-                  How it Works
-                </Link>
-              </li>
-              {/* <li>
-                <Link href="/#testimonies" className="hover:underline">
-                  Testimonies
-                </Link>
-              </li> */}
-              <li>
-                <Link href="/contact" className="hover:underline">
-                  Contact Us
-                </Link>
-              </li>
-            </ul>
-          </div>
+          {/* Company */}
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
+              Company
+            </Typography>
+            <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0 }}>
+              {["About Us", "How It Works", "Testimonials", "Careers"].map(
+                (item) => (
+                  <li key={item}>
+                    <MuiLink
+                      component={Link}
+                      href={
+                        item === "About Us"
+                          ? "/about"
+                          : item === "How It Works"
+                          ? "/#howitworks"
+                          : item === "Testimonials"
+                          ? "/#testimonials"
+                          : "/careers"
+                      }
+                      sx={{
+                        display: "block",
+                        py: 0.5,
+                        color: "text.secondary",
+                        "&:hover": { color: "primary.main" },
+                      }}
+                    >
+                      {item}
+                    </MuiLink>
+                  </li>
+                )
+              )}
+            </Box>
+          </Grid>
 
-          <div className="w-full md:w-auto mb-6 md:mb-0 md:mr-8">
-            <h3 className="font-bold text-lg mb-2">Useful Links</h3>
-            <ul>
-              <li>
-                <Link href="/privacy" className="hover:underline">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className="hover:underline">
-                  Terms and Conditions
-                </Link>
-              </li>
-            </ul>
-          </div>
+          {/* Support */}
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
+              Support
+            </Typography>
+            <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0 }}>
+              {["Contact Us", "FAQs", "Help Center", "Live Chat"].map(
+                (item) => (
+                  <li key={item}>
+                    <MuiLink
+                      component={Link}
+                      href={
+                        item === "Contact Us"
+                          ? "/contact"
+                          : item === "FAQs"
+                          ? "/#faq"
+                          : item === "Help Center"
+                          ? "/help"
+                          : "#"
+                      }
+                      sx={{
+                        display: "block",
+                        py: 0.5,
+                        color: "text.secondary",
+                        "&:hover": { color: "primary.main" },
+                      }}
+                    >
+                      {item}
+                    </MuiLink>
+                  </li>
+                )
+              )}
+            </Box>
 
-          <div className="w-full md:w-auto flex flex-col items-start sm:items-center">
-            <Link href="/">
-              <Image
-                src={logo}
-                width="100"
-                height="100"
-                alt="Company Logo"
-                className="mb-2 w-auto h-auto"
-              />
-            </Link>
-            <p className="text-left sm:text-center">
-              No. 12 Golden Plaza,
-              <br />
-              Opp. El-Kanemi College
-              <br />
-              Maiduguri, Borno State
-            </p>
-            <p className="text-center">
-              <Link
-                href="mailto:emailaddress@gmail.com"
-                className="hover:underline"
+            <Box sx={{ mt: 2 }}>
+              <Typography
+                variant="subtitle2"
+                gutterBottom
+                sx={{ fontWeight: "bold" }}
               >
-                emailaddress@gmail.com
-              </Link>
-            </p>
-          </div>
-        </div>
+                System Status
+              </Typography>
+              <Chip
+                icon={<FaShieldAlt />}
+                label="All Systems Operational"
+                color="success"
+                size="small"
+              />
+            </Box>
+          </Grid>
 
-        <div className="container mx-auto flex flex-col md:flex-row justify-between items-center mt-8 border-t border-white pt-4">
-          <div className="flex space-x-4">
-            <p className="text-center">
-              © {currentYear} A.A. Ajibest Land Vendors Ltd. All rights
-              reserved.
-            </p>
-          </div>
-          <div className="flex space-x-4 mt-4 md:mt-0">
-            <Link href="#" className="hover:text-gray-300">
-              <FaFacebookF />
-            </Link>
-            <Link href="#" className="hover:text-gray-300">
-              <FaTwitter />
-            </Link>
-            <Link href="#" className="hover:text-gray-300">
-              <FaLinkedinIn />
-            </Link>
-            <Link href="#" className="hover:text-gray-300">
-              <FaInstagram />
-            </Link>
-          </div>
-        </div>
-      </div>
-    </footer>
+          {/* Contact & Legal */}
+          <Grid item xs={12} sm={6} md={3}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: isMobile ? "flex-start" : "flex-start",
+                textAlign: "left",
+              }}
+            >
+              <MuiLink component={Link} href="/">
+                <Image
+                  src={logo}
+                  width={100}
+                  height={100}
+                  alt="Company Logo"
+                  style={{ marginBottom: theme.spacing(1) }}
+                />
+              </MuiLink>
+
+              <Typography variant="body2" gutterBottom>
+                No. 12 Golden Plaza,
+                <br />
+                Opp. El-Kanemi College
+                <br />
+                Maiduguri, Borno State
+              </Typography>
+
+              <MuiLink
+                href="mailto:support@ajibestlandvendors.com"
+                sx={{
+                  color: "primary.main",
+                  "&:hover": { textDecoration: "underline" },
+                  mb: 1,
+                }}
+              >
+                support@ajibestlandvendors.com
+              </MuiLink>
+
+              <MuiLink
+                href="tel:+2348012345678"
+                sx={{
+                  color: "text.primary",
+                  "&:hover": { color: "primary.main" },
+                }}
+              >
+                +234 801 234 5678
+              </MuiLink>
+
+              <Box sx={{ mt: 2, display: "flex", gap: 1 }}>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  startIcon={<SiAppstore />}
+                  sx={{ fontSize: "0.7rem" }}
+                >
+                  App Store
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  startIcon={<SiGoogleplay />}
+                  sx={{ fontSize: "0.7rem" }}
+                >
+                  Google Play
+                </Button>
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
+
+        <Divider sx={{ my: 4 }} />
+
+        {/* Legal & Trust Section */}
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <Typography
+              variant="subtitle2"
+              gutterBottom
+              sx={{ fontWeight: "bold" }}
+            >
+              Legal & Compliance
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
+              {[
+                "Privacy Policy",
+                "Terms of Service",
+                "Legal Disclaimers",
+                "Accessibility Statement",
+              ].map((item) => (
+                <MuiLink
+                  key={item}
+                  component={Link}
+                  href={
+                    item === "Privacy Policy"
+                      ? "/privacy"
+                      : item === "Terms of Service"
+                      ? "/terms"
+                      : item === "Legal Disclaimers"
+                      ? "/disclaimers"
+                      : "/accessibility"
+                  }
+                  sx={{
+                    fontSize: "0.8rem",
+                    color: "text.secondary",
+                    "&:hover": { color: "primary.main" },
+                  }}
+                >
+                  {item}
+                </MuiLink>
+              ))}
+            </Box>
+
+            <Alert severity="info" sx={{ fontSize: "0.75rem", mb: 2 }}>
+              A.A. Ajibest Land Vendors Ltd. is a registered real estate
+              company. All transactions are protected by our comprehensive
+              security protocols.
+            </Alert>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Typography
+              variant="subtitle2"
+              gutterBottom
+              sx={{ fontWeight: "bold" }}
+            >
+              Stay Connected
+            </Typography>
+
+            {/* Newsletter Signup */}
+            <Box sx={{ display: "flex", mb: 2 }}>
+              <TextField
+                placeholder="Your email"
+                size="small"
+                sx={{
+                  mr: 1,
+                  flexGrow: 1,
+                  "& .MuiOutlinedInput-root": {
+                    fontSize: "0.8rem",
+                  },
+                }}
+              />
+              <Button variant="contained" size="small">
+                Subscribe
+              </Button>
+            </Box>
+
+            {/* Social Media */}
+            <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+              {[
+                { icon: <FaFacebookF />, href: "#" },
+                { icon: <FaTwitter />, href: "#" },
+                { icon: <FaLinkedinIn />, href: "#" },
+                { icon: <FaInstagram />, href: "#" },
+              ].map((social, index) => (
+                <MuiLink
+                  key={index}
+                  href={social.href}
+                  sx={{
+                    color: "text.secondary",
+                    "&:hover": { color: "primary.main" },
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {social.icon}
+                </MuiLink>
+              ))}
+            </Box>
+
+            {/* Security Badge */}
+            <Paper
+              elevation={1}
+              sx={{
+                p: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: theme.palette.grey[100],
+              }}
+            >
+              <FaShieldAlt
+                style={{ marginRight: 8, color: theme.palette.success.main }}
+              />
+              <Typography variant="caption" sx={{ fontWeight: "bold" }}>
+                Secured by Advanced Encryption
+              </Typography>
+            </Paper>
+          </Grid>
+        </Grid>
+
+        <Divider sx={{ my: 3 }} />
+
+        {/* Copyright and Developer Credit */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: isMobile ? "column" : "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            pt: 2,
+          }}
+        >
+          <Typography
+            variant="body2"
+            sx={{ textAlign: "center", mb: isMobile ? 2 : 0 }}
+          >
+            © {currentYear} A.A. Ajibest Land Vendors Ltd. All rights reserved.
+          </Typography>
+
+          <Typography
+            variant="caption"
+            sx={{ textAlign: "center", color: "text.secondary" }}
+          >
+            Designed and developed by{" "}
+            <MuiLink
+              href="https://triplemultipurposetechnology.com.ng"
+              target="_blank"
+              rel="noopener"
+              sx={{ fontWeight: "bold", color: "primary.main" }}
+            >
+              Triple Multipurpose Technology
+            </MuiLink>
+          </Typography>
+        </Box>
+      </Container>
+    </Box>
   );
 };
 

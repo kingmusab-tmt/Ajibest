@@ -1,72 +1,212 @@
-// pages/FAQ.tsx
-import { useState } from "react";
+// components/FAQPage.tsx
+"use client";
+
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import Accordion from "../landingpagecomponents/accordion";
-import cutstomer from "@/public/images/customer care.png";
+import {
+  Box,
+  Container,
+  Typography,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  useTheme,
+  useMediaQuery,
+  Grid,
+  Paper,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import customerCare from "@/public/images/customer care.png";
 
 interface FAQ {
+  _id: string;
   question: string;
   answer: string;
+  order: number;
+  isActive: boolean;
 }
 
-const faqs: FAQ[] = [
-  {
-    question: "Where are your property locations?",
-    answer:
-      "We currently have properties in Borno State. We plan to expand to all 36 states soon.",
-  },
-  {
-    question: "Can I pay on Installment Basis",
-    answer:
-      "Yes you are allowed to pay on Installment basis, but you can also pay a lumpsum or at once.",
-  },
-  {
-    question: "Do you offer international shipping?",
-    answer: "Yes, we ship to over 50 countries worldwide.",
-  },
-  {
-    question: "How can I track my order?",
-    answer:
-      "You can track your order using the tracking number provided in your shipment confirmation email.",
-  },
-];
-
 const FAQPage = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [faqs, setFaqs] = useState<FAQ[]>([]);
+  const [expanded, setExpanded] = useState<string | false>(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const handleAccordionClick = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+  useEffect(() => {
+    const fetchFaqs = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/aapi/faqs");
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch FAQs");
+        }
+
+        const data = await response.json();
+        setFaqs(data);
+      } catch (err) {
+        console.error("Error fetching FAQs:", err);
+        setError("Failed to load FAQs. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFaqs();
+  }, []);
+
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false);
+    };
+
+  if (loading) {
+    return (
+      <Box
+        id="faq"
+        sx={{
+          py: 8,
+          px: { xs: 2, sm: 4 },
+          backgroundColor: "primary.light",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "50vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box
+        id="faq"
+        sx={{
+          py: 8,
+          px: { xs: 2, sm: 4 },
+          backgroundColor: "primary.light",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "50vh",
+        }}
+      >
+        <Alert severity="error">{error}</Alert>
+      </Box>
+    );
+  }
 
   return (
-    <div
+    <Box
       id="faq"
-      className="flex flex-col md:flex-row justify-between items-center md:items-start px-4 py-16 bg-blue-300"
+      sx={{
+        py: 8,
+        px: { xs: 2, sm: 4 },
+        backgroundColor: "primary.light",
+      }}
     >
-      <div className="w-full md:w-1/2 mb-8 md:mb-0">
-        <h2 className="text-3xl font-bold mb-8">Frequently Asked Questions</h2>
-        {faqs.map((faq, index) => (
-          <Accordion
-            key={index}
-            faq={faq}
-            isOpen={openIndex === index}
-            onClick={() => handleAccordionClick(index)}
-          />
-        ))}
-      </div>
-      <div className="w-full md:w-2/4 flex flex-col items-center">
-        <Image
-          src={cutstomer}
-          alt="Customer Care"
-          width="300"
-          height="500"
-          className="object-contain rounded-lg shadow-lg mb-8 w-auto h-auto"
-        />
-        {/* <button className="bg-blue-500 text-white py-2 px-6 rounded-lg shadow-lg hover:bg-blue-700">
-          Get in Touch
-        </button> */}
-      </div>
-    </div>
+      <Container maxWidth="lg">
+        <Typography
+          variant="h3"
+          component="h2"
+          align="center"
+          gutterBottom
+          sx={{
+            fontWeight: 700,
+            color: "white",
+            mb: 6,
+            fontSize: { xs: "2rem", md: "2.5rem" },
+          }}
+        >
+          Frequently Asked Questions
+        </Typography>
+
+        <Grid container spacing={4} alignItems="flex-start">
+          <Grid item xs={12} md={6}>
+            {faqs.map((faq, index) => (
+              <Accordion
+                key={faq._id}
+                expanded={expanded === `panel${index}`}
+                onChange={handleChange(`panel${index}`)}
+                sx={{ mb: 2, borderRadius: 2 }}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls={`panel${index}bh-content`}
+                  id={`panel${index}bh-header`}
+                  sx={{
+                    backgroundColor: "background.paper",
+                    borderRadius:
+                      expanded === `panel${index}` ? "8px 8px 0 0" : "8px",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    component="h3"
+                    sx={{ fontWeight: 600 }}
+                  >
+                    {faq.question}
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails sx={{ backgroundColor: "grey.50" }}>
+                  <Typography variant="body1" color="text.secondary">
+                    {faq.answer}
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+            ))}
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Paper
+              elevation={3}
+              sx={{
+                p: 3,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                borderRadius: 3,
+                backgroundColor: "background.paper",
+              }}
+            >
+              <Box
+                sx={{
+                  position: "relative",
+                  width: "100%",
+                  height: 300,
+                  mb: 3,
+                }}
+              >
+                <Image
+                  src={customerCare}
+                  alt="Customer Care"
+                  fill
+                  style={{ objectFit: "contain" }}
+                />
+              </Box>
+              <Typography
+                variant="h5"
+                component="h3"
+                gutterBottom
+                align="center"
+              >
+                Need More Help?
+              </Typography>
+              <Typography variant="body1" color="text.secondary" align="center">
+                Our customer care team is ready to assist you with any questions
+                you may have about our properties and services.
+              </Typography>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Container>
+    </Box>
   );
 };
 

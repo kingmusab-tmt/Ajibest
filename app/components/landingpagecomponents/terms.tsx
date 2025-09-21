@@ -1,124 +1,165 @@
-// pages/terms.tsx
+"use client";
 import React from "react";
+import {
+  Container,
+  Typography,
+  Paper,
+  Box,
+  useTheme,
+  useMediaQuery,
+  List,
+  ListItem,
+  ListItemText,
+  Chip,
+} from "@mui/material";
+import {
+  Gavel,
+  Article,
+  Description,
+  ContactMail,
+  Warning,
+} from "@mui/icons-material";
 
 const TermCondition: React.FC = () => {
-  return (
-    <div className="pt-28 pb-14 max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-      <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
-        Terms and Conditions
-      </h1>
-      <p className="text-gray-700 mb-4">
-        Welcome to{" "}
-        <span className="font-extrabold text-xl text-blue-700">
-          A.A. Ajibest Land Vendors Ltd!.
-        </span>{" "}
-        These terms and conditions outline the rules and regulations for the use
-        of our website and Services.
-      </p>
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-      <section className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          1. Introduction
-        </h2>
-        <p className="text-gray-700">
+  return (
+    <Container
+      maxWidth="lg"
+      sx={{
+        py: { xs: 4, md: 6 },
+        px: { xs: 2, sm: 3, md: 4 },
+      }}
+    >
+      {/* Header Section */}
+      <Paper
+        elevation={2}
+        sx={{
+          p: 4,
+          mb: 4,
+          background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+          color: "white",
+          borderRadius: 2,
+        }}
+      >
+        <Box display="flex" alignItems="center" mb={2}>
+          <Gavel sx={{ fontSize: 40, mr: 2 }} />
+          <Typography variant="h3" component="h1" fontWeight="bold">
+            Terms and Conditions
+          </Typography>
+        </Box>
+        <Typography variant="h6" sx={{ opacity: 0.9 }}>
+          Welcome to{" "}
+          <Box component="span" fontWeight="bold">
+            A.A. Ajibest Land Vendors Ltd!
+          </Box>{" "}
+          These terms and conditions outline the rules and regulations for the
+          use of our website and Services.
+        </Typography>
+      </Paper>
+
+      {/* Introduction Section */}
+      <Paper elevation={1} sx={{ p: 4, mb: 4, borderRadius: 2 }}>
+        <Box display="flex" alignItems="center" mb={2}>
+          <Article color="primary" sx={{ mr: 2 }} />
+          <Typography variant="h4" component="h2" fontWeight="600">
+            1. Introduction
+          </Typography>
+        </Box>
+        <Typography variant="body1" paragraph>
           By accessing this website we assume you accept these terms and
           conditions. Do not continue to use{" "}
-          <span className="font-extrabold text-xl text-blue-700">
-            A.A. Ajibest Land Vendors Ltd!.
-          </span>{" "}
+          <Box component="span" fontWeight="bold" color="primary.main">
+            A.A. Ajibest Land Vendors Ltd!
+          </Box>{" "}
           if you do not agree to all of the terms and conditions stated on this
           page.
-        </p>
-      </section>
+        </Typography>
+      </Paper>
 
-      <section className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">2. License</h2>
-        <p className="text-gray-700">
+      {/* License Section */}
+      <Paper elevation={1} sx={{ p: 4, mb: 4, borderRadius: 2 }}>
+        <Box display="flex" alignItems="center" mb={2}>
+          <Description color="primary" sx={{ mr: 2 }} />
+          <Typography variant="h4" component="h2" fontWeight="600">
+            2. License
+          </Typography>
+        </Box>
+        <Typography variant="body1" paragraph>
           Unless otherwise stated,{" "}
-          <span className="font-extrabold text-xl text-blue-700">
-            A.A. Ajibest Land Vendors Ltd!.
-          </span>{" "}
+          <Box component="span" fontWeight="bold" color="primary.main">
+            A.A. Ajibest Land Vendors Ltd!
+          </Box>{" "}
           and/or its licensors own the intellectual property rights for all
           material on{" "}
-          <span className="font-extrabold text-xl text-blue-700">
-            A.A. Ajibest Land Vendors Ltd!.
-          </span>{" "}
+          <Box component="span" fontWeight="bold" color="primary.main">
+            A.A. Ajibest Land Vendors Ltd!
+          </Box>
           . All intellectual property rights are reserved.
-        </p>
-      </section>
+        </Typography>
+      </Paper>
 
-      <section className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          3. Farm/Plot of Lands Purchase Terms and Conditions
-        </h2>
-        <p className="text-gray-700">
-          <p className="pb-2 text-justify">
-            1. The <b>PARTIES</b> agreed that at the beginning of the Contract,
-            the <b>PURCHASER</b> shall inspect the PLOT(S) subject of
-            transaction physically.
-          </p>
-          <p className="pb-2 text-justify">
-            2. The <b>PARTIES</b> further agreed that mode of payment is subject
-            to negotiation by the <b>PARTIES</b>, but <b>SHALL</b> be put in
-            writing.{" "}
-          </p>
-          <p className="pb-2 text-justify">
-            3. The <b>PURCHASER</b> shall contact the <b>VENDOR/COMPANY</b> in
-            the event where he may fail to make the monthly payment of the
-            PLOT(S) earlier before the end of every month.{" "}
-          </p>
-          <p className="pb-2 text-justify">
-            4. That where the <b>PURCHASER</b> on <b>HIS</b> own volition failed
-            to informed/contact and give reasonable account of his failure to
-            make payment of the PLOT(S) for a period of 2 month, the{" "}
-            <b>
-              VENDOR/COMPANY is at liberty to terminate the contract and refund
-              the PURCHASER
-            </b>{" "}
-            the amount paid on the <b>PLOT(S)</b> in the manner which the{" "}
-            <b>PURCHASER</b> made the payment of the <b>PLOT(S)</b> and the{" "}
-            <b>PURCHASER</b> would FORFIET 10% of the total amount as
-            administrative charges.{" "}
-          </p>
-          <p className="pb-2 text-justify">
-            5. The <b>VENDOR/COMPANY</b> shall issue the <b>PURCHASER</b>{" "}
-            receipt acknowledging the monthly installmental payments, upon
-            receipt of such payment at the end of every month until the whole
-            consideration herein is liquidated.{" "}
-          </p>
-          <p className="pb-2 text-justify">
-            6. The <b>PARTIES</b> agreed that the <b>VENDOR/COMPANY</b> HEREBY
-            sells, transfer and assigns all its <b>TITLE</b>, <b>RIGHTS</b> and{" "}
-            <b>INTEREST</b> in and over the PLOT(S) only upon terms and
-            conditions that may be imposed from time to time by the appropriate
-            authorities to the BUYER and to hold same unto the BUYER.{" "}
-          </p>
-          <p className="pb-2 text-justify">
-            7. After successful Transaction the <b>BUYER</b> shall bring back
-            all Installmental payment receipt and would be issue a single
-            purchase Receipt as well as All the documents related to the Plot of
-            Land by the <b>VENDOR/COMPANY</b>.{" "}
-          </p>
-          <p className="pb-2 text-justify">
-            8. That this <b>TERMS</b> and <b>CONDITIONS</b> is being read and
-            translated to the <b>PARTIES</b> and their witnesses from English
-            language to Hausa/Kanuri/Buyer’s Language and vice visa which they
-            understand same before affixing their signatures/thumb prints.{" "}
-          </p>
-          <p className="pb-2 text-justify">
-            9. I_________________________ have read and understdood the Terms
-            and conditions stipulated above before signing this loan contract.
-          </p>
-        </p>
-      </section>
+      {/* Farm/Plot Purchase Terms */}
+      <Paper elevation={1} sx={{ p: 4, mb: 4, borderRadius: 2 }}>
+        <Box display="flex" alignItems="center" mb={2}>
+          <Warning color="primary" sx={{ mr: 2 }} />
+          <Typography variant="h4" component="h2" fontWeight="600">
+            3. Farm/Plot of Lands Purchase Terms and Conditions
+          </Typography>
+        </Box>
 
-      {/* Add more sections as needed */}
+        <List sx={{ width: "100%" }}>
+          {[
+            "The PARTIES agreed that at the beginning of the Contract, the PURCHASER shall inspect the PLOT(S) subject of transaction physically.",
+            "The PARTIES further agreed that mode of payment is subject to negotiation by the PARTIES, but SHALL be put in writing.",
+            "The PURCHASER shall contact the VENDOR/COMPANY in the event where he may fail to make the monthly payment of the PLOT(S) earlier before the end of every month.",
+            "That where the PURCHASER on HIS own volition failed to informed/contact and give reasonable account of his failure to make payment of the PLOT(S) for a period of 2 month, the VENDOR/COMPANY is at liberty to terminate the contract and refund the PURCHASER the amount paid on the PLOT(S) in the manner which the PURCHASER made the payment of the PLOT(S) and the PURCHASER would FORFIET 10% of the total amount as administrative charges.",
+            "The VENDOR/COMPANY shall issue the PURCHASER receipt acknowledging the monthly installmental payments, upon receipt of such payment at the end of every month until the whole consideration herein is liquidated.",
+            "The PARTIES agreed that the VENDOR/COMPANY HEREBY sells, transfer and assigns all its TITLE, RIGHTS and INTEREST in and over the PLOT(S) only upon terms and conditions that may be imposed from time to time by the appropriate authorities to the BUYER and to hold same unto the BUYER.",
+            "After successful Transaction the BUYER shall bring back all Installmental payment receipt and would be issue a single purchase Receipt as well as All the documents related to the Plot of Land by the VENDOR/COMPANY.",
+            "That this TERMS and CONDITIONS is being read and translated to the PARTIES and their witnesses from English language to Hausa/Kanuri/Buyer's Language and vice visa which they understand same before affixing their signatures/thumb prints.",
+            "I_________________________ have read and understdood the Terms and conditions stipulated above before signing this loan contract.",
+          ].map((item, index) => (
+            <ListItem key={index} alignItems="flex-start" sx={{ py: 1.5 }}>
+              <Chip
+                label={index + 1}
+                color="primary"
+                size="small"
+                sx={{ mr: 2, mt: 0.5 }}
+              />
+              <ListItemText primary={item} />
+            </ListItem>
+          ))}
+        </List>
+      </Paper>
 
-      <p className="text-gray-700 mt-8">
-        If you have any questions about our Terms and Conditions, please contact
-        us for more information.
-      </p>
-    </div>
+      {/* Contact Section */}
+      <Paper elevation={2} sx={{ p: 4, borderRadius: 2 }}>
+        <Box display="flex" alignItems="center" mb={2}>
+          <ContactMail color="primary" sx={{ mr: 2 }} />
+          <Typography variant="h5" component="h2" fontWeight="600">
+            Questions?
+          </Typography>
+        </Box>
+        <Typography variant="body1">
+          If you have any questions about our Terms and Conditions, please
+          contact us for more information.
+        </Typography>
+      </Paper>
+
+      {/* Last Updated */}
+      <Box sx={{ mt: 4, textAlign: "center" }}>
+        <Typography variant="body2" color="text.secondary">
+          Last updated:{" "}
+          {new Date().toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </Typography>
+      </Box>
+    </Container>
   );
 };
 

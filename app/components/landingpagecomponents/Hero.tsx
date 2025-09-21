@@ -1,69 +1,226 @@
 "use client";
 import { useEffect, useState } from "react";
+import {
+  Box,
+  Container,
+  Typography,
+  Button,
+  Paper,
+  Fade,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import Herosearch from "../landingpagecomponents/Herosearch";
-import Buttons from "../landingpagecomponents/button";
+
+type HeroContent = {
+  title: string;
+  subtitle: string;
+  buttonText: string;
+  backgrounds: string[];
+};
 
 const Hero = () => {
   const [backgroundIndex, setBackgroundIndex] = useState(0);
-  const backgrounds = [
-    "/images/bgimage.webp",
-    "/images/img2.webp",
-    "/images/img3.webp",
-    "/images/img4.webp",
-    "/images/f.webp",
-    "/images/b.jpeg",
-    "/images/c.jpg",
-    "/images/h.jpg",
-    "/images/o.jpg",
-  ];
+  const [heroContent, setHeroContent] = useState<HeroContent | null>(null);
+  const [loading, setLoading] = useState(true);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
+  // Fallback content if nothing is fetched from the database
+  const fallbackContent = {
+    title: "Fulfill Your Dream & Become a Property Owner with Ease",
+    subtitle: "Explore a wide range of Property for Sale or Rent",
+    buttonText: "Search Properties",
+    backgrounds: [
+      "/images/bgimage.webp",
+      "/images/img2.webp",
+      "/images/img3.webp",
+      "/images/img4.webp",
+      "/images/f.webp",
+      "/images/b.jpeg",
+      "/images/c.jpg",
+      "/images/h.jpg",
+      "/images/o.jpg",
+    ],
+  };
+
+  // Fetch content from backend
   useEffect(() => {
+    const fetchHeroContent = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/aapi/hero-content");
+
+        if (response.ok) {
+          const data = await response.json();
+          setHeroContent(data);
+        } else {
+          setHeroContent(fallbackContent);
+        }
+      } catch (error) {
+        console.error("Error fetching hero content:", error);
+        setHeroContent(fallbackContent);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHeroContent();
+  }, [fallbackContent]);
+
+  // Background rotation effect
+  useEffect(() => {
+    if (!heroContent) return;
+
     const interval = setInterval(() => {
-      setBackgroundIndex((prevIndex) => (prevIndex + 1) % backgrounds.length);
-    }, 8000);
+      setBackgroundIndex(
+        (prevIndex) => (prevIndex + 1) % heroContent.backgrounds.length
+      );
+    }, 5000);
 
     return () => clearInterval(interval);
-  }, [backgrounds.length]);
+  }, [heroContent]);
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "grey.100",
+        }}
+      >
+        Loading...
+      </Box>
+    );
+  }
 
   return (
-    <div className="relative px-2 pt-14 h-screen lg:px-8">
-      {/* Background overlay */}
-      <div className="absolute inset-0 z-0">
-        {/* Changing Background */}
-        <div
-          className="absolute inset-0 z-0 bg-cover bg-center"
-          style={{
-            backgroundImage: `url('${backgrounds[backgroundIndex]}')`, // Use the current background image from the array
-            filter: "contrast(0.6)", // Adjust contrast value as per your preference
-            objectFit: "contain",
-          }}
-          aria-hidden="true"
-        ></div>
-      </div>
+    <Box
+      sx={{
+        position: "relative",
+        height: "100vh",
+        overflow: "hidden",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        px: isMobile ? 2 : 8,
+        pt: 14,
+      }}
+    >
+      {/* Background images with fade transition */}
+      {heroContent?.backgrounds.map((bg, index) => (
+        <Fade
+          key={index}
+          in={index === backgroundIndex}
+          timeout={1000}
+          unmountOnExit
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundImage: `url('${bg}')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              filter: "contrast(0.6)",
+              zIndex: 0,
+            }}
+            aria-hidden="true"
+          />
+        </Fade>
+      ))}
+
+      {/* Dark overlay for better text visibility */}
+      <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: "rgba(0, 0, 0, 0.4)",
+          zIndex: 1,
+        }}
+      />
 
       {/* Main content */}
-      <div className="relative z-10 mx-auto max-w-4xl py-32 sm:py-48 lg:py-40 text-white">
-        <div className="text-center">
-          <h1 className="text-2xl sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-white">
-            Fullfill Your Dream & Become a Property Owner with Ease
-          </h1>
+      <Container
+        maxWidth="lg"
+        sx={{
+          position: "relative",
+          zIndex: 2,
+          textAlign: "center",
+          color: "white",
+          py: { xs: 8, sm: 12, md: 10 },
+        }}
+      >
+        <Typography
+          variant="h1"
+          sx={{
+            fontSize: {
+              xs: "2rem",
+              sm: "3rem",
+              md: "3.5rem",
+              lg: "4rem",
+            },
+            fontWeight: "bold",
+            mb: 3,
+          }}
+        >
+          {heroContent?.title}
+        </Typography>
 
-          <p className="mt-6 text-xl leading-8 text-white lg:py-5">
-            Explore a wide range of Property for Sale or Rent
-          </p>
-          <div className="mt-48 sm:mt-20 flex items-center justify-center gap-x-0 mx-0">
-            <Buttons
-              text="Register Now"
-              onClick={() => {}}
-              className="text-xl w-1/2 h-14 rounded-t-lg bg-indigo-600 text-white hover:bg-indigo-500 font-bold mt-1"
-            />
-          </div>
-          <div className="flex items-center justify-center">
+        <Typography
+          variant="h5"
+          sx={{
+            mb: 4,
+            fontSize: {
+              xs: "1.1rem",
+              sm: "1.3rem",
+            },
+          }}
+        >
+          {heroContent?.subtitle}
+        </Typography>
+
+        <Box
+          sx={{
+            mt: { xs: 18, sm: 10 },
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          <Button
+            variant="contained"
+            size="large"
+            sx={{
+              backgroundColor: "primary.main",
+              fontSize: "1.1rem",
+              px: 4,
+              py: 1.5,
+              borderRadius: "4px 4px 0 0",
+              "&:hover": {
+                backgroundColor: "primary.dark",
+              },
+            }}
+          >
+            {heroContent?.buttonText}
+          </Button>
+
+          <Container maxWidth="lg">
             <Herosearch />
-          </div>
-        </div>
-      </div>
-    </div>
+          </Container>
+        </Box>
+      </Container>
+    </Box>
   );
 };
 

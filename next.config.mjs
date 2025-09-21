@@ -8,8 +8,7 @@ const nextConfig = {
   // },
 
   experimental: {
-    // appDir: true,
-    serverComponentsExternalPackages: ["mongoose"],
+    serverExternalPackages: ["mongodb"],
   },
 
   images: {
