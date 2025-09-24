@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import UserDashboardSidebar from "../components/userscomponent/usernav";
 import ProfileTopNavBar from "../components/userscomponent/profiletopnav";
-import AccountTabs from "../components/userscomponent/accounttab";
+import CalculatorOnProfile from "../components/userscomponent/accounttab";
 import UserInfo from "../components/userscomponent/profileitems";
 import TransactionHistory from "../components/generalcomponents/transactionhistory";
 import UpdateProfile from "../components/userscomponent/updateProfile";
@@ -98,7 +98,7 @@ const Userprofile = () => {
         return (
           <>
             <UserInfo />
-            <AccountTabs />
+            <CalculatorOnProfile />
           </>
         );
       case "MyProperty":
