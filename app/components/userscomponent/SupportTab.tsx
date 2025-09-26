@@ -280,7 +280,7 @@ const SupportTab: React.FC = () => {
           <SupportAgent color="primary" /> Customer Support
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          We're here to help! Get in touch with our support team
+          We&apos;re here to help! Get in touch with our support team
         </Typography>
       </Box>
 
