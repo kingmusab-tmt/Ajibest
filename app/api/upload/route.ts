@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 export async function POST(req) {
   const data = await req.formData();
   const file = data.get("file");
