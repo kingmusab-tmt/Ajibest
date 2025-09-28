@@ -20,6 +20,10 @@ interface IUser extends Document {
   password: string;
   bvnOrNin: string;
   role: string;
+  otp: string;
+  otpExpiry: Date;
+  resetToken: string;
+  resetTokenExpiry: Date;
   country: string;
   state: string;
   lga: string;
@@ -99,6 +103,10 @@ const userSchema = new Schema<IUser>(
     emailToken: {
       type: String,
     },
+    otp: { type: String },
+    otpExpiry: { type: Date },
+    resetToken: { type: String },
+    resetTokenExpiry: { type: Date },
     isActive: {
       type: Boolean,
       required: [true, "Please verify your Email"],

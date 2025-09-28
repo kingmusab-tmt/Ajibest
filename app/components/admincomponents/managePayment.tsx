@@ -29,12 +29,7 @@ const ManagePayments: React.FC = () => {
   return (
     <div className="p-2">
       <nav className="mb-6">
-        {[
-          // "Personal Information",
-          "Make Payment for User",
-          // "Next of Kin Detail",
-          // "Change Password",
-        ].map((section) => (
+        {["Make Payment for User"].map((section) => (
           <button
             key={section}
             onClick={() => setCurrentSection(section as Section)}
