@@ -99,7 +99,7 @@ const NavigationComponent: React.FC = () => {
             </Tabs>
           </Box>
 
-          <Box sx={{ p: 2 }}>
+          <Box>
             <TabPanel value={currentTab} index={0}>
               <PersonalInformation />
             </TabPanel>
@@ -157,7 +157,7 @@ const NavigationComponent: React.FC = () => {
         </Grid>
 
         <Grid item xs={12} md={9}>
-          <Paper elevation={3} sx={{ borderRadius: 2, p: 4, minHeight: 400 }}>
+          <Paper elevation={3} sx={{ borderRadius: 2, p: 2, minHeight: 400 }}>
             <TabPanel value={currentTab} index={0}>
               <PersonalInformation />
             </TabPanel>
