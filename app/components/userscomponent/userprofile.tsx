@@ -170,10 +170,15 @@ const PersonalInformation = () => {
           <CardContent sx={{ p: 4 }}>
             {/* Header */}
             <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
-              <Avatar sx={{ bgcolor: "primary.main", mr: 2 }}>
+              <Avatar sx={{ bgcolor: "primary.main", mr: 1 }}>
                 <PersonIcon />
               </Avatar>
-              <Typography variant="h4" component="h1" fontWeight="bold">
+              <Typography
+                variant="h4"
+                component="h1"
+                fontWeight="bold"
+                fontSize={isMobile ? "1.5rem" : "2rem"}
+              >
                 Personal Information
               </Typography>
             </Box>
