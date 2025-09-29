@@ -3,8 +3,8 @@
 import { useState, useEffect, FormEvent } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import EditableImage from "../generalcomponents/Image";
-import MessageModal from "../generalcomponents/messageModal";
+import EditableImage from "../../components/generalcomponents/Image";
+import MessageModal from "../../components/generalcomponents/messageModal";
 
 interface PropertyFormProps {
   propertyId: string;

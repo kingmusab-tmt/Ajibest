@@ -56,7 +56,7 @@ const AdminFAQEditor = () => {
 
   const fetchFaqs = async () => {
     try {
-      const response = await fetch("/api/faqs");
+      const response = await fetch("/api/aapi/faqs");
       if (response.ok) {
         const data = await response.json();
         setFaqs(data);
@@ -71,7 +71,7 @@ const AdminFAQEditor = () => {
 
   const handleCreateFaq = async () => {
     try {
-      const response = await fetch("/api/faqs", {
+      const response = await fetch("/api/aapi/faqs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -102,7 +102,7 @@ const AdminFAQEditor = () => {
     if (!editingFaq || !editingFaq._id) return;
 
     try {
-      const response = await fetch("/api/faqs", {
+      const response = await fetch("/api/aapi/faqs", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -126,7 +126,7 @@ const AdminFAQEditor = () => {
 
   const handleDeleteFaq = async (id: string) => {
     try {
-      const response = await fetch(`/api/faqs?id=${id}`, {
+      const response = await fetch(`/api/aapi/faqs?id=${id}`, {
         method: "DELETE",
       });
 
@@ -145,7 +145,7 @@ const AdminFAQEditor = () => {
   const handleToggleStatus = async (faq: FAQ) => {
     try {
       const updatedFaq = { ...faq, isActive: !faq.isActive };
-      const response = await fetch("/api/faqs", {
+      const response = await fetch("/api/aapi/faqs", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

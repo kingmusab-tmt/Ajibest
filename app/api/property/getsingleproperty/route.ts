@@ -13,10 +13,9 @@ export async function GET(req) {
   let filterProperty = {};
   if (id) {
     filterProperty = { _id: new Object(id) };
+  } else if (title) {
+    filterProperty = { title };
   }
-  // else if (title) {
-  //   filterProperty = { title };
-  // }
   console.log(id);
 
   await dbConnect();

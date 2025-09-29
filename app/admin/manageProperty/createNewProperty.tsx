@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import EditableImage from "../generalcomponents/Image";
-import MessageModal from "../generalcomponents/messageModal";
+import EditableImage from "../../components/generalcomponents/Image";
+import MessageModal from "../../components/generalcomponents/messageModal";
 
 const NewProperty = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
