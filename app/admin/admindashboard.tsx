@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import AnalyticDashboard from "./AnalyticDashboard";
+import AnalyticDashboard from "./adminComponents/AnalyticDashboard";
 
 interface DashboardData {
   transactions: any[];

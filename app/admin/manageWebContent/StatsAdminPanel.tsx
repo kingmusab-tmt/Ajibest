@@ -16,9 +16,6 @@ import {
 } from "@mui/material";
 import { Add, Save, Cancel, Refresh } from "@mui/icons-material";
 import { statsApi } from "@/lib/api/statsApi";
-import TestimonialCard, {
-  Testimonial,
-} from "@/app/components/landingpagecomponents/TestimonialCard";
 
 const iconOptions = ["Home", "People", "TrendingUp", "CalendarMonth", "Star"];
 const colorOptions = [
@@ -99,25 +96,6 @@ const StatsAdminPanel = () => {
     }
   };
 
-  const handleAddTestimonial = async (newTestimonial: Testimonial) => {
-    try {
-      const response = await statsApi.addTestimonial(newTestimonial);
-
-      if (response.success) {
-        setContent(response.data);
-        setIsFallback(false);
-        setDialogOpen(false);
-        setSuccess("Testimonial added successfully");
-        setTimeout(() => setSuccess(""), 3000);
-      } else {
-        throw new Error(response.error || "Failed to add testimonial");
-      }
-    } catch (err) {
-      setError("Failed to add testimonial");
-      console.error("Error adding testimonial:", err);
-    }
-  };
-
   const handleDeleteTestimonial = async (id: string) => {
     try {
       const response = await statsApi.deleteTestimonial(id);
@@ -144,13 +122,6 @@ const StatsAdminPanel = () => {
     );
 
     setContent(updatedContent);
-  };
-
-  const handleEditTestimonial = (testimonial: Testimonial) => {
-    setEditingTestimonial(testimonial);
-    setDialogType("testimonial");
-    setDialogMode("edit");
-    setDialogOpen(true);
   };
 
   const openAddDialog = (type: "testimonial" | "stat") => {
@@ -247,7 +218,7 @@ const StatsAdminPanel = () => {
 
       <Grid container spacing={3}>
         {/* Testimonials Management */}
-        <Grid item xs={12} md={6}>
+        {/* <Grid item xs={12} md={6}>
           <Paper sx={{ p: 3 }}>
             <Box
               sx={{
@@ -291,7 +262,7 @@ const StatsAdminPanel = () => {
               </Typography>
             )}
           </Paper>
-        </Grid>
+        </Grid> */}
 
         {/* Stats Management (simplified for this example) */}
         <Grid item xs={12} md={6}>
@@ -322,7 +293,7 @@ const StatsAdminPanel = () => {
             onChange={setEditingTestimonial}
           />
         </DialogContent>
-        <DialogActions>
+        {/* <DialogActions>
           <Button onClick={() => setDialogOpen(false)} startIcon={<Cancel />}>
             Cancel
           </Button>
@@ -334,7 +305,7 @@ const StatsAdminPanel = () => {
           >
             {saving ? "Saving..." : dialogMode === "add" ? "Add" : "Update"}
           </Button>
-        </DialogActions>
+        </DialogActions> */}
       </Dialog>
     </Box>
   );

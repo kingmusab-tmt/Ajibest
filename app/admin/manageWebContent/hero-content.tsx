@@ -47,7 +47,7 @@ const AdminHeroEditor: React.FC = () => {
   useEffect(() => {
     const fetchHeroContent = async () => {
       try {
-        const response = await fetch("/api/hero-content");
+        const response = await fetch("/api/aapi/hero-content");
         if (response.ok) {
           const data = await response.json();
           setHeroContent(data);
@@ -98,7 +98,7 @@ const AdminHeroEditor: React.FC = () => {
     setMessage(null);
 
     try {
-      const response = await fetch("/api/hero-content", {
+      const response = await fetch("/api/aapi/hero-content", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

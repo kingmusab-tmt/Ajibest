@@ -7,21 +7,22 @@ import {
   useTheme,
   useMediaQuery,
   CircularProgress,
-  Backdrop,
+  Container,
 } from "@mui/material";
-import UserDashboardSidebar from "../components/userscomponent/usernav";
-import ProfileTopNavBar from "../components/userscomponent/profiletopnav";
-import CalculatorOnProfile from "../components/userscomponent/accounttab";
-import UserInfo from "../components/userscomponent/profileitems";
-import TransactionHistory from "../components/generalcomponents/transactionhistory";
+
+import UserDashboardSidebar from "./adminComponents/adminnav";
+import ProfileTopNavBar from "./adminComponents/profiletopnav";
+import ManageProperty from "./manageProperty/page";
+import ManageUsers from "./manageUser/page";
+import ManageTransactions from "./manageTransactions/page";
+import ManagePayments from "./managePayment/page";
 import UpdateProfile from "../components/userscomponent/updateProfile";
-import PropertyListing from "../components/userscomponent/propertyListing";
-import MyProperty from "../components/userscomponent/userproperties";
+import DashboardPage from "./admindashboard";
 import ProtectedRoute from "../components/generalcomponents/ProtectedRoute";
-import SupportTab from "../components/userscomponent/SupportTab";
+import ManageWebContent from "./manageWebContent/page";
 
 interface Notification {
-  id: number;
+  _id: string;
   message: string;
 }
 
@@ -33,20 +34,14 @@ interface User {
   isLoggedIn: boolean;
 }
 
-const Userprofile = () => {
+const AdminPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [selectedComponent, setSelectedComponent] = useState("UserInfo");
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [isClient, setIsClient] = useState(false);
-
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.up("sm"));
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -69,7 +64,7 @@ const Userprofile = () => {
         );
         setNotifications(filteredNotifications);
       } catch (error) {
-        throw error;
+        console.error("Error fetching notifications:", error);
       }
     };
     if (status === "authenticated") {
@@ -85,16 +80,31 @@ const Userprofile = () => {
 
   useEffect(() => {
     const handleComponentChange = () => {
-      router.replace(`/userprofile?#${selectedComponent}`);
+      router.replace(`/admin?/${selectedComponent}`);
     };
     handleComponentChange();
   }, [selectedComponent, router]);
 
-  if (status === "loading" || !isClient) {
+  // Handle sidebar auto-close on mobile when clicking on menu items
+  useEffect(() => {
+    if (isMobile && isSidebarOpen) {
+      setIsSidebarOpen(false);
+    }
+  }, [selectedComponent, isMobile, isSidebarOpen]);
+
+  if (status === "loading") {
     return (
-      <Backdrop open sx={{ color: "#fff", zIndex: theme.zIndex.drawer + 1 }}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          backgroundColor: theme.palette.background.default,
+        }}
+      >
+        <CircularProgress />
+      </Box>
     );
   }
 
@@ -112,39 +122,27 @@ const Userprofile = () => {
 
   const renderComponent = () => {
     switch (selectedComponent) {
-      case "UserInfo":
-        return (
-          <>
-            <UserInfo />
-            <CalculatorOnProfile />
-          </>
-        );
-      case "MyProperty":
-        return <MyProperty />;
-      case "PropertyListing":
-        return <PropertyListing />;
-      case "TransactionHistory":
-        return <TransactionHistory />;
+      case "DashboardPage":
+        return <DashboardPage />;
+      case "ManageProperty":
+        return <ManageProperty />;
+      case "ManageUsers":
+        return <ManageUsers />;
+      case "ManageTransactions":
+        return <ManageTransactions />;
+      case "ManagePayments":
+        return <ManagePayments />;
+      case "ManageWebContent":
+        return <ManageWebContent />;
       case "UpdateProfile":
         return <UpdateProfile />;
-      case "SupportTab":
-        return <SupportTab />;
       default:
-        return <UserInfo />;
-    }
-  };
-
-  // Calculate margin left based on sidebar state and screen size
-  const getMarginLeft = () => {
-    if (isSidebarOpen) {
-      return { xs: "256px", sm: "256px" }; // ml-64 equivalent
-    } else {
-      return { xs: "0px", sm: "96px" }; // ml-0 sm:ml-24 equivalent (24 * 4 = 96px)
+        return <DashboardPage />;
     }
   };
 
   return (
-    <ProtectedRoute roles={["User", "Agent", "Admin"]}>
+    <ProtectedRoute roles={["Admin"]}>
       <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
         <UserDashboardSidebar
           user={user}
@@ -153,18 +151,24 @@ const Userprofile = () => {
           setSelectedComponent={setSelectedComponent}
         />
 
+        {/* Main Content Area */}
         <Box
+          component="main"
           sx={{
+            flexGrow: 1,
             display: "flex",
             flexDirection: "column",
-            flexGrow: 1,
-            marginLeft: getMarginLeft(),
-            transition: theme.transitions.create("margin", {
-              duration: 300, // matches duration-300
+            marginLeft: {
+              xs: 0,
+              md: isSidebarOpen ? "280px" : "80px",
+            },
+            transition: theme.transitions.create(["margin"], {
+              easing: theme.transitions.easing.sharp,
+              duration: theme.transitions.duration.leavingScreen,
             }),
             width: {
-              xs: `calc(100% - ${isSidebarOpen ? "256px" : "0px"})`,
-              sm: `calc(100% - ${isSidebarOpen ? "256px" : "96px"})`,
+              xs: "100%",
+              md: isSidebarOpen ? "calc(100% - 280px)" : "calc(100% - 80px)",
             },
           }}
         >
@@ -174,23 +178,22 @@ const Userprofile = () => {
             setSelectedComponent={setSelectedComponent}
           />
 
-          <Box
-            component="main"
+          <Container
+            maxWidth={false}
             sx={{
               flexGrow: 1,
-              p: 3, // equivalent to p-4
-              backgroundColor:
-                theme.palette.mode === "dark" ? "grey.900" : "background.paper",
+              p: 3,
+              backgroundColor: theme.palette.background.default,
               overflow: "auto",
-              maxHeight: "100vh",
+              maxHeight: "calc(100vh - 64px)", // Subtract AppBar height
             }}
           >
             {renderComponent()}
-          </Box>
+          </Container>
         </Box>
       </Box>
     </ProtectedRoute>
   );
 };
 
-export default Userprofile;
+export default AdminPage;

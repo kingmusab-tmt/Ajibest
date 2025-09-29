@@ -1,7 +1,7 @@
 "use client";
 import classNames from "classnames";
 import { useState } from "react";
-import TransactionHistory from "./transactionhistory";
+import TransactionHistory from "../adminComponents/transactionhistory";
 
 type Section =
   // | "One Time Payments Transactions"

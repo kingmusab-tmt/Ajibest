@@ -1,5 +1,5 @@
 import React from "react";
-import NewProperty from "../components/admincomponents/createNewProperty";
+import NewProperty from "../admin/manageProperty/createNewProperty";
 
 const TestPage = () => {
   return (
