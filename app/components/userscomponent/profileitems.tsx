@@ -40,12 +40,73 @@ import {
   Home,
   CheckCircle,
   Payment,
+  House,
 } from "@mui/icons-material";
+import LoadingSpinner from "../generalcomponents/loadingSpinner";
 
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
+}
+
+// Analytics Data Interface
+interface AnalyticsData {
+  propertyStatistics: {
+    totalPropertiesPurchased: number;
+    totalPropertiesRented: number;
+    totalPaymentMade: number;
+    totalPaymentToBeMade: number;
+    purchasedPropertiesUnderPayment: number;
+    rentedPropertiesUnderPayment: number;
+  };
+  personalInformation: {
+    email: string;
+    phone: string;
+    address: string;
+    lastLogin: string | null;
+  };
+  accountSummary: {
+    status: string;
+    registrationDate: string;
+    nextPaymentDate: string | null;
+    nextPaymentAmountDue: number;
+  };
+  propertiesUnderPayment: Array<{
+    title: string;
+    propertyId: string;
+    propertyType: string;
+    listingPurpose: string;
+    paymentMethod: string;
+    initialPayment: number;
+    totalPaid: number;
+    remainingBalance: number;
+    nextPaymentDate: string | null;
+    nextPaymentAmount: number;
+    paymentProgress: {
+      percentage: number;
+      paymentsMade: number;
+      totalPayments: number;
+    };
+  }>;
+  propertiesPurchased: Array<{
+    title: string;
+    propertyId: string;
+    propertyType: string;
+    paymentDate: string;
+    paymentMethod: string;
+    propertyPrice: number;
+    status: string;
+  }>;
+  propertiesRented: Array<{
+    title: string;
+    propertyId: string;
+    propertyType: string;
+    paymentDate: string;
+    paymentMethod: string;
+    propertyPrice: number;
+    status: string;
+  }>;
 }
 
 function TabPanel(props: TabPanelProps) {
@@ -65,31 +126,39 @@ function TabPanel(props: TabPanelProps) {
 
 const UserInfo: React.FC = () => {
   const { data: session, status } = useSession();
-  const [userData, setUserData] = useState<User | null>(null);
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(
+    null
+  );
+  const [loading, setLoading] = useState(true);
   const [tabValue, setTabValue] = useState(0);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchAnalyticsData = async () => {
       if (session?.user?.email) {
         try {
-          const response = await fetch("/api/users/searchbyemail", {
+          setLoading(true);
+          const response = await fetch("/api/users/analyticss", {
             headers: {
               "Cache-Control": "no-cache, no-store",
             },
           });
           if (response.ok) {
-            const data = await response.json();
-            setUserData({ ...data.user });
+            const result = await response.json();
+            if (result.success) {
+              setAnalyticsData(result.data);
+            }
           }
         } catch (error) {
-          console.error("Error fetching user data:", error);
+          console.error("Error fetching analytics data:", error);
+        } finally {
+          setLoading(false);
         }
       }
     };
     if (status === "authenticated") {
-      fetchUserData();
+      fetchAnalyticsData();
     }
   }, [session, status]);
 
@@ -103,7 +172,8 @@ const UserInfo: React.FC = () => {
     minimumFractionDigits: 2,
   });
 
-  const formatDate = (date: Date | string) => {
+  const formatDate = (date: Date | string | null) => {
+    if (!date) return "Not available";
     return new Date(date).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
@@ -111,21 +181,11 @@ const UserInfo: React.FC = () => {
     });
   };
 
+  // Stats cards using analytics data
   const statsCards = [
     {
-      title: "Remaining Balance",
-      value: userData?.remainingBalance ?? 0,
-      format: "currency",
-      icon: <AccountBalanceWallet sx={{ fontSize: 40 }} />,
-      color: theme.palette.success.main,
-      gradient: `linear-gradient(135deg, ${alpha(
-        theme.palette.success.main,
-        0.1
-      )} 0%, ${alpha(theme.palette.success.main, 0.2)} 100%)`,
-    },
-    {
-      title: "Total Properties",
-      value: userData?.totalPropertyPurchased ?? 0,
+      title: "Total Properties Purchased",
+      value: analyticsData?.propertyStatistics.totalPropertiesPurchased ?? 0,
       format: "number",
       icon: <Apartment sx={{ fontSize: 40 }} />,
       color: theme.palette.primary.main,
@@ -135,10 +195,32 @@ const UserInfo: React.FC = () => {
       )} 0%, ${alpha(theme.palette.primary.main, 0.2)} 100%)`,
     },
     {
-      title: "Total Paid",
-      value: userData?.totalPaymentMade ?? 0,
+      title: "Total Property Rented",
+      value: analyticsData?.propertyStatistics.totalPropertiesRented ?? 0,
+      format: "number",
+      icon: <House sx={{ fontSize: 40 }} />,
+      color: theme.palette.info.main,
+      gradient: `linear-gradient(135deg, ${alpha(
+        theme.palette.info.main,
+        0.1
+      )} 0%, ${alpha(theme.palette.info.main, 0.2)} 100%)`,
+    },
+    {
+      title: "Total Payments Made",
+      value: analyticsData?.propertyStatistics.totalPaymentMade ?? 0,
       format: "currency",
       icon: <Payments sx={{ fontSize: 40 }} />,
+      color: theme.palette.success.main,
+      gradient: `linear-gradient(135deg, ${alpha(
+        theme.palette.success.main,
+        0.1
+      )} 0%, ${alpha(theme.palette.success.main, 0.2)} 100%)`,
+    },
+    {
+      title: "Total Payment to be Made",
+      value: analyticsData?.propertyStatistics.totalPaymentToBeMade ?? 0,
+      format: "currency",
+      icon: <AccountBalanceWallet sx={{ fontSize: 40 }} />,
       color: theme.palette.warning.main,
       gradient: `linear-gradient(135deg, ${alpha(
         theme.palette.warning.main,
@@ -146,51 +228,41 @@ const UserInfo: React.FC = () => {
       )} 0%, ${alpha(theme.palette.warning.main, 0.2)} 100%)`,
     },
     {
-      title: "Pending Payments",
-      value: userData?.totalPaymentToBeMade ?? 0,
-      format: "currency",
-      icon: <Schedule sx={{ fontSize: 40 }} />,
-      color: theme.palette.error.main,
+      title: "Purchased Properties Under Payment",
+      value:
+        analyticsData?.propertyStatistics.purchasedPropertiesUnderPayment ?? 0,
+      format: "number",
+      icon: <Apartment sx={{ fontSize: 40 }} />,
+      color: theme.palette.primary.main,
       gradient: `linear-gradient(135deg, ${alpha(
-        theme.palette.error.main,
+        theme.palette.primary.main,
         0.1
-      )} 0%, ${alpha(theme.palette.error.main, 0.2)} 100%)`,
+      )} 0%, ${alpha(theme.palette.primary.main, 0.2)} 100%)`,
     },
-    ...(session?.user.role === "Agent"
-      ? [
-          {
-            title: "Referral Earnings",
-            value: userData?.referralEarnings ?? 0,
-            format: "currency",
-            icon: <TrendingUp sx={{ fontSize: 40 }} />,
-            color: theme.palette.info.main,
-            gradient: `linear-gradient(135deg, ${alpha(
-              theme.palette.info.main,
-              0.1
-            )} 0%, ${alpha(theme.palette.info.main, 0.2)} 100%)`,
-          },
-          {
-            title: "Referrals",
-            value: userData?.numberOfReferrals ?? 0,
-            format: "number",
-            icon: <People sx={{ fontSize: 40 }} />,
-            color: theme.palette.secondary.main,
-            gradient: `linear-gradient(135deg, ${alpha(
-              theme.palette.secondary.main,
-              0.1
-            )} 0%, ${alpha(theme.palette.secondary.main, 0.2)} 100%)`,
-          },
-        ]
-      : []),
+    {
+      title: "Rented Property Under Payment",
+      value:
+        analyticsData?.propertyStatistics.rentedPropertiesUnderPayment ?? 0,
+      format: "number",
+      icon: <House sx={{ fontSize: 40 }} />,
+      color: theme.palette.info.main,
+      gradient: `linear-gradient(135deg, ${alpha(
+        theme.palette.info.main,
+        0.1
+      )} 0%, ${alpha(theme.palette.info.main, 0.2)} 100%)`,
+    },
   ];
 
-  const propertiesUnderPayment = userData?.propertyUnderPayment || [];
-  const ownedProperties = userData?.propertyPurOrRented || [];
+  if (status === "loading" || loading) {
+    return <LoadingSpinner />;
+  }
 
-  if (status === "loading") {
+  if (!analyticsData) {
     return (
-      <Container maxWidth="xl" sx={{ py: 4 }}>
-        <LinearProgress />
+      <Container maxWidth="xl" sx={{ py: 4, textAlign: "center" }}>
+        <Typography variant="h6" color="text.secondary">
+          Failed to load analytics data. Please try again.
+        </Typography>
       </Container>
     );
   }
@@ -211,14 +283,14 @@ const UserInfo: React.FC = () => {
         <Grid container spacing={2} alignItems="center">
           <Grid item>
             <Avatar
-              src={userData?.image || session?.user?.image || ""}
+              src={session?.user?.image || ""}
               sx={{
                 width: { xs: 60, md: 80 },
                 height: { xs: 60, md: 80 },
                 border: "3px solid white",
               }}
             >
-              {userData?.name?.[0] || session?.user?.name?.[0] || "U"}
+              {session?.user?.name?.[0] || "U"}
             </Avatar>
           </Grid>
           <Grid item xs>
@@ -228,7 +300,7 @@ const UserInfo: React.FC = () => {
               gutterBottom
               sx={{ fontSize: { xs: "1.5rem", md: "2.125rem" } }}
             >
-              {userData?.name || session?.user?.name || "User"}
+              {session?.user?.name || "User"}
             </Typography>
             <Stack
               direction={{ xs: "column", sm: "row" }}
@@ -236,7 +308,7 @@ const UserInfo: React.FC = () => {
               alignItems={{ xs: "flex-start", sm: "center" }}
             >
               <Chip
-                label={userData?.role || "User"}
+                label={session?.user?.role || "User"}
                 color="secondary"
                 size="small"
                 sx={{
@@ -245,8 +317,12 @@ const UserInfo: React.FC = () => {
                 }}
               />
               <Chip
-                label={userData?.isActive ? "Verified" : "Pending Verification"}
-                color={userData?.isActive ? "success" : "warning"}
+                label={analyticsData.accountSummary.status}
+                color={
+                  analyticsData.accountSummary.status === "Active"
+                    ? "success"
+                    : "warning"
+                }
                 size="small"
                 variant="outlined"
               />
@@ -255,7 +331,7 @@ const UserInfo: React.FC = () => {
                 sx={{ opacity: 0.9, mt: { xs: 0.5, sm: 0 } }}
               >
                 Member since{" "}
-                {formatDate(userData?.dateOfRegistration || new Date())}
+                {formatDate(analyticsData.accountSummary.registrationDate)}
               </Typography>
             </Stack>
           </Grid>
@@ -307,6 +383,74 @@ const UserInfo: React.FC = () => {
           </Grid>
         ))}
       </Grid>
+
+      {/* Account Summary Card */}
+      <Card
+        elevation={1}
+        sx={{
+          mb: 3,
+          border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+          borderRadius: 2,
+        }}
+      >
+        <CardContent>
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          >
+            <CalendarToday color="primary" /> Payment Summary
+          </Typography>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6} md={3}>
+              <Box textAlign="center">
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  Next Payment Date
+                </Typography>
+                <Typography variant="h6" fontWeight="bold">
+                  {formatDate(analyticsData.accountSummary.nextPaymentDate)}
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Box textAlign="center">
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  Next Payment Amount
+                </Typography>
+                <Typography variant="h6" fontWeight="bold" color="primary.main">
+                  {formatter.format(
+                    analyticsData.accountSummary.nextPaymentAmountDue
+                  )}
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Box textAlign="center">
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  Total Paid
+                </Typography>
+                <Typography variant="h6" fontWeight="bold" color="success.main">
+                  {formatter.format(
+                    analyticsData.propertyStatistics.totalPaymentMade
+                  )}
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Box textAlign="center">
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  Remaining Balance
+                </Typography>
+                <Typography variant="h6" fontWeight="bold" color="warning.main">
+                  {formatter.format(
+                    analyticsData.propertyStatistics.totalPaymentToBeMade
+                  )}
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
 
       {/* Tabs Section */}
       <Paper elevation={0} sx={{ borderRadius: 2, overflow: "hidden" }}>
@@ -365,7 +509,7 @@ const UserInfo: React.FC = () => {
                       </ListItemIcon>
                       <ListItemText
                         primary="Email"
-                        secondary={userData?.email || session?.user?.email}
+                        secondary={analyticsData.personalInformation.email}
                         primaryTypographyProps={{ variant: "body2" }}
                         secondaryTypographyProps={{ variant: "body1" }}
                       />
@@ -376,7 +520,10 @@ const UserInfo: React.FC = () => {
                       </ListItemIcon>
                       <ListItemText
                         primary="Phone"
-                        secondary={userData?.phoneNumber || "Not provided"}
+                        secondary={
+                          analyticsData.personalInformation.phone ||
+                          "Not provided"
+                        }
                         primaryTypographyProps={{ variant: "body2" }}
                         secondaryTypographyProps={{ variant: "body1" }}
                       />
@@ -388,9 +535,8 @@ const UserInfo: React.FC = () => {
                       <ListItemText
                         primary="Address"
                         secondary={
-                          userData?.address
-                            ? `${userData.address}, ${userData.lga}, ${userData.state}, ${userData.country}`
-                            : "Not provided"
+                          analyticsData.personalInformation.address ||
+                          "Not provided"
                         }
                         primaryTypographyProps={{ variant: "body2" }}
                         secondaryTypographyProps={{ variant: "body1" }}
@@ -402,11 +548,9 @@ const UserInfo: React.FC = () => {
                       </ListItemIcon>
                       <ListItemText
                         primary="Last Login"
-                        secondary={
-                          userData?.lastLoginTime
-                            ? formatDate(userData.lastLoginTime)
-                            : "Never"
-                        }
+                        secondary={formatDate(
+                          analyticsData.personalInformation.lastLogin
+                        )}
                         primaryTypographyProps={{ variant: "body2" }}
                         secondaryTypographyProps={{ variant: "body1" }}
                       />
@@ -449,8 +593,12 @@ const UserInfo: React.FC = () => {
                     >
                       <Typography variant="body2">Status</Typography>
                       <Chip
-                        label={userData?.isActive ? "Active" : "Inactive"}
-                        color={userData?.isActive ? "success" : "default"}
+                        label={analyticsData.accountSummary.status}
+                        color={
+                          analyticsData.accountSummary.status === "Active"
+                            ? "success"
+                            : "default"
+                        }
                         size="small"
                       />
                     </Box>
@@ -459,17 +607,35 @@ const UserInfo: React.FC = () => {
                     >
                       <Typography variant="body2">Registration Date</Typography>
                       <Typography variant="body2" textAlign="right">
-                        {formatDate(userData?.dateOfRegistration || new Date())}
+                        {formatDate(
+                          analyticsData.accountSummary.registrationDate
+                        )}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{ display: "flex", justifyContent: "space-between" }}
+                    >
+                      <Typography variant="body2">Next Payment Date</Typography>
+                      <Typography variant="body2" textAlign="right">
+                        {formatDate(
+                          analyticsData.accountSummary.nextPaymentDate
+                        )}
                       </Typography>
                     </Box>
                     <Box
                       sx={{ display: "flex", justifyContent: "space-between" }}
                     >
                       <Typography variant="body2">
-                        Favorite Properties
+                        Next Payment Amount
                       </Typography>
-                      <Typography variant="body2">
-                        {userData?.favouriteProperties?.length || 0}
+                      <Typography
+                        variant="body2"
+                        fontWeight="bold"
+                        color="primary.main"
+                      >
+                        {formatter.format(
+                          analyticsData.accountSummary.nextPaymentAmountDue
+                        )}
                       </Typography>
                     </Box>
                   </Box>
@@ -503,25 +669,15 @@ const UserInfo: React.FC = () => {
                   >
                     <Payment color="warning" />
                     <Typography variant="h6" fontWeight="bold">
-                      Properties Under Payment ({propertiesUnderPayment.length})
+                      Properties Under Payment (
+                      {analyticsData.propertiesUnderPayment.length})
                     </Typography>
                   </Box>
 
-                  {propertiesUnderPayment.length > 0 ? (
+                  {analyticsData.propertiesUnderPayment.length > 0 ? (
                     <Stack spacing={2}>
-                      {propertiesUnderPayment.map((property, index) => {
-                        const totalPrice =
-                          property.paymentHisotry[0]?.propertyPrice || 0;
-                        const paidAmount =
-                          ((property as any).initialPayment ?? 0) +
-                          (property.paymentHisotry?.reduce(
-                            (sum, payment) => sum + payment.amount,
-                            0
-                          ) ?? 0);
-                        const progress =
-                          totalPrice > 0 ? (paidAmount / totalPrice) * 100 : 0;
-
-                        return (
+                      {analyticsData.propertiesUnderPayment.map(
+                        (property, index) => (
                           <Paper
                             key={index}
                             elevation={0}
@@ -557,7 +713,7 @@ const UserInfo: React.FC = () => {
                                 variant="outlined"
                               />
                               <Chip
-                                label={property.paymentPurpose}
+                                label={property.listingPurpose}
                                 size="small"
                                 color="secondary"
                                 variant="outlined"
@@ -565,7 +721,7 @@ const UserInfo: React.FC = () => {
                             </Box>
                             <LinearProgress
                               variant="determinate"
-                              value={progress}
+                              value={property.paymentProgress.percentage}
                               sx={{
                                 height: 8,
                                 borderRadius: 4,
@@ -584,15 +740,35 @@ const UserInfo: React.FC = () => {
                                 display: "flex",
                                 justifyContent: "space-between",
                                 fontSize: "0.875rem",
+                                mb: 1,
                               }}
                             >
                               <Typography variant="body2">
-                                Paid: {formatter.format(paidAmount)}
+                                Paid: {formatter.format(property.totalPaid)}
                               </Typography>
                               <Typography variant="body2">
-                                Total: {formatter.format(totalPrice)}
+                                Remaining:{" "}
+                                {formatter.format(property.remainingBalance)}
                               </Typography>
                             </Box>
+                            {property.nextPaymentDate && (
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  fontSize: "0.875rem",
+                                  mb: 1,
+                                }}
+                              >
+                                <Typography variant="body2">
+                                  Next Payment:{" "}
+                                  {formatDate(property.nextPaymentDate)}
+                                </Typography>
+                                <Typography variant="body2" fontWeight="bold">
+                                  {formatter.format(property.nextPaymentAmount)}
+                                </Typography>
+                              </Box>
+                            )}
                             <Button
                               variant="outlined"
                               size="small"
@@ -603,8 +779,8 @@ const UserInfo: React.FC = () => {
                               Continue Payment
                             </Button>
                           </Paper>
-                        );
-                      })}
+                        )
+                      )}
                     </Stack>
                   ) : (
                     <Box sx={{ textAlign: "center", py: 4 }}>
@@ -652,24 +828,100 @@ const UserInfo: React.FC = () => {
                   >
                     <CheckCircle color="success" />
                     <Typography variant="h6" fontWeight="bold">
-                      Owned Properties ({ownedProperties.length})
+                      Owned Properties (
+                      {analyticsData.propertiesPurchased.length +
+                        analyticsData.propertiesRented.length}
+                      )
                     </Typography>
                   </Box>
 
-                  {ownedProperties.length > 0 ? (
+                  {analyticsData.propertiesPurchased.length > 0 ||
+                  analyticsData.propertiesRented.length > 0 ? (
                     <Stack spacing={2}>
-                      {ownedProperties.map((property, index) => (
+                      {/* Purchased Properties */}
+                      {analyticsData.propertiesPurchased.map(
+                        (property, index) => (
+                          <Paper
+                            key={`purchased-${index}`}
+                            elevation={0}
+                            sx={{
+                              p: 2,
+                              border: `1px solid ${theme.palette.divider}`,
+                              borderRadius: 1,
+                              background: alpha(
+                                theme.palette.success.light,
+                                0.05
+                              ),
+                            }}
+                          >
+                            <Typography
+                              variant="subtitle1"
+                              fontWeight="bold"
+                              gutterBottom
+                            >
+                              {property.title} (Purchased)
+                            </Typography>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                mb: 1,
+                              }}
+                            >
+                              <Chip
+                                label={property.propertyType}
+                                size="small"
+                                color="primary"
+                                variant="outlined"
+                              />
+                              <Chip
+                                label="Fully Paid"
+                                size="small"
+                                color="success"
+                              />
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                mb: 1,
+                              }}
+                            >
+                              <Typography variant="body2" fontWeight="bold">
+                                {formatter.format(property.propertyPrice)}
+                              </Typography>
+                              <Typography
+                                variant="caption"
+                                color="text.secondary"
+                              >
+                                {formatDate(property.paymentDate)}
+                              </Typography>
+                            </Box>
+                            <Button
+                              variant="contained"
+                              size="small"
+                              fullWidth
+                              sx={{ mt: 1 }}
+                              startIcon={<Home />}
+                            >
+                              View Property
+                            </Button>
+                          </Paper>
+                        )
+                      )}
+
+                      {/* Rented Properties */}
+                      {analyticsData.propertiesRented.map((property, index) => (
                         <Paper
-                          key={index}
+                          key={`rented-${index}`}
                           elevation={0}
                           sx={{
                             p: 2,
                             border: `1px solid ${theme.palette.divider}`,
                             borderRadius: 1,
-                            background: alpha(
-                              theme.palette.success.light,
-                              0.05
-                            ),
+                            background: alpha(theme.palette.info.light, 0.05),
                           }}
                         >
                           <Typography
@@ -677,7 +929,7 @@ const UserInfo: React.FC = () => {
                             fontWeight="bold"
                             gutterBottom
                           >
-                            {property.title}
+                            {property.title} (Rented)
                           </Typography>
                           <Box
                             sx={{
@@ -694,9 +946,9 @@ const UserInfo: React.FC = () => {
                               variant="outlined"
                             />
                             <Chip
-                              label="Fully Paid"
+                              label="Active Rental"
                               size="small"
-                              color="success"
+                              color="info"
                             />
                           </Box>
                           <Box
@@ -718,7 +970,7 @@ const UserInfo: React.FC = () => {
                             </Typography>
                           </Box>
                           <Button
-                            variant="contained"
+                            variant="outlined"
                             size="small"
                             fullWidth
                             sx={{ mt: 1 }}

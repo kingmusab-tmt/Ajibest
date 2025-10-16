@@ -14,7 +14,6 @@ import {
   Card,
   CardContent,
   Alert,
-  CircularProgress,
   Stack,
   Divider,
   useTheme,
@@ -46,6 +45,7 @@ import {
   Schedule,
   Security,
 } from "@mui/icons-material";
+import LoadingSpinner from "./loadingSpinner";
 
 const Contactus = () => {
   const [message, setMessage] = useState("");
@@ -191,7 +191,7 @@ const Contactus = () => {
   return (
     <Container
       maxWidth="lg"
-      sx={{ py: { xs: 2, md: 4 }, px: { xs: 1, sm: 2 } }}
+      sx={{ py: { xs: 2, md: 4 }, px: { xs: 1, sm: 2 }, mt: 6 }}
     >
       {/* Header Section */}
       <Box sx={{ textAlign: "center", mb: { xs: 3, md: 4 } }}>
@@ -622,9 +622,7 @@ const Contactus = () => {
                       onClick={handleSend}
                       variant="contained"
                       disabled={sending}
-                      startIcon={
-                        sending ? <CircularProgress size={20} /> : <Send />
-                      }
+                      startIcon={sending ? <LoadingSpinner /> : <Send />}
                       fullWidth={isMobile}
                       sx={{
                         background: `linear-gradient(135deg, ${theme.palette.success.main} 0%, ${theme.palette.success.dark} 100%)`,

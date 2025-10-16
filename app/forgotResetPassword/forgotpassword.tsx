@@ -10,7 +10,6 @@ import {
   Button,
   Typography,
   Alert,
-  CircularProgress,
   InputAdornment,
   IconButton,
   Stepper,
@@ -18,6 +17,7 @@ import {
   StepLabel,
 } from "@mui/material";
 import { Visibility, VisibilityOff, Lock, Mail } from "@mui/icons-material";
+import LoadingSpinner from "../components/generalcomponents/loadingSpinner";
 
 export default function ForgotResetPassword() {
   const [loading, setLoading] = useState(false);
@@ -348,7 +348,7 @@ export default function ForgotResetPassword() {
                 fontWeight: "bold",
               }}
             >
-              {loading ? <CircularProgress size={24} /> : "Reset Password"}
+              {loading ? <LoadingSpinner /> : "Reset Password"}
             </Button>
           )}
 

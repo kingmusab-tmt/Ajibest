@@ -14,7 +14,6 @@ import {
   Card,
   CardContent,
   Alert,
-  CircularProgress,
   Stack,
   Divider,
   useTheme,
@@ -40,6 +39,7 @@ import {
   Twitter,
   LinkedIn,
 } from "@mui/icons-material";
+import LoadingSpinner from "../generalcomponents/loadingSpinner";
 
 const SupportTab: React.FC = () => {
   const { data: session } = useSession();
@@ -406,9 +406,7 @@ const SupportTab: React.FC = () => {
                   size="large"
                   onClick={handleSend}
                   disabled={sending || !subject || !message}
-                  startIcon={
-                    sending ? <CircularProgress size={20} /> : <Send />
-                  }
+                  startIcon={sending ? <LoadingSpinner /> : <Send />}
                   sx={{
                     borderRadius: 2,
                     py: 1.5,

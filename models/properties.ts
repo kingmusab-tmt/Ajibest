@@ -20,7 +20,7 @@ interface IProperty extends Document {
   rented: boolean;
 
   instalmentAllowed: boolean;
-  size?: string;
+  size?: "Quarter Plot" | "Half Plot" | "Full Plot";
 }
 
 const propertySchema = new Schema<IProperty>(

@@ -1,6 +1,7 @@
 import dbConnect from "../../../../utils/connectDB";
 import Property from "../../../../models/properties";
 import User from "../../../../models/user";
+import Transaction from "../../../../models/transaction";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 
@@ -57,24 +58,62 @@ export async function POST(req: Request) {
       amount: initialPayment,
       propertyPrice: propertyPrice,
       totalPaymentMade: initialPayment,
-      remainingBalance: remainingBalance,
-      paymentCompleted: paymentCompleted,
+      remainingBalance: remainingBalance || propertyPrice - initialPayment,
+      paymentCompleted: paymentCompleted || false,
     };
 
     // Convert propertyId to ObjectId
     const propertyObjectId = new mongoose.Types.ObjectId(propertyId);
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+
+    // Generate unique transaction ID
+    const transactionId = `manual_${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}`;
+
+    // Create transaction record in Transaction model
+    const transaction = new Transaction({
+      userName: user.name || user.username,
+      title: property.title,
+      email: user.email,
+      transactionId: transactionId,
+      propertyPrice: propertyPrice,
+      userId: userObjectId,
+      propertyId: propertyObjectId,
+      propertyType: property.propertyType,
+      paymentMethod: paymentMethod,
+      listingPurpose: property.listingPurpose,
+      amount: initialPayment,
+      status: paymentCompleted ? "successful" : "pending",
+      paymentType: "manual",
+    });
+
+    // Save transaction
+    await transaction.save();
 
     if (paymentCompleted) {
       // Add to purchased/rented properties
       user.propertyPurOrRented.push({
         title: property.title,
+        description: property.description,
+        location: property.location,
+        image: property.image,
         userEmail: user.email,
         propertyId: propertyObjectId,
         paymentDate: currentDate,
         propertyType: property.propertyType,
         paymentMethod: paymentMethod,
-        paymentPurpose: property.listingPurpose,
-        propertyPrice: propertyPrice,
+        listingPurpose: property.listingPurpose,
+        price: propertyPrice,
+        bedrooms: property.bedrooms,
+        bathrooms: property.bathrooms,
+        amenities: property.amenities,
+        utilities: property.utilities,
+        plotNumber: property.plotNumber,
+        city: property.city,
+        size: property.size,
+        rentalDuration: property.rentalDuration,
+        instalmentAllowed: property.instalmentAllowed,
       });
 
       // Update user totals
@@ -93,18 +132,33 @@ export async function POST(req: Request) {
     } else {
       // Add to properties under payment
       user.propertyUnderPayment.push({
-        userEmail: user.email,
         title: property.title,
+        description: property.description,
+        location: property.location,
+        image: property.image,
+        userEmail: user.email,
         propertyId: propertyObjectId,
         propertyType: property.propertyType,
+        listingPurpose: property.listingPurpose,
         paymentMethod: paymentMethod,
-        paymentPurpose: property.listingPurpose,
         initialPayment: initialPayment,
-        paymentHisotry: [paymentHistoryEntry],
+        price: propertyPrice,
+        bedrooms: property.bedrooms,
+        bathrooms: property.bathrooms,
+        amenities: property.amenities,
+        utilities: property.utilities,
+        plotNumber: property.plotNumber,
+        city: property.city,
+        size: property.size,
+        instalmentAllowed: property.instalmentAllowed,
+        paymentHistory: [paymentHistoryEntry],
+        isWithdrawn: false,
+        isWithdrawnApproved: false,
       });
 
       // Update user financials
-      user.remainingBalance += remainingBalance;
+      user.remainingBalance =
+        remainingBalance || propertyPrice - initialPayment;
       user.totalPaymentMade += initialPayment;
       user.totalPaymentToBeMade += propertyPrice;
     }
@@ -112,7 +166,7 @@ export async function POST(req: Request) {
     // Save user updates
     await user.save();
 
-    // Update property status if not completed
+    // Update property status
     if (!paymentCompleted) {
       property.status =
         property.listingPurpose === "For Sale" ? "sold" : "rented";
@@ -134,7 +188,8 @@ export async function POST(req: Request) {
           property: property._id,
           paymentMethod,
           initialPayment,
-          remainingBalance,
+          remainingBalance: remainingBalance || propertyPrice - initialPayment,
+          transactionId: transaction._id,
         },
       },
       { status: 200 }

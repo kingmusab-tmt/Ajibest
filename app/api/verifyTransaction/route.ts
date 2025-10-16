@@ -18,7 +18,7 @@ export async function POST(req) {
     propertyId,
     propertyType,
     paymentMethod,
-    paymentPurpose,
+    listingPurpose,
   } = body;
 
   try {
@@ -61,7 +61,7 @@ export async function POST(req) {
         propertyType,
         paymentMethod,
         propertyPrice,
-        paymentPurpose,
+        listingPurpose,
         amount,
         status: "pending",
       });
@@ -69,7 +69,7 @@ export async function POST(req) {
       await transaction.save();
 
       const propertyUpdate =
-        paymentPurpose === "For Renting"
+        listingPurpose === "For Renting"
           ? { rented: true }
           : { purchased: true };
       await Property.findByIdAndUpdate(propertyId, propertyUpdate);
@@ -94,7 +94,7 @@ export async function POST(req) {
               paymentDate: Date.now(),
               propertyType,
               paymentMethod,
-              paymentPurpose,
+              listingPurpose,
               propertyPrice,
             },
           },
@@ -114,9 +114,9 @@ export async function POST(req) {
               propertyId: propertyId,
               propertyType,
               paymentMethod,
-              paymentPurpose,
+              listingPurpose,
               initialPayment: amount,
-              paymentHisotry: [
+              paymentHistory: [
                 {
                   paymentDate: Date.now(),
                   nextPaymentDate: new Date(
@@ -145,7 +145,7 @@ export async function POST(req) {
         propertyId,
         propertyType,
         paymentMethod,
-        paymentPurpose,
+        listingPurpose,
         amount,
         status: "pending",
       });
@@ -157,28 +157,28 @@ export async function POST(req) {
       );
 
       const totalPaymentMadeForProperty =
-        userProperty?.paymentHisotry.reduce(
+        userProperty?.paymentHistory.reduce(
           (acc, payment) => acc + payment.amount,
           0
         ) + amount;
 
       const remainingBalanceForProperty =
         userProperty &&
-        userProperty.paymentHisotry &&
-        userProperty.paymentHisotry[0]
-          ? userProperty.paymentHisotry[0].propertyPrice -
+        userProperty.paymentHistory &&
+        userProperty.paymentHistory[0]
+          ? userProperty.paymentHistory[0].propertyPrice -
             totalPaymentMadeForProperty
           : 0;
 
       // const remainingBalanceForProperty =
-      //   userProperty.paymentHisotry[0].propertyPrice -
+      //   userProperty.paymentHistory[0].propertyPrice -
       //   totalPaymentMadeForProperty;
 
-      userProperty?.paymentHisotry.push({
+      userProperty?.paymentHistory.push({
         paymentDate: new Date(Date.now()),
         nextPaymentDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
         amount,
-        propertyPrice: userProperty.paymentHisotry[0].propertyPrice,
+        propertyPrice: userProperty.paymentHistory[0].propertyPrice,
         totalPaymentMade: totalPaymentMadeForProperty,
         remainingBalance: remainingBalanceForProperty,
         paymentCompleted: remainingBalanceForProperty === 0,
@@ -194,8 +194,8 @@ export async function POST(req) {
           $set: {
             totalPaymentMade: newTotalPaymentMade,
             remainingBalance: newRemainingBalance,
-            "propertyUnderPayment.$[elem].paymentHisotry":
-              userProperty?.paymentHisotry,
+            "propertyUnderPayment.$[elem].paymentHistory":
+              userProperty?.paymentHistory,
             "propertyUnderPayment.$[elem].paymentCompleted":
               remainingBalanceForProperty === 0,
           },
@@ -216,8 +216,8 @@ export async function POST(req) {
               paymentDate: Date.now(),
               propertyType,
               paymentMethod,
-              paymentPurpose,
-              propertyPrice: userProperty?.paymentHisotry[0].propertyPrice,
+              listingPurpose,
+              propertyPrice: userProperty?.paymentHistory[0].propertyPrice,
             },
           },
           $pull: {

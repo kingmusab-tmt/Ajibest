@@ -5,8 +5,6 @@ import {
   FaLinkedinIn,
   FaInstagram,
   FaShieldAlt,
-  FaMobileAlt,
-  FaAccessibleIcon,
 } from "react-icons/fa";
 import { SiAppstore, SiGoogleplay } from "react-icons/si";
 import logo from "../../../public/ajibestlogo.png";

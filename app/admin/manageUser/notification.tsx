@@ -11,8 +11,8 @@ import {
   Alert,
   Select,
   MenuItem,
-  CircularProgress,
 } from "@mui/material";
+import LoadingSpinner from "@/app/components/generalcomponents/loadingSpinner";
 
 interface User {
   email: string;
@@ -258,7 +258,7 @@ const NotificationForm = () => {
             disabled={loading}
           >
             {loading ? (
-              <CircularProgress size={24} />
+              <LoadingSpinner />
             ) : editMode ? (
               "Update Notification"
             ) : (

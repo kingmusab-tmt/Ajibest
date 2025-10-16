@@ -35,6 +35,7 @@ import {
   Security,
 } from "@mui/icons-material";
 import MessageModal from "../generalcomponents/messageModal";
+import LoadingSpinner from "../generalcomponents/loadingSpinner";
 
 interface FormData {
   name: string;
@@ -745,14 +746,7 @@ const SignupForm: React.FC = () => {
             </Stepper>
 
             {isLoading ? (
-              <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                minHeight={300}
-              >
-                <CircularProgress size={60} />
-              </Box>
+              <LoadingSpinner />
             ) : (
               <>
                 <StepOne

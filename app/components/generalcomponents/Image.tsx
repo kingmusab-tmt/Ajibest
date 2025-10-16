@@ -9,9 +9,9 @@ import {
   Card,
   CardMedia,
   Typography,
-  CircularProgress,
   styled,
 } from "@mui/material";
+import LoadingSpinner from "./loadingSpinner";
 
 interface EditableImageProps {
   link: string;
@@ -121,7 +121,7 @@ const EditableImage: React.FC<EditableImageProps> = ({ link, setLink }) => {
         fullWidth
         onClick={handleButtonClick}
         disabled={isUploading}
-        startIcon={isUploading ? <CircularProgress size={16} /> : null}
+        startIcon={isUploading ? <LoadingSpinner /> : null}
         sx={{
           borderRadius: 2,
           textTransform: "none",

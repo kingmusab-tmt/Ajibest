@@ -11,9 +11,10 @@ interface ITransaction extends Document {
   propertyId: mongoose.Types.ObjectId;
   propertyType: "House" | "Land" | "Farm";
   paymentMethod: "installment" | "payOnce";
-  paymentPurpose: "For Sale" | "For Renting";
+  listingPurpose: "For Sale" | "For Renting";
   amount: number;
   status: "pending" | "successful" | "failed" | "canceled";
+  paymentType: "automatic" | "manual";
 }
 
 const transactionSchema = new Schema<ITransaction>(
@@ -40,7 +41,7 @@ const transactionSchema = new Schema<ITransaction>(
       enum: ["installment", "payOnce"],
       required: true,
     },
-    paymentPurpose: {
+    listingPurpose: {
       type: String,
       enum: ["For Renting", "For Sale"],
       required: true,
@@ -49,6 +50,11 @@ const transactionSchema = new Schema<ITransaction>(
     status: {
       type: String,
       enum: ["pending", "successful", "failed", "canceled"],
+      required: true,
+    },
+    paymentType: {
+      type: String,
+      enum: ["automatic", "manual"],
       required: true,
     },
   },

@@ -16,7 +16,6 @@ import {
   Typography,
   Divider,
   Alert,
-  CircularProgress,
   InputAdornment,
   IconButton,
   useTheme,
@@ -30,6 +29,7 @@ import {
   StepLabel,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import LoadingSpinner from "../generalcomponents/loadingSpinner";
 
 function Login() {
   const [loading, setLoading] = useState(false);
@@ -192,7 +192,7 @@ function Login() {
         alignItems="center"
         minHeight="100vh"
       >
-        <CircularProgress />
+        <LoadingSpinner />
       </Box>
     );
   }
@@ -386,7 +386,7 @@ function Login() {
                   fontWeight: "bold",
                 }}
               >
-                {loading ? <CircularProgress size={24} /> : "Sign In"}
+                {loading ? <LoadingSpinner /> : "Sign In"}
               </Button>
 
               <Divider sx={{ my: 3 }}>
@@ -403,7 +403,7 @@ function Login() {
                 disabled={googleLoading}
                 startIcon={
                   googleLoading ? (
-                    <CircularProgress size={20} />
+                    <LoadingSpinner />
                   ) : (
                     <svg
                       width="20"
@@ -540,9 +540,7 @@ function Login() {
                 onClick={handleForgotPasswordSubmit}
                 variant="contained"
                 disabled={forgotPasswordLoading}
-                startIcon={
-                  forgotPasswordLoading ? <CircularProgress size={20} /> : null
-                }
+                startIcon={forgotPasswordLoading ? <LoadingSpinner /> : null}
               >
                 {forgotPasswordLoading ? "Sending..." : "Send OTP"}
               </Button>

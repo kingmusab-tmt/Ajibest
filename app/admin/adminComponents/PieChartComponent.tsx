@@ -16,7 +16,7 @@ const PieChartComponent = ({ transactions, users }) => {
         (sum, user) =>
           sum +
           user.propertyPurOrRented?.reduce(
-            (acc, curr) => acc + (curr.paymentPurpose === "For Sale" ? 1 : 0),
+            (acc, curr) => acc + (curr.listingPurpose === "For Sale" ? 1 : 0),
             0
           ),
         0
@@ -29,7 +29,7 @@ const PieChartComponent = ({ transactions, users }) => {
           sum +
           user.propertyPurOrRented?.reduce(
             (acc, curr) =>
-              acc + (curr.paymentPurpose === "For Renting" ? 1 : 0),
+              acc + (curr.listingPurpose === "For Renting" ? 1 : 0),
             0
           ),
         0
