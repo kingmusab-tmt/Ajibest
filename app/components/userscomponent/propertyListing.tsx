@@ -64,7 +64,6 @@ const priceRanges = [
 ];
 
 const PropertyListing = () => {
-  const { data: session } = useSession();
   const [properties, setProperties] = useState<Property[]>([]);
   const [favoriteProperties, setFavoriteProperties] = useState<string[]>([]);
   const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
@@ -288,10 +287,7 @@ const PropertyListing = () => {
   }
 
   return (
-    <Container
-      maxWidth="lg"
-      sx={{ py: { xs: 2, md: 4 }, px: { xs: 1, sm: 2 } }}
-    >
+    <Container maxWidth="lg">
       {/* Header */}
       <Box sx={{ mb: { xs: 3, md: 4 } }}>
         <Typography

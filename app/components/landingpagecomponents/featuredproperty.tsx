@@ -187,6 +187,7 @@ const FeaturedProperties: React.FC = () => {
             mb: 2,
             fontSize: { xs: "2rem", md: "2.5rem" },
           }}
+          id="featured-properties"
         >
           Featured Properties
         </Typography>

@@ -9,7 +9,6 @@ import {
   Typography,
   Box,
   Chip,
-  CircularProgress,
   Alert,
   Grid,
   Card,
@@ -51,6 +50,7 @@ import {
   Cancel,
   Sort,
 } from "@mui/icons-material";
+import LoadingSpinner from "./loadingSpinner";
 
 interface Transaction {
   _id: string;
@@ -61,7 +61,7 @@ interface Transaction {
   propertyId: mongoose.Types.ObjectId;
   propertyType: "House" | "Land" | "Farm";
   paymentMethod: "installment" | "payOnce";
-  paymentPurpose: "For Sale" | "For Renting";
+  listingPurpose: "For Sale" | "For Renting";
   amount: number;
   status: "pending" | "successful" | "failed" | "canceled";
   email: string;
@@ -258,7 +258,7 @@ const TransactionHistory: React.FC = () => {
           justifyContent: "center",
         }}
       >
-        <CircularProgress size={60} thickness={4} />
+        <LoadingSpinner />
         <Typography
           variant="h6"
           sx={{ mt: 3, fontSize: { xs: "1.1rem", md: "1.25rem" } }}
@@ -686,7 +686,7 @@ const TransactionHistory: React.FC = () => {
                   )}
                   <TableCell>
                     <Typography variant="body2">
-                      {transaction.paymentPurpose}
+                      {transaction.listingPurpose}
                     </Typography>
                   </TableCell>
                   <TableCell>

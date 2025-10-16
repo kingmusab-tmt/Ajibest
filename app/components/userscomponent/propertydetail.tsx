@@ -12,7 +12,6 @@ import {
   Box,
   Chip,
   Grid,
-  CircularProgress,
   Alert,
   Divider,
   IconButton,
@@ -30,6 +29,7 @@ import {
   Cancel,
   Visibility,
 } from "@mui/icons-material";
+import LoadingSpinner from "../generalcomponents/loadingSpinner";
 
 interface PropertyDetailProps {
   open: boolean;
@@ -189,17 +189,7 @@ const PropertyDetail: React.FC<PropertyDetailProps> = ({
 
       <DialogContent dividers sx={{ p: 0 }}>
         {loading ? (
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            minHeight={300}
-          >
-            <CircularProgress size={60} />
-            <Typography variant="body1" sx={{ ml: 2 }}>
-              Loading property details...
-            </Typography>
-          </Box>
+          <LoadingSpinner />
         ) : error ? (
           <Box p={3}>
             <Alert severity="error" sx={{ mb: 2 }}>

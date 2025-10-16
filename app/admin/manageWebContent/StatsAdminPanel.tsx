@@ -12,9 +12,26 @@ import {
   DialogContent,
   DialogActions,
   Chip,
-  Divider,
+  IconButton,
+  Card,
+  CardContent,
+  Switch,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControlLabel,
 } from "@mui/material";
-import { Add, Save, Cancel, Refresh } from "@mui/icons-material";
+import {
+  Add,
+  Save,
+  Cancel,
+  Refresh,
+  Edit,
+  Delete,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
 import { statsApi } from "@/lib/api/statsApi";
 
 const iconOptions = ["Home", "People", "TrendingUp", "CalendarMonth", "Star"];
@@ -34,13 +51,18 @@ const StatsAdminPanel = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isFallback, setIsFallback] = useState(false);
+
+  // Testimonial states
   const [editingTestimonial, setEditingTestimonial] = useState<any>(null);
+  const [testimonialDialogOpen, setTestimonialDialogOpen] = useState(false);
+  const [testimonialDialogMode, setTestimonialDialogMode] = useState<
+    "add" | "edit"
+  >("add");
+
+  // Stat states
   const [editingStat, setEditingStat] = useState<any>(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogType, setDialogType] = useState<"testimonial" | "stat">(
-    "testimonial"
-  );
-  const [dialogMode, setDialogMode] = useState<"add" | "edit">("add");
+  const [statDialogOpen, setStatDialogOpen] = useState(false);
+  const [statDialogMode, setStatDialogMode] = useState<"add" | "edit">("add");
 
   useEffect(() => {
     loadContent();
@@ -96,21 +118,67 @@ const StatsAdminPanel = () => {
     }
   };
 
-  const handleDeleteTestimonial = async (id: string) => {
-    try {
-      const response = await statsApi.deleteTestimonial(id);
+  // Testimonial Functions
+  const openAddTestimonialDialog = () => {
+    setEditingTestimonial({
+      name: "",
+      comment: "",
+      rating: 5,
+      isActive: true,
+    });
+    setTestimonialDialogMode("add");
+    setTestimonialDialogOpen(true);
+  };
 
-      if (response.success) {
-        setContent(response.data);
-        setSuccess("Testimonial deleted successfully");
-        setTimeout(() => setSuccess(""), 3000);
-      } else {
-        throw new Error(response.error || "Failed to delete testimonial");
-      }
-    } catch (err) {
-      setError("Failed to delete testimonial");
-      console.error("Error deleting testimonial:", err);
+  const openEditTestimonialDialog = (testimonial: any) => {
+    setEditingTestimonial({ ...testimonial });
+    setTestimonialDialogMode("edit");
+    setTestimonialDialogOpen(true);
+  };
+
+  const handleSaveTestimonial = () => {
+    if (!content) return;
+
+    const updatedContent = { ...content };
+
+    if (testimonialDialogMode === "add") {
+      // Add new testimonial with temporary ID
+      updatedContent.testimonials.push({
+        ...editingTestimonial,
+        _id: `temp-${Date.now()}`,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+    } else {
+      // Update existing testimonial
+      updatedContent.testimonials = updatedContent.testimonials.map((t: any) =>
+        t._id === editingTestimonial._id
+          ? { ...editingTestimonial, updatedAt: new Date() }
+          : t
+      );
     }
+
+    setContent(updatedContent);
+    setTestimonialDialogOpen(false);
+    setSuccess(
+      `Testimonial ${
+        testimonialDialogMode === "add" ? "added" : "updated"
+      } successfully`
+    );
+    setTimeout(() => setSuccess(""), 3000);
+  };
+
+  const handleDeleteTestimonial = (id: string) => {
+    if (!content) return;
+
+    const updatedContent = {
+      ...content,
+      testimonials: content.testimonials.filter((t: any) => t._id !== id),
+    };
+
+    setContent(updatedContent);
+    setSuccess("Testimonial deleted successfully");
+    setTimeout(() => setSuccess(""), 3000);
   };
 
   const handleToggleTestimonialActive = (id: string) => {
@@ -118,41 +186,97 @@ const StatsAdminPanel = () => {
 
     const updatedContent = { ...content };
     updatedContent.testimonials = updatedContent.testimonials.map((t: any) =>
-      t._id?.toString() === id ? { ...t, isActive: !t.isActive } : t
+      t._id === id ? { ...t, isActive: !t.isActive, updatedAt: new Date() } : t
     );
 
     setContent(updatedContent);
   };
 
-  const openAddDialog = (type: "testimonial" | "stat") => {
-    setDialogType(type);
-    setDialogMode("add");
+  // Stat Functions
+  const openAddStatDialog = () => {
+    setEditingStat({
+      title: "",
+      value: 0,
+      icon: "Home",
+      color: "primary",
+      suffix: "+",
+      isActive: true,
+    });
+    setStatDialogMode("add");
+    setStatDialogOpen(true);
+  };
 
-    if (type === "testimonial") {
-      setEditingTestimonial({
-        name: "",
-        comment: "",
-        rating: 5,
-        isActive: true,
+  const openEditStatDialog = (stat: any) => {
+    setEditingStat({ ...stat });
+    setStatDialogMode("edit");
+    setStatDialogOpen(true);
+  };
+
+  const handleSaveStat = () => {
+    if (!content) return;
+
+    const updatedContent = { ...content };
+
+    if (statDialogMode === "add") {
+      // Add new stat with temporary ID
+      updatedContent.stats.push({
+        ...editingStat,
+        _id: `temp-${Date.now()}`,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
     } else {
-      setEditingStat({
-        title: "",
-        value: 0,
-        icon: "Home",
-        color: "primary",
-        suffix: "+",
-        isActive: true,
-      });
+      // Update existing stat
+      updatedContent.stats = updatedContent.stats.map((s: any) =>
+        s._id === editingStat._id
+          ? { ...editingStat, updatedAt: new Date() }
+          : s
+      );
     }
 
-    setDialogOpen(true);
+    setContent(updatedContent);
+    setStatDialogOpen(false);
+    setSuccess(
+      `Stat ${statDialogMode === "add" ? "added" : "updated"} successfully`
+    );
+    setTimeout(() => setSuccess(""), 3000);
+  };
+
+  const handleDeleteStat = (id: string) => {
+    if (!content) return;
+
+    const updatedContent = {
+      ...content,
+      stats: content.stats.filter((s: any) => s._id !== id),
+    };
+
+    setContent(updatedContent);
+    setSuccess("Stat deleted successfully");
+    setTimeout(() => setSuccess(""), 3000);
+  };
+
+  const handleToggleStatActive = (id: string) => {
+    if (!content) return;
+
+    const updatedContent = { ...content };
+    updatedContent.stats = updatedContent.stats.map((s: any) =>
+      s._id === id ? { ...s, isActive: !s.isActive, updatedAt: new Date() } : s
+    );
+
+    setContent(updatedContent);
   };
 
   if (loading) {
     return (
-      <Box>
-        <Typography>Loading content...</Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "200px",
+        }}
+      >
+        <Typography variant="h6">Loading content...</Typography>
       </Box>
     );
   }
@@ -218,7 +342,7 @@ const StatsAdminPanel = () => {
 
       <Grid container spacing={3}>
         {/* Testimonials Management */}
-        {/* <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6}>
           <Paper sx={{ p: 3 }}>
             <Box
               sx={{
@@ -228,64 +352,207 @@ const StatsAdminPanel = () => {
                 mb: 3,
               }}
             >
-              <Typography variant="h5">
-                Testimonials ({content.testimonials?.length || 0})
-              </Typography>
+              <Typography variant="h5">Testimonials</Typography>
               <Button
-                variant="outlined"
+                variant="contained"
                 startIcon={<Add />}
-                onClick={() => openAddDialog("testimonial")}
+                onClick={openAddTestimonialDialog}
               >
                 Add Testimonial
               </Button>
             </Box>
 
-            <Divider sx={{ mb: 3 }} />
-
-            {content.testimonials?.map((testimonial: any) => (
-              <TestimonialCard
-                key={testimonial._id?.toString()}
-                testimonial={testimonial}
-                onEdit={handleEditTestimonial}
-                onDelete={handleDeleteTestimonial}
-                onToggleActive={handleToggleTestimonialActive}
-                isAdmin={true}
-              />
-            ))}
-
-            {(!content.testimonials || content.testimonials.length === 0) && (
-              <Typography
-                color="text.secondary"
-                sx={{ textAlign: "center", py: 4 }}
-              >
-                No testimonials added yet.
-              </Typography>
-            )}
+            <Grid container spacing={2}>
+              {content.testimonials.map((testimonial: any) => (
+                <Grid item xs={12} key={testimonial._id}>
+                  <Card variant="outlined">
+                    <CardContent>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "flex-start",
+                          mb: 1,
+                        }}
+                      >
+                        <Typography variant="h6">{testimonial.name}</Typography>
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                        >
+                          <Chip
+                            label={testimonial.isActive ? "Active" : "Inactive"}
+                            color={testimonial.isActive ? "success" : "default"}
+                            size="small"
+                          />
+                          <IconButton
+                            size="small"
+                            onClick={() =>
+                              handleToggleTestimonialActive(testimonial._id)
+                            }
+                          >
+                            {testimonial.isActive ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() =>
+                              openEditTestimonialDialog(testimonial)
+                            }
+                          >
+                            <Edit />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            color="error"
+                            onClick={() =>
+                              handleDeleteTestimonial(testimonial._id)
+                            }
+                          >
+                            <Delete />
+                          </IconButton>
+                        </Box>
+                      </Box>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                      >
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Typography
+                            key={star}
+                            color={
+                              star <= testimonial.rating ? "gold" : "grey.400"
+                            }
+                          >
+                            ★
+                          </Typography>
+                        ))}
+                        <Typography variant="body2" sx={{ ml: 1 }}>
+                          ({testimonial.rating}/5)
+                        </Typography>
+                      </Box>
+                      <Typography variant="body2" color="text.secondary">
+                        {testimonial.comment}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+              {content.testimonials.length === 0 && (
+                <Grid item xs={12}>
+                  <Typography color="text.secondary" textAlign="center">
+                    No testimonials yet. Add your first testimonial!
+                  </Typography>
+                </Grid>
+              )}
+            </Grid>
           </Paper>
-        </Grid> */}
+        </Grid>
 
-        {/* Stats Management (simplified for this example) */}
+        {/* Stats Management */}
         <Grid item xs={12} md={6}>
           <Paper sx={{ p: 3 }}>
-            <Typography variant="h5" sx={{ mb: 3 }}>
-              Statistics Management
-            </Typography>
-            <Typography color="text.secondary">
-              Statistics management UI would go here...
-            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mb: 3,
+              }}
+            >
+              <Typography variant="h5">Statistics</Typography>
+              <Button
+                variant="contained"
+                startIcon={<Add />}
+                onClick={openAddStatDialog}
+              >
+                Add Stat
+              </Button>
+            </Box>
+
+            <Grid container spacing={2}>
+              {content.stats.map((stat: any) => (
+                <Grid item xs={12} key={stat._id}>
+                  <Card variant="outlined">
+                    <CardContent>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "flex-start",
+                        }}
+                      >
+                        <Box>
+                          <Typography
+                            variant="h6"
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                            }}
+                          >
+                            {stat.icon} • {stat.title}
+                          </Typography>
+                          <Typography variant="h4" color={stat.color}>
+                            {stat.value}
+                            {stat.suffix}
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                        >
+                          <Chip
+                            label={stat.isActive ? "Active" : "Inactive"}
+                            color={stat.isActive ? "success" : "default"}
+                            size="small"
+                          />
+                          <IconButton
+                            size="small"
+                            onClick={() => handleToggleStatActive(stat._id)}
+                          >
+                            {stat.isActive ? <Visibility /> : <VisibilityOff />}
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => openEditStatDialog(stat)}
+                          >
+                            <Edit />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            color="error"
+                            onClick={() => handleDeleteStat(stat._id)}
+                          >
+                            <Delete />
+                          </IconButton>
+                        </Box>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+              {content.stats.length === 0 && (
+                <Grid item xs={12}>
+                  <Typography color="text.secondary" textAlign="center">
+                    No stats yet. Add your first stat!
+                  </Typography>
+                </Grid>
+              )}
+            </Grid>
           </Paper>
         </Grid>
       </Grid>
 
-      {/* Add/Edit Dialog */}
+      {/* Testimonial Dialog */}
       <Dialog
-        open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
+        open={testimonialDialogOpen}
+        onClose={() => setTestimonialDialogOpen(false)}
         maxWidth="sm"
         fullWidth
       >
         <DialogTitle>
-          {dialogMode === "add" ? "Add" : "Edit"} Testimonial
+          {testimonialDialogMode === "add" ? "Add" : "Edit"} Testimonial
         </DialogTitle>
         <DialogContent>
           <TestimonialForm
@@ -293,19 +560,51 @@ const StatsAdminPanel = () => {
             onChange={setEditingTestimonial}
           />
         </DialogContent>
-        {/* <DialogActions>
-          <Button onClick={() => setDialogOpen(false)} startIcon={<Cancel />}>
+        <DialogActions>
+          <Button
+            onClick={() => setTestimonialDialogOpen(false)}
+            startIcon={<Cancel />}
+          >
             Cancel
           </Button>
           <Button
             variant="contained"
-            onClick={() => handleAddTestimonial(editingTestimonial)}
-            startIcon={dialogMode === "add" ? <Add /> : <Save />}
-            disabled={saving}
+            onClick={handleSaveTestimonial}
+            startIcon={testimonialDialogMode === "add" ? <Add /> : <Save />}
           >
-            {saving ? "Saving..." : dialogMode === "add" ? "Add" : "Update"}
+            {testimonialDialogMode === "add" ? "Add" : "Update"}
           </Button>
-        </DialogActions> */}
+        </DialogActions>
+      </Dialog>
+
+      {/* Stat Dialog */}
+      <Dialog
+        open={statDialogOpen}
+        onClose={() => setStatDialogOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          {statDialogMode === "add" ? "Add" : "Edit"} Stat
+        </DialogTitle>
+        <DialogContent>
+          <StatForm stat={editingStat} onChange={setEditingStat} />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setStatDialogOpen(false)}
+            startIcon={<Cancel />}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleSaveStat}
+            startIcon={statDialogMode === "add" ? <Add /> : <Save />}
+          >
+            {statDialogMode === "add" ? "Add" : "Update"}
+          </Button>
+        </DialogActions>
       </Dialog>
     </Box>
   );
@@ -351,6 +650,90 @@ const TestimonialForm = ({
         ))}
       </Box>
     </Box>
+    <FormControlLabel
+      control={
+        <Switch
+          checked={testimonial?.isActive || false}
+          onChange={(e) =>
+            onChange({ ...testimonial, isActive: e.target.checked })
+          }
+        />
+      }
+      label="Active"
+    />
+  </Box>
+);
+
+const StatForm = ({
+  stat,
+  onChange,
+}: {
+  stat: any;
+  onChange: (value: any) => void;
+}) => (
+  <Box sx={{ pt: 2 }}>
+    <TextField
+      fullWidth
+      label="Title"
+      value={stat?.title || ""}
+      onChange={(e) => onChange({ ...stat, title: e.target.value })}
+      sx={{ mb: 2 }}
+    />
+    <TextField
+      fullWidth
+      type="number"
+      label="Value"
+      value={stat?.value || 0}
+      onChange={(e) =>
+        onChange({ ...stat, value: parseInt(e.target.value) || 0 })
+      }
+      sx={{ mb: 2 }}
+    />
+    <FormControl fullWidth sx={{ mb: 2 }}>
+      <InputLabel>Icon</InputLabel>
+      <Select
+        value={stat?.icon || "Home"}
+        label="Icon"
+        onChange={(e) => onChange({ ...stat, icon: e.target.value })}
+      >
+        {iconOptions.map((icon) => (
+          <MenuItem key={icon} value={icon}>
+            {icon}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+    <FormControl fullWidth sx={{ mb: 2 }}>
+      <InputLabel>Color</InputLabel>
+      <Select
+        value={stat?.color || "primary"}
+        label="Color"
+        onChange={(e) => onChange({ ...stat, color: e.target.value })}
+      >
+        {colorOptions.map((color) => (
+          <MenuItem key={color} value={color}>
+            {color}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+    <TextField
+      fullWidth
+      label="Suffix"
+      value={stat?.suffix || "+"}
+      onChange={(e) => onChange({ ...stat, suffix: e.target.value })}
+      sx={{ mb: 2 }}
+      helperText="e.g., +, %, k, etc."
+    />
+    <FormControlLabel
+      control={
+        <Switch
+          checked={stat?.isActive || false}
+          onChange={(e) => onChange({ ...stat, isActive: e.target.checked })}
+        />
+      }
+      label="Active"
+    />
   </Box>
 );
 

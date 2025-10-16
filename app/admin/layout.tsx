@@ -2,13 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import {
-  Box,
-  useTheme,
-  useMediaQuery,
-  CircularProgress,
-  Container,
-} from "@mui/material";
+import { Box, useTheme, useMediaQuery, Container } from "@mui/material";
 
 import UserDashboardSidebar from "./adminComponents/adminnav";
 import ProfileTopNavBar from "./adminComponents/profiletopnav";
@@ -20,6 +14,7 @@ import UpdateProfile from "../components/userscomponent/updateProfile";
 import DashboardPage from "./admindashboard";
 import ProtectedRoute from "../components/generalcomponents/ProtectedRoute";
 import ManageWebContent from "./manageWebContent/page";
+import LoadingSpinner from "../components/generalcomponents/loadingSpinner";
 
 interface Notification {
   _id: string;
@@ -93,19 +88,7 @@ const AdminPage = () => {
   }, [selectedComponent, isMobile, isSidebarOpen]);
 
   if (status === "loading") {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          backgroundColor: theme.palette.background.default,
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
+    return <LoadingSpinner />;
   }
 
   if (!session?.user) {

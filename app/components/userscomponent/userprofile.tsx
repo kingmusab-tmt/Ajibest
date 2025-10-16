@@ -14,13 +14,13 @@ import {
   Container,
   Alert,
   Snackbar,
-  CircularProgress,
   Card,
   CardContent,
   Divider,
 } from "@mui/material";
 import { Save as SaveIcon, Person as PersonIcon } from "@mui/icons-material";
 import EditableImage from "../generalcomponents/Image";
+import LoadingSpinner from "../generalcomponents/loadingSpinner";
 
 const PersonalInformation = () => {
   const { data: session, status, update } = useSession();
@@ -145,16 +145,7 @@ const PersonalInformation = () => {
   const hasChanges = Object.keys(changedFields).length > 0 || imageChanged;
 
   if (loading && !profile.name) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight={400}
-      >
-        <CircularProgress />
-      </Box>
-    );
+    return <LoadingSpinner />;
   }
 
   return (
@@ -318,9 +309,7 @@ const PersonalInformation = () => {
                 size="large"
                 onClick={handleSave}
                 disabled={!hasChanges || loading}
-                startIcon={
-                  loading ? <CircularProgress size={20} /> : <SaveIcon />
-                }
+                startIcon={loading ? <LoadingSpinner /> : <SaveIcon />}
                 sx={{
                   px: 4,
                   py: 1.5,

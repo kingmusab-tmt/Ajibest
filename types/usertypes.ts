@@ -43,8 +43,8 @@ export interface User {
     propertyId: mongoose.Types.ObjectId;
     propertyType: "House" | "Land" | "Farm";
     paymentMethod: "installment" | "payOnce";
-    paymentPurpose: "For Sale" | "For Renting";
-    paymentHisotry: {
+    listingPurpose: "For Sale" | "For Renting";
+    paymentHistory: {
       paymentDate: Date;
       nextPaymentDate: Date;
       amount: number;
@@ -61,7 +61,7 @@ export interface User {
     paymentDate: Date;
     propertyType: "House" | "Land" | "Farm";
     paymentMethod: "installment" | "payOnce";
-    paymentPurpose: "For Sale" | "For Renting";
+    listingPurpose: "For Sale" | "For Renting";
     propertyPrice: number;
   }[];
   referralEarnings: number;

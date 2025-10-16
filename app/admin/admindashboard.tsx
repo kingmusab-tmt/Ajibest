@@ -76,9 +76,9 @@ const DashboardPage: React.FC = () => {
   return (
     <div>
       <AnalyticDashboard
-        transactions={data.transactions}
-        users={data.users}
-        properties={data.properties}
+      // transactions={data.transactions}
+      // users={data.users}
+      // properties={data.properties}
       />
     </div>
   );

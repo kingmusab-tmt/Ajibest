@@ -6,7 +6,6 @@ import {
   TextField,
   Button,
   MenuItem,
-  CircularProgress,
   Alert,
   FormControl,
   InputLabel,
@@ -15,6 +14,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
+import LoadingSpinner from "@/app/components/generalcomponents/loadingSpinner";
 
 const AdminPayment: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -140,7 +140,7 @@ const AdminPayment: React.FC = () => {
             onClick={handleSearchProperty}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} /> : "Search Property"}
+            {loading ? <LoadingSpinner /> : "Search Property"}
           </Button>
         </div>
         <FormControlLabel
@@ -226,7 +226,7 @@ const AdminPayment: React.FC = () => {
         disabled={loading}
         fullWidth
       >
-        {loading ? <CircularProgress size={24} /> : "Make Payment"}
+        {loading ? <LoadingSpinner /> : "Make Payment"}
       </Button>
     </div>
   );

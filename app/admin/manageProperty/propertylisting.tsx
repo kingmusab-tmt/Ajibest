@@ -11,7 +11,6 @@ import {
   Box,
   Chip,
   Paper,
-  CircularProgress,
   Alert,
   Button,
   useTheme,
@@ -50,6 +49,7 @@ import {
   Agriculture,
 } from "@mui/icons-material";
 import { Property } from "@/constants/interface";
+import LoadingSpinner from "@/app/components/generalcomponents/loadingSpinner";
 
 export default function Properties() {
   const [properties, setProperties] = useState<Property[]>([]);
@@ -261,7 +261,7 @@ export default function Properties() {
           justifyContent: "center",
         }}
       >
-        <CircularProgress size={60} thickness={4} />
+        <LoadingSpinner />
         <Typography
           variant="h6"
           sx={{ mt: 3, fontSize: { xs: "1.1rem", md: "1.25rem" } }}
@@ -297,7 +297,7 @@ export default function Properties() {
   return (
     <Container
       maxWidth="lg"
-      sx={{ py: { xs: 2, md: 4 }, px: { xs: 1, sm: 2 } }}
+      // sx={{ py: { xs: 2, md: 4 }, px: { xs: 1, sm: 2 } }}
     >
       {/* Header */}
       <Box sx={{ mb: { xs: 3, md: 4 } }}>
@@ -323,14 +323,14 @@ export default function Properties() {
               Manage your property portfolio ({totalPropertiesCount} properties)
             </Typography>
           </Box>
-          <Button
+          {/* <Button
             variant="contained"
             startIcon={<Add />}
             size={isMobile ? "medium" : "large"}
             sx={{ borderRadius: 2 }}
           >
             Add Property
-          </Button>
+          </Button> */}
         </Stack>
       </Box>
 

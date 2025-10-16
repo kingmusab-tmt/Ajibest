@@ -1,11 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   Box,
   Container,
   Typography,
   Button,
-  Paper,
   Fade,
   useTheme,
   useMediaQuery,
@@ -19,58 +18,53 @@ type HeroContent = {
   backgrounds: string[];
 };
 
-const Hero = () => {
+// Move fallbackContent outside the component to prevent recreation on every render
+const fallbackContent: HeroContent = {
+  title: "Fulfill Your Dream & Become a Property Owner with Ease",
+  subtitle: "Explore a wide range of Property for Sale or Rent",
+  buttonText: "Search Properties",
+  backgrounds: [
+    "/images/bgimage.webp",
+    "/images/img2.webp",
+    "/images/img3.webp",
+    "/images/img4.webp",
+    "/images/f.webp",
+    "/images/b.jpeg",
+    "/images/c.jpg",
+    "/images/h.jpg",
+    "/images/o.jpg",
+  ],
+};
+
+interface HeroProps {
+  data?: HeroContent | null;
+}
+
+const Hero = ({ data }: HeroProps) => {
   const [backgroundIndex, setBackgroundIndex] = useState(0);
-  const [heroContent, setHeroContent] = useState<HeroContent | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [heroContent, setHeroContent] = useState<HeroContent>(fallbackContent);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  // Fallback content if nothing is fetched from the database
-  const fallbackContent = {
-    title: "Fulfill Your Dream & Become a Property Owner with Ease",
-    subtitle: "Explore a wide range of Property for Sale or Rent",
-    buttonText: "Search Properties",
-    backgrounds: [
-      "/images/bgimage.webp",
-      "/images/img2.webp",
-      "/images/img3.webp",
-      "/images/img4.webp",
-      "/images/f.webp",
-      "/images/b.jpeg",
-      "/images/c.jpg",
-      "/images/h.jpg",
-      "/images/o.jpg",
-    ],
-  };
-
-  // Fetch content from backend
+  // Use the data passed from Home component or fallback
   useEffect(() => {
-    const fetchHeroContent = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch("/api/aapi/hero-content");
-
-        if (response.ok) {
-          const data = await response.json();
-          setHeroContent(data);
-        } else {
-          setHeroContent(fallbackContent);
-        }
-      } catch (error) {
-        console.error("Error fetching hero content:", error);
+    if (data) {
+      // Validate the data structure before using it
+      if (data.title && data.backgrounds && Array.isArray(data.backgrounds)) {
+        setHeroContent(data);
+      } else {
+        console.warn("Invalid data structure passed to Hero, using fallback");
         setHeroContent(fallbackContent);
-      } finally {
-        setLoading(false);
       }
-    };
-
-    fetchHeroContent();
-  }, [fallbackContent]);
+    } else {
+      // If no data is passed, use fallback
+      setHeroContent(fallbackContent);
+    }
+  }, [data]);
 
   // Background rotation effect
   useEffect(() => {
-    if (!heroContent) return;
+    if (!heroContent?.backgrounds?.length) return;
 
     const interval = setInterval(() => {
       setBackgroundIndex(
@@ -79,23 +73,7 @@ const Hero = () => {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [heroContent]);
-
-  if (loading) {
-    return (
-      <Box
-        sx={{
-          height: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "grey.100",
-        }}
-      >
-        Loading...
-      </Box>
-    );
-  }
+  }, [heroContent?.backgrounds?.length]);
 
   return (
     <Box
@@ -111,7 +89,7 @@ const Hero = () => {
       }}
     >
       {/* Background images with fade transition */}
-      {heroContent?.backgrounds.map((bg, index) => (
+      {heroContent.backgrounds.map((bg, index) => (
         <Fade
           key={index}
           in={index === backgroundIndex}
@@ -173,7 +151,7 @@ const Hero = () => {
             mb: 3,
           }}
         >
-          {heroContent?.title}
+          {heroContent.title}
         </Typography>
 
         <Typography
@@ -186,7 +164,7 @@ const Hero = () => {
             },
           }}
         >
-          {heroContent?.subtitle}
+          {heroContent.subtitle}
         </Typography>
 
         <Box
@@ -212,7 +190,7 @@ const Hero = () => {
               },
             }}
           >
-            {heroContent?.buttonText}
+            {heroContent.buttonText}
           </Button>
 
           <Container maxWidth="lg">

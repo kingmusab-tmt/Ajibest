@@ -2,13 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import {
-  Box,
-  useTheme,
-  useMediaQuery,
-  CircularProgress,
-  Backdrop,
-} from "@mui/material";
+import { Box, useTheme, useMediaQuery, Backdrop } from "@mui/material";
 import UserDashboardSidebar from "../components/userscomponent/usernav";
 import ProfileTopNavBar from "../components/userscomponent/profiletopnav";
 import CalculatorOnProfile from "../components/userscomponent/accounttab";
@@ -19,6 +13,7 @@ import PropertyListing from "../components/userscomponent/propertyListing";
 import MyProperty from "../components/userscomponent/userproperties";
 import ProtectedRoute from "../components/generalcomponents/ProtectedRoute";
 import SupportTab from "../components/userscomponent/SupportTab";
+import LoadingSpinner from "../components/generalcomponents/loadingSpinner";
 
 interface Notification {
   id: number;
@@ -91,11 +86,7 @@ const Userprofile = () => {
   }, [selectedComponent, router]);
 
   if (status === "loading" || !isClient) {
-    return (
-      <Backdrop open sx={{ color: "#fff", zIndex: theme.zIndex.drawer + 1 }}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    );
+    return <LoadingSpinner />;
   }
 
   if (!session?.user) {

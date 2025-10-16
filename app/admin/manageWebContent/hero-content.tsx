@@ -11,13 +11,13 @@ import {
   CardMedia,
   IconButton,
   Alert,
-  CircularProgress,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
 } from "@mui/material";
 import { Delete, Add, CloudUpload } from "@mui/icons-material";
+import LoadingSpinner from "@/app/components/generalcomponents/loadingSpinner";
 
 interface HeroContent {
   _id?: string;
@@ -134,7 +134,7 @@ const AdminHeroEditor: React.FC = () => {
         alignItems="center"
         minHeight="200px"
       >
-        <CircularProgress />
+        <LoadingSpinner />
       </Box>
     );
   }
@@ -236,9 +236,7 @@ const AdminHeroEditor: React.FC = () => {
                   variant="contained"
                   size="large"
                   disabled={saving}
-                  startIcon={
-                    saving ? <CircularProgress size={20} /> : <CloudUpload />
-                  }
+                  startIcon={saving ? <LoadingSpinner /> : <CloudUpload />}
                 >
                   {saving ? "Saving..." : "Update Content"}
                 </Button>
