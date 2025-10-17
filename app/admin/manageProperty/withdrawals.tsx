@@ -438,7 +438,8 @@ const AdminWithdrawalsPage = () => {
             <strong>{selectedRequest?.title}</strong>?
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            The property will be moved back to the user's "In Progress" tab.
+            The property will be moved back to the user&apos;s &quot;In
+            Progress&quot; tab.
           </Typography>
         </DialogContent>
         <DialogActions>
