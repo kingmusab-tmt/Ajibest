@@ -69,7 +69,7 @@ interface PropertyUnderPayment {
   image: string;
   userEmail: string;
   propertyId: string;
-  propertyType: "House" | "Land" | "Farm";
+  propertyType: "House" | "Land" | "Farm" | "Commercial" | "Office" | "Shop";
   listingPurpose: "For Renting" | "For Sale";
   paymentMethod: "installment" | "payOnce";
   initialPayment: number;
@@ -95,7 +95,7 @@ interface PropertyPurOrRented {
   userEmail: string;
   propertyId: string;
   paymentDate: Date;
-  propertyType: "House" | "Land" | "Farm";
+  propertyType: "House" | "Land" | "Farm" | "Commercial" | "Office" | "Shop";
   listingPurpose: "For Renting" | "For Sale";
   paymentMethod: "installment" | "payOnce";
   price: number;
@@ -117,7 +117,7 @@ interface PropertyWithdrawn {
   image: string;
   userEmail: string;
   propertyId: string;
-  propertyType: "House" | "Land" | "Farm";
+  propertyType: "House" | "Land" | "Farm" | "Commercial" | "Office" | "Shop";
   listingPurpose: "For Renting" | "For Sale";
   paymentMethod: "installment" | "payOnce";
   initialPayment: number;

@@ -55,6 +55,8 @@ export async function POST(request: NextRequest) {
       withdrawnDate: new Date(),
       isWithdrawnApproved: false,
       withdrawalReason,
+      approvedAt: property.approvedAt ?? new Date(),
+      approvedBy: property.approvedBy ?? "",
     };
 
     // Remove from propertyUnderPayment and add to propertyWithdrawn

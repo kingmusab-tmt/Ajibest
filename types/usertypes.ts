@@ -41,7 +41,7 @@ export interface User {
     title: string;
     userEmail: string;
     propertyId: mongoose.Types.ObjectId;
-    propertyType: "House" | "Land" | "Farm";
+    propertyType: "House" | "Land" | "Farm" | "Commercial" | "Office" | "Shop";
     paymentMethod: "installment" | "payOnce";
     listingPurpose: "For Sale" | "For Renting";
     paymentHistory: {
@@ -59,7 +59,7 @@ export interface User {
     userEmail: string;
     propertyId: mongoose.Types.ObjectId;
     paymentDate: Date;
-    propertyType: "House" | "Land" | "Farm";
+    propertyType: "House" | "Land" | "Farm" | "Commercial" | "Office" | "Shop";
     paymentMethod: "installment" | "payOnce";
     listingPurpose: "For Sale" | "For Renting";
     propertyPrice: number;

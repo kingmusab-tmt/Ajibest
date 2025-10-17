@@ -36,7 +36,7 @@ interface IProperty {
   description: string;
   location: string;
   image: string;
-  propertyType: "House" | "Farm" | "Land";
+  propertyType: "House" | "Farm" | "Land" | "Commercial" | "Office" | "Shop";
   price: number;
   listingPurpose: "For Renting" | "For Sale";
   bedrooms?: number;

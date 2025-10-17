@@ -527,7 +527,7 @@ interface IPropertyWithdrawn {
   image: string;
   userEmail: string;
   propertyId: mongoose.Types.ObjectId;
-  propertyType: "House" | "Land" | "Farm";
+  propertyType: "House" | "Land" | "Farm" | "Commercial" | "Office" | "Shop";
   listingPurpose: "For Renting" | "For Sale";
   paymentMethod: "installment" | "payOnce";
   initialPayment: number;
@@ -550,9 +550,11 @@ interface IPropertyWithdrawn {
     paymentCompleted: boolean;
   }[];
   withdrawnDate: Date;
+  approvedAt: Date;
   isWithdrawnApproved: boolean;
   withdrawalReason?: string;
   isWithdrawn: boolean;
+  approvedBy: string;
 }
 
 export interface IUser extends Document {
@@ -592,7 +594,7 @@ export interface IUser extends Document {
     image: string;
     userEmail: string;
     propertyId: mongoose.Types.ObjectId;
-    propertyType: "House" | "Land" | "Farm";
+    propertyType: "House" | "Land" | "Farm" | "Commercial" | "Office" | "Shop";
     listingPurpose: "For Renting" | "For Sale";
     paymentMethod: "installment" | "payOnce";
     initialPayment: number;
@@ -616,6 +618,9 @@ export interface IUser extends Document {
     }[];
     isWithdrawn: boolean;
     isWithdrawnApproved: boolean;
+    withdrawalReason?: string;
+    approvedAt?: Date;
+    approvedBy?: string;
   }[];
   propertyPurOrRented: {
     title: string;
@@ -625,7 +630,7 @@ export interface IUser extends Document {
     userEmail: string;
     propertyId: mongoose.Types.ObjectId;
     paymentDate: Date;
-    propertyType: "House" | "Land" | "Farm";
+    propertyType: "House" | "Land" | "Farm" | "Commercial" | "Office" | "Shop";
     listingPurpose: "For Renting" | "For Sale";
     paymentMethod: "installment" | "payOnce";
     price: number;
@@ -662,7 +667,10 @@ const propertyWithdrawnSchema = new Schema<IPropertyWithdrawn>({
   image: { type: String },
   userEmail: { type: String },
   propertyId: { type: Schema.Types.ObjectId, ref: "Property" },
-  propertyType: { type: String, enum: ["House", "Land", "Farm"] },
+  propertyType: {
+    type: String,
+    enum: ["House", "Land", "Farm", "Commercial", "Office", "Shop"],
+  },
   listingPurpose: { type: String, enum: ["For Renting", "For Sale"] },
   paymentMethod: { type: String, enum: ["installment", "payOnce"] },
   initialPayment: { type: Number },
@@ -693,6 +701,8 @@ const propertyWithdrawnSchema = new Schema<IPropertyWithdrawn>({
   isWithdrawnApproved: { type: Boolean, default: false },
   withdrawalReason: { type: String },
   isWithdrawn: { type: Boolean, default: false },
+  approvedAt: { type: Date },
+  approvedBy: { type: String },
 });
 
 const userSchema = new Schema<IUser>(
@@ -763,7 +773,10 @@ const userSchema = new Schema<IUser>(
         userEmail: { type: String },
         propertyId: { type: Schema.Types.ObjectId, ref: "Property" },
         paymentDate: { type: Date },
-        propertyType: { type: String, enum: ["House", "Land", "Farm"] },
+        propertyType: {
+          type: String,
+          enum: ["House", "Land", "Farm", "Commercial", "Office", "Shop"],
+        },
         listingPurpose: { type: String, enum: ["For Renting", "For Sale"] },
         paymentMethod: { type: String, enum: ["installment", "payOnce"] },
         price: { type: Number },
@@ -805,7 +818,10 @@ const userSchema = new Schema<IUser>(
         image: { type: String },
         userEmail: { type: String },
         propertyId: { type: Schema.Types.ObjectId, ref: "Property" },
-        propertyType: { type: String, enum: ["House", "Land", "Farm"] },
+        propertyType: {
+          type: String,
+          enum: ["House", "Land", "Farm", "Commercial", "Office", "Shop"],
+        },
         listingPurpose: { type: String, enum: ["For Renting", "For Sale"] },
         paymentMethod: { type: String, enum: ["installment", "payOnce"] },
         initialPayment: { type: Number },
@@ -834,6 +850,9 @@ const userSchema = new Schema<IUser>(
         ],
         isWithdrawn: { type: Boolean, default: false },
         isWithdrawnApproved: { type: Boolean, default: false },
+        withdrawalReason: { type: String },
+        approvedAt: { type: Date },
+        approvedBy: { type: String },
       },
     ],
     propertyWithdrawn: [propertyWithdrawnSchema],

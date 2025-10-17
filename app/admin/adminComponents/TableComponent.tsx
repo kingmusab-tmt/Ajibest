@@ -163,6 +163,9 @@ const TableComponent = ({ users }) => {
             <MenuItem value="House">House</MenuItem>
             <MenuItem value="Farm">Farm</MenuItem>
             <MenuItem value="Land">Land</MenuItem>
+            <MenuItem value="Commercial">Commercial</MenuItem>
+            <MenuItem value="Office">Office</MenuItem>
+            <MenuItem value="Shop">Shop</MenuItem>
           </Select>
         </FormControl>
       </Box>

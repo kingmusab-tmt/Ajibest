@@ -132,6 +132,11 @@ const HeroSearch: React.FC = () => {
               <MenuItem value="residential land">Residential Land</MenuItem>
               <MenuItem value="house for sell">House for Sale</MenuItem>
               <MenuItem value="house for rent">House for Rent</MenuItem>
+              <MenuItem value="commercial property">
+                Commercial Property
+              </MenuItem>
+              <MenuItem value="office space">Office Space</MenuItem>
+              <MenuItem value="shop space">Shop Space</MenuItem>
               <MenuItem value="all">All Types</MenuItem>
             </Select>
           </FormControl>

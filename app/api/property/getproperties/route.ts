@@ -80,7 +80,7 @@ export async function GET() {
 
     let properties;
     try {
-      properties = await Property.find({}).limit(8);
+      properties = await Property.find({});
 
       // If no properties found in database, use fallback
       if (!properties || properties.length === 0) {
