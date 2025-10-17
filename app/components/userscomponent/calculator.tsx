@@ -31,9 +31,12 @@ const defaultPropertyPrices = {
     full: 620000,
   },
   house: {
-    "2-bedroom": 2100000,
-    "3-bedroom": 3100000,
-    "4-bedroom": 4100000,
+    "2-room": 2100000,
+    "3-room": 3100000,
+    "4-room": 4100000,
+    "5-room": 5100000,
+    "6-room": 6100000,
+    "7-room": 7100000,
   },
 };
 
@@ -135,7 +138,11 @@ const PropertyCalculator = () => {
           Full Plot
         </MenuItem>,
       ];
-    } else if (propertyType === "house") {
+    } else if (
+      propertyType === "house" ||
+      propertyType === "shop" ||
+      propertyType === "office"
+    ) {
       return [
         <MenuItem key="2-bedroom" value="2-bedroom">
           2 Bedroom
@@ -145,6 +152,15 @@ const PropertyCalculator = () => {
         </MenuItem>,
         <MenuItem key="4-bedroom" value="4-bedroom">
           4 Bedroom
+        </MenuItem>,
+        <MenuItem key="5-bedroom" value="5-bedrooms">
+          5 Bedroom
+        </MenuItem>,
+        <MenuItem key="6-bedroom" value="6-bedrooms">
+          6 Bedroom
+        </MenuItem>,
+        <MenuItem key="7-bedroom" value="7-bedrooms">
+          7 Bedroom
         </MenuItem>,
       ];
     }
@@ -200,6 +216,9 @@ const PropertyCalculator = () => {
                   </MenuItem>
                   <MenuItem value="land">Land</MenuItem>
                   <MenuItem value="house">House</MenuItem>
+                  <MenuItem value="commercial">Commercial Property</MenuItem>
+                  <MenuItem value="office">Office Space</MenuItem>
+                  <MenuItem value="shop">Shop Space</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

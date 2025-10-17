@@ -30,7 +30,7 @@ interface Property {
   _id: string;
   title: string;
   price: number;
-  propertyType: "House" | "Farm" | "Land";
+  propertyType: "House" | "Farm" | "Land" | "Commercial" | "Office" | "Shop";
   listingPurpose: "For Renting" | "For Sale";
   location: string;
   city: string;

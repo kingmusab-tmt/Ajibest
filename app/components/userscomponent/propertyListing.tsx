@@ -356,6 +356,9 @@ const PropertyListing = () => {
                 <MenuItem value="House">House</MenuItem>
                 <MenuItem value="Land">Land</MenuItem>
                 <MenuItem value="Farm">Farm</MenuItem>
+                <MenuItem value="Commercial">Commercial Property</MenuItem>
+                <MenuItem value="Office">Office Space</MenuItem>
+                <MenuItem value="Shop">Shop Space</MenuItem>
               </Select>
             </FormControl>
 

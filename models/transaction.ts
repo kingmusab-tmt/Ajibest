@@ -9,7 +9,7 @@ interface ITransaction extends Document {
   propertyPrice: number;
   userId: mongoose.Types.ObjectId;
   propertyId: mongoose.Types.ObjectId;
-  propertyType: "House" | "Land" | "Farm";
+  propertyType: "House" | "Farm" | "Land" | "Commercial" | "Office" | "Shop";
   paymentMethod: "installment" | "payOnce";
   listingPurpose: "For Sale" | "For Renting";
   amount: number;
@@ -33,7 +33,7 @@ const transactionSchema = new Schema<ITransaction>(
     },
     propertyType: {
       type: String,
-      enum: ["House", "Land", "Farm"],
+      enum: ["House", "Land", "Farm", "Commercial", "Office", "Shop"],
       required: true,
     },
     paymentMethod: {
@@ -55,7 +55,6 @@ const transactionSchema = new Schema<ITransaction>(
     paymentType: {
       type: String,
       enum: ["automatic", "manual"],
-      required: true,
     },
   },
   {

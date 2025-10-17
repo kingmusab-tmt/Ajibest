@@ -59,7 +59,7 @@ interface Transaction {
   propertyPrice: number;
   userId: mongoose.Types.ObjectId;
   propertyId: mongoose.Types.ObjectId;
-  propertyType: "House" | "Land" | "Farm";
+  propertyType: "House" | "Land" | "Farm" | "Commercial" | "Office" | "Shop";
   paymentMethod: "installment" | "payOnce";
   listingPurpose: "For Sale" | "For Renting";
   amount: number;

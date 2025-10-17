@@ -5,7 +5,7 @@ interface IProperty extends Document {
   description: string;
   location: string;
   image: string;
-  propertyType: "House" | "Farm" | "Land";
+  propertyType: "House" | "Farm" | "Land" | "Commercial" | "Office" | "Shop";
   price: number;
   listingPurpose: "For Renting" | "For Sale";
   bedrooms?: number;
@@ -41,7 +41,7 @@ const propertySchema = new Schema<IProperty>(
     propertyType: {
       type: String,
       required: [true, "Property Type is required"],
-      enum: ["House", "Farm", "Land"],
+      enum: ["House", "Farm", "Land", "Commercial", "Office", "Shop"],
     },
     city: {
       type: String,

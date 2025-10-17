@@ -5,7 +5,7 @@ interface IPropertyWithdrawn {
   image: string;
   userEmail: string;
   propertyId: string;
-  propertyType: "House" | "Land" | "Farm";
+  propertyType: "House" | "Land" | "Farm" | "Commercial" | "Office" | "Shop";
   listingPurpose: "For Renting" | "For Sale";
   paymentMethod: "installment" | "payOnce";
   initialPayment: number;
@@ -82,7 +82,7 @@ export interface User {
     image: string;
     userEmail: string;
     propertyId: string;
-    propertyType: "House" | "Land" | "Farm";
+    propertyType: "House" | "Land" | "Farm" | "Commercial" | "Office" | "Shop";
     listingPurpose: "For Renting" | "For Sale";
     paymentMethod: "installment" | "payOnce";
     initialPayment: number;
@@ -115,7 +115,7 @@ export interface User {
     userEmail: string;
     propertyId: string;
     paymentDate: Date;
-    propertyType: "House" | "Land" | "Farm";
+    propertyType: "House" | "Land" | "Farm" | "Commercial" | "Office" | "Shop";
     listingPurpose: "For Renting" | "For Sale";
     paymentMethod: "installment" | "payOnce";
     price: number;
@@ -142,7 +142,7 @@ export interface Property {
   location: string;
   createdAt: Date;
   image: string;
-  propertyType: "House" | "Farm" | "Land";
+  propertyType: "House" | "Farm" | "Land" | "Commercial" | "Office" | "Shop";
   price: number;
   listingPurpose: "For Renting" | "For Sale";
   bedrooms?: number;
@@ -166,7 +166,7 @@ export interface Transaction {
   propertyPrice: number;
   userId: string;
   propertyId: string;
-  propertyType: "House" | "Land" | "Farm";
+  propertyType: "House" | "Farm" | "Land" | "Commercial" | "Office" | "Shop";
   paymentMethod: "installment" | "payOnce";
   listingPurpose: "For Sale" | "For Renting";
   amount: number;
