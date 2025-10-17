@@ -183,7 +183,7 @@ function Login() {
     }
   };
 
-  // Don't render if session exists (will redirect)
+  // Dont render if session exists (will redirect)
   if (session) {
     return (
       <Box
@@ -491,8 +491,8 @@ function Login() {
           {forgotPasswordStep === 0 && (
             <>
               <Typography variant="body1" sx={{ mb: 3 }}>
-                Enter your email address and we'll send you a One-Time Password
-                (OTP) to reset your password.
+                Enter your email address and we&apos;ll send you a One-Time
+                Password (OTP) to reset your password.
               </Typography>
               <TextField
                 fullWidth
@@ -519,14 +519,14 @@ function Login() {
                 </Typography>
                 <Typography variant="body2">
                   If an account with the email{" "}
-                  <strong>{forgotPasswordEmail}</strong> exists, we've sent a
-                  One-Time Password (OTP) to it. Please check your inbox and
+                  <strong>{forgotPasswordEmail}</strong> exists, we&apos;ve sent
+                  a One-Time Password (OTP) to it. Please check your inbox and
                   follow the instructions to reset your password.
                 </Typography>
               </Alert>
               <Typography variant="body2" color="text.secondary">
-                Didn't receive the email? Check your spam folder or try again in
-                a few minutes.
+                Didn&apos;t receive the email? Check your spam folder or try
+                again in a few minutes.
               </Typography>
             </>
           )}

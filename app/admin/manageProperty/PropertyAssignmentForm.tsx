@@ -438,8 +438,8 @@ const PropertyAssignmentForm: React.FC = () => {
                   </Typography>
                   {formData.paymentMethod === "installment" && (
                     <Typography variant="body2" color="text.secondary">
-                      This property will be added to user's properties under
-                      payment
+                      This property will be added to user&apos;s properties
+                      under payment
                     </Typography>
                   )}
                 </CardContent>
