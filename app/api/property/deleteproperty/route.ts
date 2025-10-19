@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "../../../../utils/connectDB";
 import Properties from "@/models/properties";
-import authMiddleware from "../../../../utils/authMiddleware";
-import roleMiddleware from "../../../../utils/roleMiddleware";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";

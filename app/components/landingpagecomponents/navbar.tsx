@@ -58,7 +58,7 @@ const Navbar = () => {
 
   const handleNavigation = (item) => {
     // Show loading spinner
-    setLoading(true);
+    // setLoading(true);
 
     // Close mobile drawer if open
     if (menuOpen) {
@@ -103,7 +103,7 @@ const Navbar = () => {
   const navItems = [
     { label: "About Us", href: "/about" },
     { label: "Services", href: "/#services", scroll: true },
-    { label: "Properties", href: "/#featured-properties", scroll: true },
+    { label: "Properties", href: "/properties" },
     { label: "FAQs", href: "/#faq", scroll: true },
     { label: "Payment Calculator", onClick: openModal },
     { label: "Contact Us", href: "/contact" },

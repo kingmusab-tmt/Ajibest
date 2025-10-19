@@ -186,7 +186,7 @@ const ManageTransactions: React.FC = () => {
                           <Typography
                             variant="caption"
                             sx={{
-                              opacity: 0.7,
+                              opastate: 0.7,
                               display: "block",
                               mt: 0.5,
                             }}

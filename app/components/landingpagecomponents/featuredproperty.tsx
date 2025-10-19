@@ -405,7 +405,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
               p: 2,
               color: "white",
               transform: isHovered ? "translateY(0)" : "translateY(8px)",
-              opacity: isHovered ? 1 : 0.9,
+              opastate: isHovered ? 1 : 0.9,
               transition: "all 0.3s ease-in-out",
             }}
           >

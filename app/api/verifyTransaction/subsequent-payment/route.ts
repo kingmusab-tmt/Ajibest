@@ -117,7 +117,7 @@ export async function POST(req) {
             amenities: propertyUnderPayment.amenities,
             utilities: propertyUnderPayment.utilities,
             plotNumber: propertyUnderPayment.plotNumber,
-            city: propertyUnderPayment.city,
+            state: propertyUnderPayment.state,
             size: propertyUnderPayment.size,
             userEmail: email,
             paymentDate: new Date(),

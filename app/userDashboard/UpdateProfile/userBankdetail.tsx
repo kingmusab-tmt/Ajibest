@@ -68,7 +68,7 @@ const BankAccountDetail: React.FC = () => {
     "Ecobank Nigeria",
     "Fidelity Bank Nigeria",
     "First Bank of Nigeria",
-    "First City Monument Bank",
+    "First state Monument Bank",
     "Guaranty Trust Bank",
     "Heritage Bank Plc",
     "Jaiz Bank Plc",
@@ -257,7 +257,7 @@ const BankAccountDetail: React.FC = () => {
             <AccountBalance sx={{ mr: 1, verticalAlign: "bottom" }} />
             Bank Account Details
           </Typography>
-          <Typography variant="body2" sx={{ opacity: 0.9, mt: 1 }}>
+          <Typography variant="body2" sx={{ opastate: 0.9, mt: 1 }}>
             Manage your bank account information for transactions and payments
           </Typography>
         </Box>

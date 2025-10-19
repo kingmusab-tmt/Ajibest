@@ -79,7 +79,7 @@ interface PropertyUnderPayment {
   amenities?: string;
   utilities?: string;
   plotNumber: string;
-  city: string;
+  state: string;
   size?: "Quarter Plot" | "Half Plot" | "Full Plot";
   instalmentAllowed: boolean;
   paymentHistory: PaymentHistory[];
@@ -104,7 +104,7 @@ interface PropertyPurOrRented {
   amenities?: string;
   utilities?: string;
   plotNumber: string;
-  city: string;
+  state: string;
   size?: "Quarter Plot" | "Half Plot" | "Full Plot";
   rentalDuration?: number;
   instalmentAllowed: boolean;
@@ -127,7 +127,7 @@ interface PropertyWithdrawn {
   amenities?: string;
   utilities?: string;
   plotNumber: string;
-  city: string;
+  state: string;
   size?: "Quarter Plot" | "Half Plot" | "Full Plot";
   instalmentAllowed: boolean;
   paymentHistory: PaymentHistory[];

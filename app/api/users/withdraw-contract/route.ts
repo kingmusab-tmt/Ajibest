@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
       amenities: property.amenities || "",
       utilities: property.utilities || "",
       plotNumber: property.plotNumber || "",
-      city: property.city || "",
+      state: property.state || "",
       size: property.size,
       instalmentAllowed: property.instalmentAllowed || false,
 

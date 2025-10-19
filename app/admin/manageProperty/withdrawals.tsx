@@ -64,7 +64,7 @@ interface WithdrawalRequest {
   amenities: string;
   utilities: string;
   plotNumber: string;
-  city: string;
+  state: string;
   instalmentAllowed: boolean;
   paymentHistory: PaymentHistory[];
   withdrawnDate: string;
@@ -379,10 +379,10 @@ const AdminWithdrawalsPage = () => {
                             </Typography>
                           </Box>
                         )}
-                        {request.city && (
+                        {request.state && (
                           <Box sx={{ mb: 1 }}>
                             <Typography variant="body2" color="text.secondary">
-                              City: {request.city}
+                              State: {request.state}
                             </Typography>
                           </Box>
                         )}

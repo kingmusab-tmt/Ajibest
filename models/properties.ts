@@ -14,6 +14,7 @@ interface IProperty extends Document {
   amenities?: string;
   plotNumber: string;
   utilities?: string;
+  state: string;
   city: string;
   status: "available" | "sold" | "rented";
   purchased: boolean;
@@ -43,7 +44,7 @@ const propertySchema = new Schema<IProperty>(
       required: [true, "Property Type is required"],
       enum: ["House", "Farm", "Land", "Commercial", "Office", "Shop"],
     },
-    city: {
+    state: {
       type: String,
       enum: [
         "abia",
@@ -83,6 +84,49 @@ const propertySchema = new Schema<IProperty>(
         "yobe",
         "zamfara",
         "fct",
+      ],
+      lowercase: true,
+    },
+    city: {
+      type: String,
+      enum: [
+        "umuahia",
+        "yola",
+        "uyo",
+        "awka",
+        "bauchi",
+        "yenagoa",
+        "makurdi",
+        "maiduguri",
+        "calabar",
+        "asaba",
+        "abakaliki",
+        "benin state",
+        "ado-ekiti",
+        "enugu",
+        "gombe",
+        "owerri",
+        "dutse",
+        "kaduna",
+        "kano",
+        "katsina",
+        "birnin kebbi",
+        "lokoja",
+        "ilorin",
+        "lagos",
+        "lafia",
+        "minna",
+        "abeokuta",
+        "akure",
+        "osogbo",
+        "ibadan",
+        "jos",
+        "port harcourt",
+        "sokoto",
+        "jalingo",
+        "damaturu",
+        "gusau",
+        "abuja",
       ],
       lowercase: true,
     },
@@ -131,7 +175,7 @@ const propertySchema = new Schema<IProperty>(
   }
 );
 
-propertySchema.index({ city: 1, propertyType: 1, price: 1, status: 1 });
+propertySchema.index({ state: 1, propertyType: 1, price: 1, status: 1 });
 
 const Property: Model<IProperty> =
   mongoose.models.Property || mongoose.model("Property", propertySchema);

@@ -49,7 +49,7 @@ const TermCondition: React.FC = () => {
             Terms and Conditions
           </Typography>
         </Box>
-        <Typography variant="h6" sx={{ opacity: 0.9 }}>
+        <Typography variant="h6" sx={{ opastate: 0.9 }}>
           Welcome to{" "}
           <Box component="span" fontWeight="bold">
             A.A. Ajibest Land Vendors Ltd!

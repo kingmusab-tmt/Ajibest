@@ -4,29 +4,8 @@ import Property from "@/models/properties";
 
 export const dynamic = "force-dynamic";
 
-// Define proper TypeScript interfaces
-interface FallbackProperty {
-  _id: string;
-  title: string;
-  description: string;
-  location: string;
-  state?: string;
-  image: string;
-  propertyType: string;
-  price: number;
-  listingPurpose: string;
-  bedrooms?: number;
-  bathrooms?: number;
-  amenities?: string;
-  utilities?: string;
-  purchased: boolean;
-  rented: boolean;
-  size: string;
-  rentalDuration?: number;
-}
-
-// Fallback properties data with proper typing
-const fallbackProperties: FallbackProperty[] = [
+// Fallback properties data
+const fallbackProperties = [
   {
     _id: "1",
     title: "Luxury Villa in Lekki",
@@ -113,58 +92,6 @@ const fallbackProperties: FallbackProperty[] = [
   },
 ];
 
-// Helper function to safely filter properties
-const filterProperties = (
-  properties: FallbackProperty[],
-  filters: {
-    state?: string | null;
-    propertyType?: string | null;
-    priceRange?: string | null;
-    purpose?: string | null;
-  }
-): FallbackProperty[] => {
-  let filtered = [...properties];
-
-  if (filters.state && filters.state !== "all") {
-    filtered = filtered.filter(
-      (prop) =>
-        prop.state &&
-        prop.state.toLowerCase().includes(filters.state!.toLowerCase())
-    );
-  }
-
-  if (filters.propertyType && filters.propertyType !== "all") {
-    const decodedPropertyType = filters.propertyType.replace(/\+/g, " ");
-    filtered = filtered.filter((prop) =>
-      prop.propertyType
-        .toLowerCase()
-        .includes(decodedPropertyType.toLowerCase())
-    );
-  }
-
-  if (filters.purpose && filters.purpose !== "all") {
-    filtered = filtered.filter(
-      (prop) => prop.listingPurpose === filters.purpose
-    );
-  }
-
-  if (filters.priceRange && filters.priceRange !== "all") {
-    const [minPrice, maxPrice] = filters.priceRange.split("-").map(Number);
-    filtered = filtered.filter((prop) => {
-      if (minPrice && maxPrice) {
-        return prop.price >= minPrice && prop.price <= maxPrice;
-      } else if (minPrice) {
-        return prop.price >= minPrice;
-      } else if (maxPrice) {
-        return prop.price <= maxPrice;
-      }
-      return true;
-    });
-  }
-
-  return filtered;
-};
-
 export async function GET(request: NextRequest) {
   try {
     await dbConnect();
@@ -173,14 +100,14 @@ export async function GET(request: NextRequest) {
     const state = searchParams.get("state");
     const propertyType = searchParams.get("propertyType");
     const priceRange = searchParams.get("priceRange");
-    const purpose = searchParams.get("purpose");
+    const purpose = searchParams.get("listingPurpose");
     const page = parseInt(searchParams.get("page") || "1");
 
-    const limit = 12;
+    const limit = 12; // Number of properties per page
     const skip = (page - 1) * limit;
 
     try {
-      // Build filter object for MongoDB
+      // Build filter object
       const filter: any = {};
 
       if (state && state !== "all") {
@@ -188,6 +115,7 @@ export async function GET(request: NextRequest) {
       }
 
       if (propertyType && propertyType !== "all") {
+        // Handle URL-encoded spaces (replace '+' with ' ')
         const decodedPropertyType = propertyType.replace(/\+/g, " ");
         filter.propertyType = { $regex: new RegExp(decodedPropertyType, "i") };
       }
@@ -214,13 +142,45 @@ export async function GET(request: NextRequest) {
 
       // If no properties found in database, use filtered fallback
       if (!properties || properties.length === 0) {
-        const filteredFallback = filterProperties(fallbackProperties, {
-          state,
-          propertyType,
-          priceRange,
-          purpose,
-        });
+        let filteredFallback = [...fallbackProperties];
 
+        // Apply similar filters to fallback data
+        if (state && state !== "all") {
+          filteredFallback = filteredFallback.filter((prop) =>
+            prop.state?.toLowerCase().includes(state.toLowerCase())
+          );
+        }
+
+        if (propertyType && propertyType !== "all") {
+          const decodedPropertyType = propertyType.replace(/\+/g, " ");
+          filteredFallback = filteredFallback.filter((prop) =>
+            prop.propertyType
+              ?.toLowerCase()
+              .includes(decodedPropertyType.toLowerCase())
+          );
+        }
+
+        if (purpose && purpose !== "all") {
+          filteredFallback = filteredFallback.filter(
+            (prop) => prop.listingPurpose === purpose
+          );
+        }
+
+        if (priceRange && priceRange !== "all") {
+          const [minPrice, maxPrice] = priceRange.split("-").map(Number);
+          filteredFallback = filteredFallback.filter((prop) => {
+            if (minPrice && maxPrice) {
+              return prop.price >= minPrice && prop.price <= maxPrice;
+            } else if (minPrice) {
+              return prop.price >= minPrice;
+            } else if (maxPrice) {
+              return prop.price <= maxPrice;
+            }
+            return true;
+          });
+        }
+
+        // Apply pagination to fallback
         const paginatedFallback = filteredFallback.slice(skip, skip + limit);
 
         return NextResponse.json({
@@ -252,12 +212,44 @@ export async function GET(request: NextRequest) {
       console.error("Database error:", dbError);
 
       // Apply filters to fallback data on database error
-      const filteredFallback = filterProperties(fallbackProperties, {
-        state,
-        propertyType,
-        priceRange,
-        purpose,
-      });
+      let filteredFallback = [...fallbackProperties];
+      const limit = 12;
+      const skip = (page - 1) * limit;
+
+      if (state && state !== "all") {
+        filteredFallback = filteredFallback.filter((prop) =>
+          prop.state?.toLowerCase().includes(state.toLowerCase())
+        );
+      }
+
+      if (propertyType && propertyType !== "all") {
+        const decodedPropertyType = propertyType.replace(/\+/g, " ");
+        filteredFallback = filteredFallback.filter((prop) =>
+          prop.propertyType
+            ?.toLowerCase()
+            .includes(decodedPropertyType.toLowerCase())
+        );
+      }
+
+      if (purpose && purpose !== "all") {
+        filteredFallback = filteredFallback.filter(
+          (prop) => prop.listingPurpose === purpose
+        );
+      }
+
+      if (priceRange && priceRange !== "all") {
+        const [minPrice, maxPrice] = priceRange.split("-").map(Number);
+        filteredFallback = filteredFallback.filter((prop) => {
+          if (minPrice && maxPrice) {
+            return prop.price >= minPrice && prop.price <= maxPrice;
+          } else if (minPrice) {
+            return prop.price >= minPrice;
+          } else if (maxPrice) {
+            return prop.price <= maxPrice;
+          }
+          return true;
+        });
+      }
 
       const paginatedFallback = filteredFallback.slice(skip, skip + limit);
 
@@ -287,12 +279,42 @@ export async function GET(request: NextRequest) {
     const limit = 12;
     const skip = (page - 1) * limit;
 
-    const filteredFallback = filterProperties(fallbackProperties, {
-      state,
-      propertyType,
-      priceRange,
-      purpose,
-    });
+    let filteredFallback = [...fallbackProperties];
+
+    if (state && state !== "all") {
+      filteredFallback = filteredFallback.filter((prop) =>
+        prop.state?.toLowerCase().includes(state.toLowerCase())
+      );
+    }
+
+    if (propertyType && propertyType !== "all") {
+      const decodedPropertyType = propertyType.replace(/\+/g, " ");
+      filteredFallback = filteredFallback.filter((prop) =>
+        prop.propertyType
+          ?.toLowerCase()
+          .includes(decodedPropertyType.toLowerCase())
+      );
+    }
+
+    if (purpose && purpose !== "all") {
+      filteredFallback = filteredFallback.filter(
+        (prop) => prop.listingPurpose === purpose
+      );
+    }
+
+    if (priceRange && priceRange !== "all") {
+      const [minPrice, maxPrice] = priceRange.split("-").map(Number);
+      filteredFallback = filteredFallback.filter((prop) => {
+        if (minPrice && maxPrice) {
+          return prop.price >= minPrice && prop.price <= maxPrice;
+        } else if (minPrice) {
+          return prop.price >= minPrice;
+        } else if (maxPrice) {
+          return prop.price <= maxPrice;
+        }
+        return true;
+      });
+    }
 
     const paginatedFallback = filteredFallback.slice(skip, skip + limit);
 

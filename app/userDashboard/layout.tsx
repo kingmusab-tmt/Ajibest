@@ -689,7 +689,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                       sx={{
                         fontSize: 48,
                         color: "text.secondary",
-                        opacity: 0.5,
+                        opastate: 0.5,
                         mb: 1,
                       }}
                     />

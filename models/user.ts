@@ -29,7 +29,7 @@ interface IPropertyWithdrawn {
   amenities?: string;
   utilities?: string;
   plotNumber: string;
-  city: string;
+  state: string;
   size?: "Quarter Plot" | "Half Plot" | "Full Plot";
   instalmentAllowed: boolean;
   paymentHistory: {
@@ -97,7 +97,7 @@ export interface IUser extends Document {
     amenities?: string;
     utilities?: string;
     plotNumber: string;
-    city: string;
+    state: string;
     size?: "Quarter Plot" | "Half Plot" | "Full Plot";
     instalmentAllowed: boolean;
     paymentHistory: {
@@ -132,7 +132,7 @@ export interface IUser extends Document {
     amenities?: string;
     utilities?: string;
     plotNumber: string;
-    city: string;
+    state: string;
     size?: "Quarter Plot" | "Half Plot" | "Full Plot";
     rentalDuration?: number;
     instalmentAllowed: boolean;
@@ -173,7 +173,7 @@ const propertyWithdrawnSchema = new Schema<IPropertyWithdrawn>({
   amenities: { type: String },
   utilities: { type: String },
   plotNumber: { type: String },
-  city: { type: String },
+  state: { type: String },
   size: {
     type: String,
     enum: ["Quarter Plot", "Half Plot", "Full Plot"],
@@ -278,7 +278,7 @@ const userSchema = new Schema<IUser>(
         amenities: { type: String },
         utilities: { type: String },
         plotNumber: { type: String },
-        city: { type: String },
+        state: { type: String },
         size: {
           type: String,
           enum: ["Quarter Plot", "Half Plot", "Full Plot"],
@@ -328,7 +328,7 @@ const userSchema = new Schema<IUser>(
         amenities: { type: String },
         utilities: { type: String },
         plotNumber: { type: String },
-        city: { type: String },
+        state: { type: String },
         size: {
           type: String,
           enum: ["Quarter Plot", "Half Plot", "Full Plot"],

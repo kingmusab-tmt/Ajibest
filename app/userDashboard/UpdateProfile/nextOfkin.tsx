@@ -161,7 +161,7 @@ const NextOfKinDetail: React.FC = () => {
     "Ecobank Nigeria",
     "Fidelity Bank Nigeria",
     "First Bank of Nigeria",
-    "First City Monument Bank",
+    "First state Monument Bank",
     "Guaranty Trust Bank",
     "Heritage Bank Plc",
     "Jaiz Bank Plc",
