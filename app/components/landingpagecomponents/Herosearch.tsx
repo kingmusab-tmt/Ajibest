@@ -18,10 +18,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useRouter } from "next/navigation";
 
 interface SearchFilters {
-  city: string;
+  state: string;
   propertyType: string;
   priceRange: string;
-  purpose: string;
+  listingPurpose: string;
 }
 
 const HeroSearch: React.FC = () => {
@@ -30,10 +30,10 @@ const HeroSearch: React.FC = () => {
   const router = useRouter();
 
   const [filters, setFilters] = useState<SearchFilters>({
-    city: "",
+    state: "",
     propertyType: "",
     priceRange: "",
-    purpose: "",
+    listingPurpose: "",
   });
 
   const handleChange =
@@ -45,12 +45,13 @@ const HeroSearch: React.FC = () => {
     // Create query string from filters
     const queryParams = new URLSearchParams();
 
-    if (filters.city) queryParams.append("city", filters.city);
+    if (filters.state) queryParams.append("state", filters.state);
     if (filters.propertyType)
       queryParams.append("propertyType", filters.propertyType);
     if (filters.priceRange)
       queryParams.append("priceRange", filters.priceRange);
-    if (filters.purpose) queryParams.append("purpose", filters.purpose);
+    if (filters.listingPurpose)
+      queryParams.append("listingPurpose", filters.listingPurpose);
 
     // Redirect to properties page with filters
     router.push(`/properties?${queryParams.toString()}`);
@@ -70,12 +71,12 @@ const HeroSearch: React.FC = () => {
       <Grid container spacing={2} alignItems="center">
         <Grid item xs={12} md={3}>
           <FormControl fullWidth size={isMobile ? "small" : "medium"}>
-            <InputLabel id="city-label">City</InputLabel>
+            <InputLabel id="state-label">State</InputLabel>
             <Select
-              labelId="city-label"
-              value={filters.city}
-              label="City"
-              onChange={handleChange("city")}
+              labelId="state-label"
+              value={filters.state}
+              label="state"
+              onChange={handleChange("state")}
             >
               <MenuItem value="abia">Abia</MenuItem>
               <MenuItem value="adamawa">Adamawa</MenuItem>
@@ -129,15 +130,13 @@ const HeroSearch: React.FC = () => {
               label="Type"
               onChange={handleChange("propertyType")}
             >
-              <MenuItem value="farm land">Farm Land</MenuItem>
-              <MenuItem value="residential land">Residential Land</MenuItem>
-              <MenuItem value="house for sell">House for Sale</MenuItem>
-              <MenuItem value="house for rent">House for Rent</MenuItem>
-              <MenuItem value="commercial property">
-                Commercial Property
-              </MenuItem>
-              <MenuItem value="office space">Office Space</MenuItem>
-              <MenuItem value="shop space">Shop Space</MenuItem>
+              <MenuItem value="farm">Farm Land</MenuItem>
+              <MenuItem value="land">Residential Land</MenuItem>
+              <MenuItem value="house">House for Sale</MenuItem>
+              <MenuItem value="house">House for Rent</MenuItem>
+              <MenuItem value="commercial">Commercial Property</MenuItem>
+              <MenuItem value="office">Office Space</MenuItem>
+              <MenuItem value="shop">Shop Space</MenuItem>
               <MenuItem value="all">All Types</MenuItem>
             </Select>
           </FormControl>
@@ -145,16 +144,16 @@ const HeroSearch: React.FC = () => {
 
         <Grid item xs={12} md={2}>
           <FormControl fullWidth size={isMobile ? "small" : "medium"}>
-            <InputLabel id="purpose-label">Purpose</InputLabel>
+            <InputLabel id="listingPurpose-label">listingPurpose</InputLabel>
             <Select
-              labelId="purpose-label"
-              value={filters.purpose}
-              label="Purpose"
-              onChange={handleChange("purpose")}
+              labelId="listingPurpose-label"
+              value={filters.listingPurpose}
+              label="listingPurpose"
+              onChange={handleChange("listingPurpose")}
             >
-              <MenuItem value="sale">For Sale</MenuItem>
-              <MenuItem value="rent">For Rent</MenuItem>
-              <MenuItem value="all">All Purposes</MenuItem>
+              <MenuItem value="For Sale">For Sale</MenuItem>
+              <MenuItem value="For Renting">For Rent</MenuItem>
+              <MenuItem value="all">All Listing Purposes</MenuItem>
             </Select>
           </FormControl>
         </Grid>

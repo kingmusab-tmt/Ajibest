@@ -290,7 +290,7 @@ const ManageUsers: React.FC = () => {
                     <Typography
                       variant="caption"
                       color="inherit"
-                      sx={{ opacity: 0.8 }}
+                      sx={{ opastate: 0.8 }}
                     >
                       {section.description}
                     </Typography>
@@ -320,7 +320,7 @@ const ManageUsers: React.FC = () => {
             <Typography variant="h6" fontWeight="bold">
               {sections.find((s) => s.key === currentSection)?.label}
             </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+            <Typography variant="body2" sx={{ opastate: 0.8 }}>
               {sections.find((s) => s.key === currentSection)?.description}
             </Typography>
           </Box>

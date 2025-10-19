@@ -167,7 +167,7 @@ const WhyChooseUs = () => {
             sx={{
               mb: 2,
               fontWeight: 600,
-              opacity: 0.9,
+              opastate: 0.9,
             }}
           >
             Trusted by Thousands of Happy Customers
@@ -175,7 +175,7 @@ const WhyChooseUs = () => {
           <Typography
             variant="body1"
             sx={{
-              opacity: 0.8,
+              opastate: 0.8,
               maxWidth: 600,
               mx: "auto",
             }}

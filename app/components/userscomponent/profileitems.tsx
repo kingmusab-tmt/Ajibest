@@ -267,7 +267,7 @@ const UserInfo: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="xs" sx={{ py: 1, px: { xs: 1, sm: 2 } }}>
+    <Container maxWidth="xl">
       {/* Header Section */}
       <Paper
         elevation={0}
@@ -331,7 +331,7 @@ const UserInfo: React.FC = () => {
               />
               <Typography
                 variant="body2"
-                sx={{ opacity: 0.9, mt: { xs: 0.5, sm: 0 } }}
+                sx={{ opastate: 0.9, mt: { xs: 0.5, sm: 0 } }}
               >
                 Member since{" "}
                 {formatDate(analyticsData.accountSummary.registrationDate)}

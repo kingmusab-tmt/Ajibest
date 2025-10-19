@@ -50,7 +50,6 @@ function Login() {
   const { data: session } = useSession();
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   // Session redirection effect
   useEffect(() => {

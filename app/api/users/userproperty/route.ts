@@ -115,7 +115,7 @@ export async function GET() {
         // Additional fields from propertyWithdrawn schema
         userEmail: property.userEmail,
         plotNumber: property.plotNumber,
-        city: property.city,
+        state: property.state,
         size: property.size,
         instalmentAllowed: property.instalmentAllowed,
         bathrooms: property.bathrooms || 0,

@@ -308,7 +308,7 @@ const PaymentPage = ({
             <Typography variant="h5" fontWeight="bold">
               Complete Your Payment
             </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.9 }}>
+            <Typography variant="body2" sx={{ opastate: 0.9 }}>
               {listingPurpose} • {type}
             </Typography>
           </Box>

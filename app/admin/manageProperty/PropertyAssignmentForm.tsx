@@ -33,7 +33,7 @@ interface Property {
   propertyType: "House" | "Farm" | "Land" | "Commercial" | "Office" | "Shop";
   listingPurpose: "For Renting" | "For Sale";
   location: string;
-  city: string;
+  state: string;
   status: "available" | "sold" | "rented";
 }
 
@@ -333,7 +333,7 @@ const PropertyAssignmentForm: React.FC = () => {
                   </Typography>
                   <Typography>
                     <strong>Location:</strong> {selectedProperty.location},{" "}
-                    {selectedProperty.city}
+                    {selectedProperty.state}
                   </Typography>
                   <Typography>
                     <strong>Price:</strong> ₦

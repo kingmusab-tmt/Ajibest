@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest } from "next";
 import { upload } from "next-file"; // Import upload function from Next-File
 
 export async function uploadFile(

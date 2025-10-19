@@ -138,7 +138,7 @@ const ManageWebContent: React.FC = () => {
 
       <Box
         sx={{
-          transition: "opacity 300ms ease-in-out",
+          transition: "opastate 300ms ease-in-out",
           minHeight: 400,
         }}
       >

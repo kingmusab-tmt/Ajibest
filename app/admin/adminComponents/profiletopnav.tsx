@@ -234,7 +234,7 @@ const ProfileTopNavBar: React.FC<ProfileTopNavBarProps> = ({
 
         {session && session.user.role === "Admin" && (
           <Link
-            href="/userprofile"
+            href="/userDashboard"
             style={{ textDecoration: "none", color: "inherit" }}
           >
             <MenuItem>

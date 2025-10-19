@@ -3,8 +3,6 @@ import { authOptions } from "@/app/auth";
 import { getServerSession } from "next-auth/next";
 import dbConnect from "../../../../utils/connectDB";
 import User from "../../../../models/user";
-import authMiddleware from "../../../../utils/authMiddleware";
-import roleMiddleware from "../../../../utils/roleMiddleware";
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";

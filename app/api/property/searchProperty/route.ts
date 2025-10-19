@@ -13,7 +13,7 @@ const fallbackProperties = [
     description:
       "Beautiful farm land with fertile soil, perfect for agriculture",
     location: "Maiduguri, Borno State",
-    city: "maiduguri",
+    state: "maiduguri",
     image: "/ajibest1ca30fa2-a97f-4d72-bf2e-14c6345c455a.jpeg.jpeg",
     propertyType: "farm land",
     price: 450000,
@@ -29,7 +29,7 @@ const fallbackProperties = [
     description:
       "Prime residential plot in developing area with great potential",
     location: "Gombe, Gombe State",
-    city: "gombe",
+    state: "gombe",
     image: "/ajibest1ca30fa2-a97f-4d72-bf2e-14c6345c455a.jpeg.jpeg",
     propertyType: "residential land",
     price: 850000,
@@ -44,7 +44,7 @@ const fallbackProperties = [
     title: "Luxury House for Sale in Damaturu",
     description: "Modern 4 bedroom house with all amenities in secure estate",
     location: "Damaturu, Yobe State",
-    city: "damaturu",
+    state: "damaturu",
     image: "/ajibest1ca30fa2-a97f-4d72-bf2e-14c6345c455a.jpeg.jpeg",
     propertyType: "house for sell",
     price: 3500000,
@@ -52,7 +52,7 @@ const fallbackProperties = [
     bedrooms: 4,
     bathrooms: 3,
     amenities: "Swimming pool, Generator, Parking space",
-    utilities: "24/7 Electricity, Water Supply",
+    utilities: "24/7 Electristate, Water Supply",
     purchased: false,
     rented: false,
     size: "5 bedrooms",
@@ -63,7 +63,7 @@ const fallbackProperties = [
     title: "Commercial Property in Bauchi",
     description: "Commercial building suitable for office or retail business",
     location: "Bauchi, Bauchi State",
-    city: "bauchi",
+    state: "bauchi",
     image: "/ajibest1ca30fa2-a97f-4d72-bf2e-14c6345c455a.jpeg.jpeg",
     propertyType: "house for rent",
     price: 1200000,
@@ -80,7 +80,7 @@ const fallbackProperties = [
     title: "Agricultural Land in Maiduguri",
     description: "Large agricultural land with irrigation system installed",
     location: "Maiduguri, Borno State",
-    city: "maiduguri",
+    state: "maiduguri",
     image: "/ajibest1ca30fa2-a97f-4d72-bf2e-14c6345c455a.jpeg.jpeg",
     propertyType: "farm land",
     price: 750000,
@@ -96,7 +96,7 @@ const fallbackProperties = [
     title: "Affordable House for Rent in Gombe",
     description: "Cozy 2 bedroom apartment in quiet neighborhood",
     location: "Gombe, Gombe State",
-    city: "gombe",
+    state: "gombe",
     image: "/ajibest1ca30fa2-a97f-4d72-bf2e-14c6345c455a.jpeg.jpeg",
     propertyType: "house for rent",
     price: 400000,
@@ -104,7 +104,7 @@ const fallbackProperties = [
     bedrooms: 2,
     bathrooms: 1,
     amenities: "Furnished, Water supply, Security",
-    utilities: "Electricity, Water",
+    utilities: "Electristate, Water",
     purchased: false,
     rented: false,
     size: "2 bedrooms",
@@ -119,7 +119,7 @@ export async function GET(req: NextRequest) {
 
     // Get query parameters
     const { searchParams } = new URL(req.url);
-    const city = searchParams.get("city");
+    const state = searchParams.get("state");
     const propertyType = searchParams.get("propertyType");
     const priceRange = searchParams.get("priceRange");
     const purpose = searchParams.get("purpose");
@@ -129,7 +129,7 @@ export async function GET(req: NextRequest) {
     // Build filter object
     const filter: any = { status: "available" };
 
-    if (city && city !== "all") filter.city = city;
+    if (state && state !== "all") filter.state = state;
     if (propertyType && propertyType !== "all")
       filter.propertyType = propertyType;
     if (purpose && purpose !== "all") {
@@ -166,8 +166,8 @@ export async function GET(req: NextRequest) {
         properties = fallbackProperties;
 
         // Apply filters to fallback data
-        if (city && city !== "all") {
-          properties = properties.filter((p) => p.city === city);
+        if (state && state !== "all") {
+          properties = properties.filter((p) => p.state === state);
         }
         if (propertyType && propertyType !== "all") {
           properties = properties.filter(

@@ -22,16 +22,11 @@ export default function Home() {
       try {
         // Fetch hero content and other critical data
         // Replace with your actual API calls
-        const [heroResponse] = await Promise.all([
-          fetch("/api/aapi/hero-content"),
-          // Add other critical API calls here if needed
-        ]);
+        const heroResponse = await fetch("/api/aapi/hero-content");
+        // Add other critical API calls here if needed
 
         const heroData = await heroResponse.json();
         setHeroData(heroData);
-
-        // Simulate additional loading time for other critical resources
-        await new Promise((resolve) => setTimeout(resolve, 1000));
       } catch (error) {
         console.error("Failed to fetch initial data:", error);
       } finally {

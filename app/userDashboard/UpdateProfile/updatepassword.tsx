@@ -499,7 +499,7 @@ const ChangePassword: React.FC = () => {
                         marginLeft: "-12px",
                       }}
                     />
-                    <span style={{ opacity: 0 }}>Change Password</span>
+                    <span>Change Password</span>
                   </>
                 ) : (
                   "Change Password"

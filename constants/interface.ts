@@ -15,7 +15,7 @@ interface IPropertyWithdrawn {
   amenities?: string;
   utilities?: string;
   plotNumber: string;
-  city: string;
+  state: string;
   size?: "Quarter Plot" | "Half Plot" | "Full Plot";
   instalmentAllowed: boolean;
   paymentHistory: {
@@ -92,7 +92,7 @@ export interface User {
     amenities?: string;
     utilities?: string;
     plotNumber: string;
-    city: string;
+    state: string;
     size?: "Quarter Plot" | "Half Plot" | "Full Plot";
     instalmentAllowed: boolean;
     paymentHistory: {
@@ -124,7 +124,7 @@ export interface User {
     amenities?: string;
     utilities?: string;
     plotNumber: string;
-    city: string;
+    state: string;
     size?: "Quarter Plot" | "Half Plot" | "Full Plot";
     rentalDuration?: number;
     instalmentAllowed: boolean;
