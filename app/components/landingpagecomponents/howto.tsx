@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Box,
   Container,
@@ -29,7 +30,7 @@ import {
 interface Step {
   title: string;
   description?: string;
-  icon: JSX.Element;
+  icon: React.ReactElement;
 }
 
 const steps: Step[] = [

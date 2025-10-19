@@ -10,7 +10,7 @@ import ManageProperty from "./manageProperty/page";
 import ManageUsers from "./manageUser/page";
 import ManageTransactions from "./manageTransactions/page";
 import ManagePayments from "./managePayment/page";
-import UpdateProfile from "../components/userscomponent/updateProfile";
+import RefundRequestsAdminPage from "./manageRefundRequest/page";
 import DashboardPage from "./admindashboard";
 import ProtectedRoute from "../components/generalcomponents/ProtectedRoute";
 import ManageWebContent from "./manageWebContent/page";
@@ -115,10 +115,12 @@ const AdminPage = () => {
         return <ManageTransactions />;
       case "ManagePayments":
         return <ManagePayments />;
+      case "RefundRequestsAdminPage":
+        return <RefundRequestsAdminPage />;
       case "ManageWebContent":
         return <ManageWebContent />;
-      case "UpdateProfile":
-        return <UpdateProfile />;
+      // case "UpdateProfile":
+      //   return <UpdateProfile />;
       default:
         return <DashboardPage />;
     }

@@ -19,8 +19,8 @@ import {
   Divider,
 } from "@mui/material";
 import { Save as SaveIcon, Person as PersonIcon } from "@mui/icons-material";
-import EditableImage from "../generalcomponents/Image";
-import LoadingSpinner from "../generalcomponents/loadingSpinner";
+import EditableImage from "@/app/components/generalcomponents/Image";
+import LoadingSpinner from "@/app/components/generalcomponents/loadingSpinner";
 
 const PersonalInformation = () => {
   const { data: session, status, update } = useSession();

@@ -11,8 +11,8 @@ export async function GET() {
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email || session?.user?.role !== "Admin") {
-      console.log(session?.user.role);
-      console.log("Unauthorized access attempt to GET /api/aapi/withdrawals");
+      // console.log(session?.user.role);
+      // console.log("Unauthorized access attempt to GET /api/aapi/withdrawals");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     await dbConnect();

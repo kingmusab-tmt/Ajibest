@@ -58,7 +58,7 @@ function Login() {
       if (session.user.role === "Admin") {
         router.push("/admin");
       } else {
-        router.push("/userprofile");
+        router.push("/userDashboard");
       }
     }
   }, [session, router]);
@@ -120,7 +120,7 @@ function Login() {
     setGoogleLoading(true);
     setError("");
     try {
-      await signIn("google", { callbackUrl: "/userprofile" });
+      await signIn("google", { callbackUrl: "/userDashboard" });
     } catch (error) {
       setError("Failed to sign in with Google");
       setGoogleLoading(false);

@@ -1,3 +1,4 @@
+import React from "react";
 import Image from "next/image";
 import {
   Box,
@@ -23,7 +24,7 @@ import {
 
 interface Service {
   name: string;
-  icon: JSX.Element;
+  icon: React.ReactElement;
 }
 
 const services: Service[] = [
@@ -98,7 +99,10 @@ const Services: React.FC = () => {
                   left: -10,
                   right: -10,
                   bottom: -10,
-                  background: `linear-gradient(45deg, ${theme.palette.primary.main}30, ${theme.palette.secondary.main}30)`,
+                  background: `linear-gradient(45deg, ${alpha(
+                    theme.palette.primary.main,
+                    0.3
+                  )}, ${alpha(theme.palette.secondary.main, 0.3)})`,
                   borderRadius: 8,
                   zIndex: -1,
                 },
@@ -211,191 +215,3 @@ const Services: React.FC = () => {
 };
 
 export default Services;
-// import Image from "next/image";
-// import {
-//   Box,
-//   Grid,
-//   Typography,
-//   Paper,
-//   useTheme,
-//   useMediaQuery,
-// } from "@mui/material";
-// import SerImg from "../../../public/images/services.png";
-
-// interface Service {
-//   name: string;
-//   icon: string;
-// }
-
-// const services: Service[] = [
-//   {
-//     name: "Buying and Selling of Farm Lands",
-//     icon: "/icons/farmhouse.png",
-//   },
-//   {
-//     name: "Estate Management",
-//     icon: "/icons/estate.png",
-//   },
-//   {
-//     name: "Leasing/Renting out Property",
-//     icon: "/icons/house.png",
-//   },
-//   {
-//     name: "Buying and Selling of Plots of Land",
-//     icon: "/icons/location-pin.png",
-//   },
-//   {
-//     name: "Tenant Management",
-//     icon: "/icons/key.png",
-//   },
-//   {
-//     name: "Property Valuation",
-//     icon: "/icons/sublease.png",
-//   },
-// ];
-
-// const Services: React.FC = () => {
-//   const theme = useTheme();
-//   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-//   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-
-//   return (
-//     <Box
-//       id="services"
-//       sx={{
-//         bgcolor: "grey.50",
-//         p: { xs: 3, sm: 4, md: 6 },
-//         borderRadius: 2,
-//         boxShadow: 3,
-//         maxWidth: 1200,
-//         mx: "auto",
-//         mt: 2,
-//       }}
-//     >
-//       <Grid container spacing={4} alignItems="center">
-//         {/* Left side: Main Image and Title */}
-//         <Grid item xs={12} md={4}>
-//           <Box
-//             sx={{
-//               display: "flex",
-//               flexDirection: "column",
-//               alignItems: "center",
-//               textAlign: { xs: "center", md: "left" },
-//             }}
-//           >
-//             <Typography
-//               variant="h3"
-//               component="h2"
-//               sx={{
-//                 fontWeight: "bold",
-//                 color: "primary.main",
-//                 mb: 4,
-//                 fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
-//                 textAlign: "center",
-//               }}
-//             >
-//               Our Services
-//             </Typography>
-//             <Box
-//               sx={{
-//                 position: "relative",
-//                 p: 2,
-//                 "&::before": {
-//                   content: '""',
-//                   position: "absolute",
-//                   top: 0,
-//                   left: 0,
-//                   right: 0,
-//                   bottom: 0,
-//                   borderRadius: "50%",
-//                   bgcolor: "primary.light",
-//                   opacity: 0.1,
-//                   zIndex: 0,
-//                 },
-//               }}
-//             >
-//               <Box
-//                 sx={{
-//                   position: "relative",
-//                   zIndex: 1,
-//                   width: { xs: 120, sm: 200, md: 250 },
-//                   height: { xs: 150, sm: 250, md: 300 },
-//                   borderRadius: "50%",
-//                   overflow: "hidden",
-//                 }}
-//               >
-//                 <Image
-//                   src={SerImg}
-//                   alt="A.A Ajibest Services"
-//                   fill
-//                   style={{
-//                     objectFit: "cover",
-//                   }}
-//                   priority
-//                 />
-//               </Box>
-//             </Box>
-//           </Box>
-//         </Grid>
-
-//         {/* Right side: Services list */}
-//         <Grid item xs={12} md={8}>
-//           <Grid container spacing={2}>
-//             {services.map((service, index) => (
-//               <Grid item xs={12} sm={6} key={index}>
-//                 <Paper
-//                   elevation={1}
-//                   sx={{
-//                     p: { xs: 2, sm: 3 },
-//                     display: "flex",
-//                     alignItems: "center",
-//                     borderRadius: 2,
-//                     transition: "all 0.3s ease-in-out",
-//                     "&:hover": {
-//                       elevation: 4,
-//                       transform: "translateY(-2px)",
-//                       boxShadow: 4,
-//                     },
-//                     height: "100%",
-//                   }}
-//                 >
-//                   <Box
-//                     sx={{
-//                       flexShrink: 0,
-//                       mr: 2,
-//                       width: { xs: 32, sm: 40 },
-//                       height: { xs: 32, sm: 40 },
-//                       position: "relative",
-//                     }}
-//                   >
-//                     <Image
-//                       src={service.icon}
-//                       alt={service.name}
-//                       fill
-//                       style={{
-//                         objectFit: "contain",
-//                       }}
-//                     />
-//                   </Box>
-//                   <Typography
-//                     variant="body1"
-//                     sx={{
-//                       fontWeight: "semibold",
-//                       color: "grey.800",
-//                       fontSize: { xs: "0.9rem", sm: "1rem", md: "1.1rem" },
-//                       lineHeight: 1.4,
-//                     }}
-//                   >
-//                     {service.name}
-//                   </Typography>
-//                 </Paper>
-//               </Grid>
-//             ))}
-//           </Grid>
-//         </Grid>
-//       </Grid>
-//     </Box>
-//   );
-// };
-
-// export default Services;

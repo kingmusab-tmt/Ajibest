@@ -41,6 +41,7 @@ import {
   GridView,
 } from "@mui/icons-material";
 import Link from "next/link";
+import LoadingSpinner from "../components/generalcomponents/loadingSpinner";
 
 interface Property {
   _id: string;
@@ -174,27 +175,7 @@ const PropertiesPage = () => {
   };
 
   if (loading) {
-    return (
-      <Container
-        maxWidth="lg"
-        sx={{
-          py: 4,
-          textAlign: "center",
-          minHeight: "60vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-        }}
-      >
-        <CircularProgress size={60} thickness={4} />
-        <Typography
-          variant="h6"
-          sx={{ mt: 3, fontSize: { xs: "1.1rem", md: "1.25rem" } }}
-        >
-          Discovering Amazing Properties...
-        </Typography>
-      </Container>
-    );
+    return <LoadingSpinner />;
   }
 
   if (error) {

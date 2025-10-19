@@ -10,7 +10,7 @@ import {
 } from "react-icons/ai";
 import { useSession, signOut } from "next-auth/react";
 import { useContext, useState, useEffect } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import logo from "@/public/ajibestlogo.png";
 import LayoutContext from "../generalcomponents/LayoutContext";
 import LoadingSpinner from "../generalcomponents/loadingSpinner";
@@ -42,7 +42,6 @@ const Navbar = () => {
 
   // Next.js navigation hooks
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   const handleNav = () => {
     setMenuOpen(!menuOpen);
@@ -55,7 +54,7 @@ const Navbar = () => {
   // Reset loading when route changes complete
   useEffect(() => {
     setLoading(false);
-  }, [pathname, searchParams]);
+  }, [pathname]);
 
   const handleNavigation = (item) => {
     // Show loading spinner
@@ -154,11 +153,11 @@ const Navbar = () => {
             <Button
               fullWidth
               component={Link}
-              href={session.user.role === "Admin" ? "/admin" : "/userprofile"}
+              href={session.user.role === "Admin" ? "/admin" : "/userDashboard"}
               onClick={() =>
                 handleNavigation({
                   href:
-                    session.user.role === "Admin" ? "/admin" : "/userprofile",
+                    session.user.role === "Admin" ? "/admin" : "/userDashboard",
                 })
               }
               sx={{ mb: 1 }}
@@ -170,11 +169,15 @@ const Navbar = () => {
                 src={imageSrc}
                 alt="Profile picture"
                 component={Link}
-                href={session.user.role === "Admin" ? "/admin" : "/userprofile"}
+                href={
+                  session.user.role === "Admin" ? "/admin" : "/userDashboard"
+                }
                 onClick={() =>
                   handleNavigation({
                     href:
-                      session.user.role === "Admin" ? "/admin" : "/userprofile",
+                      session.user.role === "Admin"
+                        ? "/admin"
+                        : "/userDashboard",
                   })
                 }
                 sx={{ cursor: "pointer" }}
@@ -332,14 +335,14 @@ const Navbar = () => {
                 <Button
                   component={Link}
                   href={
-                    session.user.role === "Admin" ? "/admin" : "/userprofile"
+                    session.user.role === "Admin" ? "/admin" : "/userDashboard"
                   }
                   onClick={() =>
                     handleNavigation({
                       href:
                         session.user.role === "Admin"
                           ? "/admin"
-                          : "/userprofile",
+                          : "/userDashboard",
                     })
                   }
                   sx={{
@@ -356,14 +359,14 @@ const Navbar = () => {
                 <IconButton
                   component={Link}
                   href={
-                    session.user.role === "Admin" ? "/admin" : "/userprofile"
+                    session.user.role === "Admin" ? "/admin" : "/userDashboard"
                   }
                   onClick={() =>
                     handleNavigation({
                       href:
                         session.user.role === "Admin"
                           ? "/admin"
-                          : "/userprofile",
+                          : "/userDashboard",
                     })
                   }
                   sx={{ ml: 1 }}

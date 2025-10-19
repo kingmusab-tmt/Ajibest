@@ -1,3 +1,4 @@
+// import React from "react";
 import {
   Box,
   Grid,
@@ -6,13 +7,14 @@ import {
   useTheme,
   useMediaQuery,
   Container,
+  alpha,
 } from "@mui/material";
 import { FaLock, FaHeadset, FaRegLightbulb, FaBuilding } from "react-icons/fa";
 
 interface Step {
   title: string;
   description: string;
-  icon: JSX.Element;
+  icon: React.ReactElement;
 }
 
 const steps: Step[] = [
@@ -52,6 +54,7 @@ const WhyChooseUs = () => {
         bgcolor: "primary.light",
         py: { xs: 6, md: 10 },
         px: { xs: 2, sm: 4 },
+        background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
       }}
     >
       <Container maxWidth="lg">
@@ -64,6 +67,7 @@ const WhyChooseUs = () => {
             fontWeight: "bold",
             color: "white",
             fontSize: { xs: "2.5rem", md: "3rem" },
+            textShadow: "0 2px 4px rgba(0,0,0,0.3)",
           }}
         >
           Why Choose Us?
@@ -91,15 +95,16 @@ const WhyChooseUs = () => {
                   alignItems: "center",
                   textAlign: "center",
                   borderRadius: 3,
-                  bgcolor: "common.white",
+                  bgcolor: "background.paper",
                   height: "100%",
                   transition: "all 0.3s ease-in-out",
                   "&:hover": {
-                    elevation: 6,
-                    transform: "translateY(-4px)",
-                    boxShadow: 4,
+                    transform: "translateY(-8px)",
+                    boxShadow: theme.shadows[8],
+                    bgcolor: alpha(theme.palette.primary.main, 0.02),
                   },
                   minHeight: 280,
+                  border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
                 }}
               >
                 <Box
@@ -125,8 +130,11 @@ const WhyChooseUs = () => {
                   sx={{
                     fontWeight: "bold",
                     mb: 2,
-                    color: "common.black",
+                    color: "text.primary",
                     fontSize: { xs: "1.25rem", md: "1.5rem" },
+                    background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                    backgroundClip: "text",
+                    WebkitBackgroundClip: "text",
                   }}
                 >
                   {step.title}
@@ -146,6 +154,37 @@ const WhyChooseUs = () => {
             </Grid>
           ))}
         </Grid>
+
+        {/* Additional Call to Action */}
+        <Box
+          sx={{
+            mt: 8,
+            textAlign: "center",
+            color: "white",
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              mb: 2,
+              fontWeight: 600,
+              opacity: 0.9,
+            }}
+          >
+            Trusted by Thousands of Happy Customers
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              opacity: 0.8,
+              maxWidth: 600,
+              mx: "auto",
+            }}
+          >
+            Join our growing community of satisfied clients who have found their
+            perfect properties through our dedicated services.
+          </Typography>
+        </Box>
       </Container>
     </Box>
   );

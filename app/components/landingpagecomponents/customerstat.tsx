@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
@@ -18,8 +19,6 @@ import {
   Alert,
 } from "@mui/material";
 import { statsApi } from "@/lib/api/statsApi";
-// import TestimonialSlider from "./TestimonialSlider";
-// import { Testimonial } from "./TestimonialCard";
 
 const iconMap: { [key: string]: React.ComponentType<any> } = {
   Home: HomeIcon,
@@ -102,18 +101,6 @@ const CustomerStats: React.FC<CustomerStatsProps> = ({ initialData }) => {
       maxWidth="xl"
       sx={{ py: { xs: 6, md: 10 }, px: { xs: 2, sm: 3 } }}
     >
-      {/* {error && (
-        <Alert severity="warning" sx={{ mb: 3 }} onClose={() => setError(null)}>
-          {error}
-        </Alert>
-      )}
-
-      {isFallback && (
-        <Alert severity="info" sx={{ mb: 3 }}>
-          Showing demo content. Admin can update this from the admin panel.
-        </Alert>
-      )} */}
-
       {/* Stats Section */}
       <Typography
         variant="h3"
@@ -141,9 +128,6 @@ const CustomerStats: React.FC<CustomerStatsProps> = ({ initialData }) => {
           </Grid>
         ))}
       </Grid>
-
-      {/* Testimonials Section
-      <TestimonialSlider testimonials={activeTestimonials} /> */}
     </Container>
   );
 };

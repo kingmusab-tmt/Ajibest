@@ -1,106 +1,3 @@
-// import dbConnect from "../../../../utils/connectDB";
-// import User from "@/models/user";
-// import bcryptjs from "bcryptjs";
-// import { NextRequest, NextResponse } from "next/server";
-// // import validator from "validator"; // Optional: for stricter email validation
-// import { sendVerificationEmail } from "@/utils/mail";
-// import { v4 as uuidv4 } from "uuid";
-
-// export const dynamic = 'force-dynamic';
-// export async function POST(req: NextRequest, res: NextResponse) {
-//   await dbConnect();
-
-//   try {
-//     // Parse the JSON request body
-//     const body = await req.json();
-
-//     const {
-//       name,
-//       username,
-//       email,
-//       phoneNumber,
-//       password,
-//       bvnOrNin,
-//       country,
-//       state,
-//       lga,
-//       address,
-//     } = body;
-
-//     if (
-//       !name ||
-//       !username ||
-//       !email ||
-//       !password ||
-//       !bvnOrNin ||
-//       !country ||
-//       !state ||
-//       !lga
-//     ) {
-//       return NextResponse.json(
-//         { message: "Please provide all required fields." },
-//         { status: 400 }
-//       );
-//     }
-
-//     // Check if the user already exists
-//     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
-//     if (existingUser) {
-//       return NextResponse.json(
-//         { message: "User already exists with this email or username." },
-//         { status: 400 }
-//       );
-//     }
-
-//     // Hash the password before saving
-//     const salt = await bcryptjs.genSalt(10);
-
-//     const hashedPassword = await bcryptjs.hash(password, salt);
-//     const token = uuidv4();
-
-//     // Create a new user
-//     const newUser = new User({
-//       name,
-//       username,
-//       email,
-//       phoneNumber,
-//       password: hashedPassword,
-//       bvnOrNin,
-//       country,
-//       state,
-//       lga,
-//       address,
-//       dateOfRegistration: new Date(),
-//       remainingBalance: 0,
-//       emailToken: token,
-//       isActive: false,
-//       role: "User",
-//       image: null,
-//       lastLoginTime: null,
-//       favouriteProperties: [],
-//       totalPropertyPurchased: 0,
-//       totalPaymentMade: 0,
-//       nextPaymentDueDate: null,
-//       referralEarnings: 0,
-//       numberOfReferrals: 0,
-//       propertyPurchased: [],
-//       propertyUnderPayment: [],
-//       propertyRented: [],
-//     });
-//     // Save the user to the database
-//     await newUser.save();
-//     await sendVerificationEmail(email, token);
-//     return NextResponse.json(
-//       { message: "User registered successfully" },
-//       { status: 201 }
-//     );
-//   } catch (error) {
-//     return NextResponse.json(
-//       { message: "Internal Server Error" },
-//       { status: 500 }
-//     );
-//   }
-// }
 import dbConnect from "../../../../utils/connectDB";
 import User from "@/models/user";
 import bcryptjs from "bcryptjs";
@@ -151,17 +48,15 @@ const userSchema = yup.object().shape({
 
 export const dynamic = "force-dynamic";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   await dbConnect();
 
   try {
-    // Parse and validate the JSON request body
     const body = await req.json();
 
     try {
-      await userSchema.validate(body, { abortEarly: false }); // Abort early is false to collect all errors
+      await userSchema.validate(body, { abortEarly: false });
     } catch (validationError: unknown) {
-      // Check if validationError is a yup.ValidationError instance
       if (validationError instanceof yup.ValidationError) {
         const errors = validationError.inner.map((err) => ({
           field: err.path,
@@ -172,7 +67,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
           { status: 400 }
         );
       }
-      // Handle other unknown errors (not expected to happen with yup validation)
+
       return NextResponse.json(
         { message: "Unexpected validation error occurred" },
         { status: 400 }
@@ -192,7 +87,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
       address,
     } = body;
 
-    // Check if the user already exists
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
       return NextResponse.json(
@@ -201,12 +95,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
       );
     }
 
-    // Hash the password before saving
     const salt = await bcryptjs.genSalt(10);
     const hashedPassword = await bcryptjs.hash(password, salt);
     const token = uuidv4();
 
-    // Create a new user
     const newUser = new User({
       name,
       username,
@@ -236,7 +128,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
       propertyRented: [],
     });
 
-    // Save the user to the database and send verification email
     await newUser.save();
     await sendVerificationEmail(email, token);
 

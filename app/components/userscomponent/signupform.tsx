@@ -14,7 +14,6 @@ import {
   Button,
   Typography,
   Alert,
-  CircularProgress,
   Divider,
   IconButton,
   InputAdornment,
@@ -161,7 +160,7 @@ const StepOne: React.FC<StepProps> = ({
   };
 
   const handleGoogleSignIn = () => {
-    signIn("google", { callbackUrl: "/userprofile" });
+    signIn("google", { callbackUrl: "/userDashboard" });
   };
 
   if (step !== 1) return null;

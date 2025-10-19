@@ -20,7 +20,7 @@ import {
   CardContent,
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
-import EditableImage from "../generalcomponents/Image";
+import EditableImage from "../../components/generalcomponents/Image";
 
 const NextOfKinDetail: React.FC = () => {
   const theme = useTheme();

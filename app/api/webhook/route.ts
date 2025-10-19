@@ -18,8 +18,8 @@ export async function POST(req) {
   await dbConnect();
 
   const event = await req.json();
-  // console.log(req.headers);
-  // console.log(event);
+  // // console.log(req.headers);
+  // // console.log(event);
 
   const headers = new Headers(req.headers);
   const secret = headers.get("x-paystack-signature");
@@ -30,9 +30,9 @@ export async function POST(req) {
     .update(JSON.stringify(event))
     .digest("hex");
 
-  console.log(req.headers);
-  console.log(secret);
-  console.log(hash);
+  // console.log(req.headers);
+  // console.log(secret);
+  // console.log(hash);
   if (hash !== secret) {
     return NextResponse.json(
       { message: "Webhook Error: Invalid signature" },

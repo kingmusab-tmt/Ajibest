@@ -2,7 +2,28 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ReactPaginate from "react-paginate";
+import {
+  Box,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  Pagination,
+  CircularProgress,
+  Alert,
+  Typography,
+  Chip,
+  InputAdornment,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import PersonIcon from "@mui/icons-material/Person";
 
 interface User {
   _id: number;
@@ -24,16 +45,17 @@ const UserRoleComponent: React.FC = () => {
 
   const fetchUsers = async () => {
     setLoading(true);
+    setError(null);
     try {
       const response = await axios.get("/api/users/getUsers", {
         headers: {
           "Cache-Control": "no-cache, no-store",
         },
-      }); // Replace with your API endpoint
-
-      setUsers(response.data.data); // Assuming response.data contains an array of users
+      });
+      setUsers(response.data.data);
     } catch (error) {
       console.error("Failed to fetch users: ", error);
+      setError("Failed to fetch users");
     } finally {
       setLoading(false);
     }
@@ -42,7 +64,7 @@ const UserRoleComponent: React.FC = () => {
   const handleRoleChange = async (id: number, newRole: User["role"]) => {
     setLoading(true);
     try {
-      await axios.patch(`/api/users/updateuser?id=${id}`, { role: newRole }); // Replace with your API endpoint for updating user role
+      await axios.patch(`/api/users/updateuser?id=${id}`, { role: newRole });
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
           user._id === id ? { ...user, role: newRole } : user
@@ -50,21 +72,20 @@ const UserRoleComponent: React.FC = () => {
       );
     } catch (error) {
       console.error(`Failed to update role for user ID ${id}: `, error);
+      setError(`Failed to update role for user`);
     } finally {
       setLoading(false);
     }
   };
+
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
+    setCurrentPage(0);
   };
 
   const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const handlePageClick = (data: { selected: number }) => {
-    setCurrentPage(data.selected);
-  };
 
   const startIndex = currentPage * usersPerPage;
   const currentUsers = filteredUsers.slice(
@@ -72,106 +93,129 @@ const UserRoleComponent: React.FC = () => {
     startIndex + usersPerPage
   );
 
+  const getRoleColor = (role: User["role"]) => {
+    switch (role) {
+      case "Admin":
+        return "error";
+      case "Agent":
+        return "warning";
+      case "User":
+        return "success";
+      default:
+        return "default";
+    }
+  };
+
   return (
-    <div className="overflow-x-auto p-4">
-      {loading && <p className="text-center">Loading...</p>}
-      {error && <p className="text-center text-red-500">{error}</p>}
-      <input
-        type="text"
-        placeholder="Search by name"
+    <Box sx={{ p: 3 }}>
+      {loading && (
+        <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
+          <CircularProgress />
+        </Box>
+      )}
+
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
+
+      <TextField
+        fullWidth
+        variant="outlined"
+        placeholder="Search users by name"
         value={searchTerm}
         onChange={handleSearch}
-        className="mb-4 px-3 py-2 border border-gray-300 rounded-md w-full sm:w-1/2 lg:w-1/3"
+        sx={{ mb: 3, maxWidth: 400 }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon color="action" />
+            </InputAdornment>
+          ),
+        }}
       />
-      <div className="overflow-y-auto overflow-x-auto max-h-screen max-w-80 sm:max-w-full ">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+
+      <TableContainer component={Paper} elevation={2}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold" }}>User Name</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Current Role</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Change Role</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {currentUsers.map((user) => (
+              <TableRow
+                key={user._id}
+                sx={{ "&:hover": { backgroundColor: "grey.50" } }}
               >
-                Name
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                User
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Agent
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Admin
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {users.map((user) => (
-              <tr key={user._id}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {user.name}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <input
-                    type="checkbox"
-                    checked={user.role === "User"}
-                    onChange={() => handleRoleChange(user._id, "User")}
+                <TableCell>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <PersonIcon color="action" />
+                    <Typography variant="body1" fontWeight="medium">
+                      {user.name}
+                    </Typography>
+                  </Box>
+                </TableCell>
+                <TableCell>
+                  <Chip
+                    label={user.role}
+                    color={getRoleColor(user.role)}
+                    variant="filled"
                   />
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <input
-                    type="checkbox"
-                    checked={user.role === "Agent"}
-                    onChange={() => handleRoleChange(user._id, "Agent")}
-                  />
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <input
-                    type="checkbox"
-                    checked={user.role === "Admin"}
-                    onChange={() => handleRoleChange(user._id, "Admin")}
-                  />
-                </td>
-              </tr>
+                </TableCell>
+                <TableCell>
+                  <RadioGroup
+                    row
+                    value={user.role}
+                    onChange={(e) =>
+                      handleRoleChange(user._id, e.target.value as User["role"])
+                    }
+                  >
+                    <FormControlLabel
+                      value="User"
+                      control={<Radio />}
+                      label="User"
+                    />
+                    <FormControlLabel
+                      value="Agent"
+                      control={<Radio />}
+                      label="Agent"
+                    />
+                    <FormControlLabel
+                      value="Admin"
+                      control={<Radio />}
+                      label="Admin"
+                    />
+                  </RadioGroup>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-        <ReactPaginate
-          previousLabel={"Previous"}
-          nextLabel={"Next"}
-          breakLabel={"..."}
-          breakClassName={"break-me"}
-          pageCount={Math.ceil(filteredUsers.length / usersPerPage)}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          onPageChange={handlePageClick}
-          containerClassName={
-            "pagination flex justify-center items-center mt-4"
-          }
-          activeClassName={"active"}
-          pageClassName={"page-item mx-1"}
-          pageLinkClassName={
-            "page-link px-2 py-1 border rounded-md hover:bg-gray-200"
-          }
-          previousClassName={"page-item"}
-          nextClassName={"page-item"}
-          previousLinkClassName={
-            "page-link px-2 py-1 border rounded-md hover:bg-gray-200"
-          }
-          nextLinkClassName={
-            "page-link px-2 py-1 border rounded-md hover:bg-gray-200"
-          }
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {filteredUsers.length === 0 && !loading && (
+        <Box sx={{ textAlign: "center", py: 4 }}>
+          <Typography variant="body1" color="text.secondary">
+            No users found
+          </Typography>
+        </Box>
+      )}
+
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+        <Pagination
+          count={Math.ceil(filteredUsers.length / usersPerPage)}
+          page={currentPage + 1}
+          onChange={(event, page) => setCurrentPage(page - 1)}
+          color="primary"
+          showFirstButton
+          showLastButton
         />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

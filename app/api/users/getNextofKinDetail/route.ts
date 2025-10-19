@@ -6,7 +6,7 @@ import User from "../../../../models/user";
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest) {
   await dbConnect();
 
   const session = await getServerSession(authOptions);

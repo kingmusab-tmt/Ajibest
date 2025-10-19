@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import {
@@ -39,7 +40,7 @@ import {
   Twitter,
   LinkedIn,
 } from "@mui/icons-material";
-import LoadingSpinner from "../generalcomponents/loadingSpinner";
+import LoadingSpinner from "../../components/generalcomponents/loadingSpinner";
 
 const SupportTab: React.FC = () => {
   const { data: session } = useSession();
