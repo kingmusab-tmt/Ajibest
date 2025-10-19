@@ -1,6 +1,6 @@
 import dbConnect from "../../../../utils/connectDB";
 import User from "@/models/user";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { authOptions } from "@/app/auth";
 import { getServerSession } from "next-auth";
 
@@ -147,10 +147,11 @@ export async function GET() {
             listingPurpose: property.listingPurpose,
             paymentMethod: property.paymentMethod,
             initialPayment: property.initialPayment || 0,
-            price: property.price || 0,
+            propertPrice: property.propertyPrice || 0,
             totalPaid: totalPaid,
             remainingBalance:
-              nextPayment?.remainingBalance || property.price - totalPaid,
+              nextPayment?.remainingBalance ||
+              property.propertyPrice - totalPaid,
             nextPaymentDate: nextPayment?.nextPaymentDate,
             nextPaymentAmount: nextPayment?.amount,
             bedrooms: property.bedrooms,
@@ -162,8 +163,8 @@ export async function GET() {
             size: property.size,
             instalmentAllowed: property.instalmentAllowed,
             paymentProgress: {
-              percentage: property.price
-                ? Math.round((totalPaid / property.price) * 100)
+              percentage: property.propertyPrice
+                ? Math.round((totalPaid / property.propertyPrice) * 100)
                 : 0,
               paymentsMade: paymentsMade,
               totalPayments: totalPayments,
@@ -192,7 +193,7 @@ export async function GET() {
         paymentDate: property.paymentDate,
         paymentMethod: property.paymentMethod,
         listingPurpose: property.listingPurpose,
-        price: property.price || 0,
+        propertyPrice: property.propertyPrice || 0,
         bedrooms: property.bedrooms,
         bathrooms: property.bathrooms,
         amenities: property.amenities,
@@ -215,7 +216,7 @@ export async function GET() {
         paymentDate: property.paymentDate,
         paymentMethod: property.paymentMethod,
         listingPurpose: property.listingPurpose,
-        price: property.price || 0,
+        propertyPrice: property.propertyPrice || 0,
         bedrooms: property.bedrooms,
         bathrooms: property.bathrooms,
         amenities: property.amenities,

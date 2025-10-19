@@ -1,7 +1,6 @@
 "use client";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Property } from "@/constants/interface";
 import {
@@ -17,7 +16,6 @@ import {
   Modal,
   InputLabel,
   FormControl,
-  CircularProgress,
   SelectChangeEvent,
   Container,
   Chip,
@@ -50,8 +48,12 @@ import {
   Share,
   Visibility,
   Payment,
+  Shop,
+  LocalPostOffice,
+  BuildCircleOutlined,
 } from "@mui/icons-material";
-import PaymentPage from "./payment";
+import PaymentPage from "@/app/components/userscomponent/payment";
+import LoadingSpinner from "@/app/components/generalcomponents/loadingSpinner";
 
 const priceRanges = [
   { label: "All", min: 0, max: Infinity },
@@ -230,6 +232,12 @@ const PropertyListing = () => {
         return <Landscape />;
       case "farm":
         return <Agriculture />;
+      case "commercial":
+        return <BuildCircleOutlined />;
+      case "office":
+        return <LocalPostOffice />;
+      case "shop":
+        return <Shop />;
       default:
         return <Home />;
     }
@@ -263,27 +271,7 @@ const PropertyListing = () => {
   };
 
   if (loading) {
-    return (
-      <Container
-        maxWidth="lg"
-        sx={{
-          py: 4,
-          textAlign: "center",
-          minHeight: "60vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-        }}
-      >
-        <CircularProgress size={60} thickness={4} />
-        <Typography
-          variant="h6"
-          sx={{ mt: 3, fontSize: { xs: "1.1rem", md: "1.25rem" } }}
-        >
-          Discovering Amazing Properties...
-        </Typography>
-      </Container>
-    );
+    return <LoadingSpinner />;
   }
 
   return (

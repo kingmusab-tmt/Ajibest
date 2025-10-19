@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -15,7 +16,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  CircularProgress,
   Alert,
   IconButton,
   useTheme,
@@ -33,6 +33,7 @@ import {
   ShoppingCart,
   House,
 } from "@mui/icons-material";
+import LoadingSpinner from "@/app/components/generalcomponents/loadingSpinner";
 
 interface DashboardData {
   stats: {
@@ -125,7 +126,7 @@ const AnalyticDashboard = () => {
               {loading
                 ? "..."
                 : formatCurrency
-                ? `₦${(value / 1000).toFixed(1)}K`
+                ? `₦${value.toFixed(2)}`
                 : value.toLocaleString()}
             </Typography>
             {subtitle && (
@@ -181,18 +182,7 @@ const AnalyticDashboard = () => {
   };
 
   if (loading && !dashboardData) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "400px",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
+    return <LoadingSpinner />;
   }
 
   const data = dashboardData || {
@@ -438,7 +428,7 @@ const AnalyticDashboard = () => {
                           {month.month}
                         </Typography>
                         <Typography variant="body2" fontWeight="bold">
-                          ₦{(month.revenue / 1000).toFixed(0)}K
+                          ₦{month.revenue.toFixed(2)}
                         </Typography>
                       </Box>
                     </Grid>

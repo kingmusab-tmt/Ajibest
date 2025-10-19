@@ -5,7 +5,6 @@ import User from "@/models/user";
 import connectDB from "@/utils/connectDB";
 import clientPromise from "@/utils/mongoConnect";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import NextAuth from "next-auth";
 import { NextAuthOptions, SessionStrategy } from "next-auth";
 
 export const authOptions = {
@@ -75,7 +74,7 @@ export const authOptions = {
   },
   callbacks: {
     async redirect({ url, baseUrl }) {
-      return baseUrl + "/userprofile";
+      return baseUrl + "/userDashboard";
     },
 
     async jwt({ token, trigger, session, user }) {

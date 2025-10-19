@@ -2,8 +2,7 @@ import Transaction from "../../../../models/transaction";
 import dbConnect from "@/utils/connectDB";
 import { NextResponse } from "next/server";
 
-
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 export async function PUT(req, res) {
   const body = await req.json();
   const { transactionId, status } = body;
@@ -11,7 +10,7 @@ export async function PUT(req, res) {
   await dbConnect();
 
   try {
-    console.log(status);
+    // console.log(status);
     const transaction = await Transaction.findByIdAndUpdate(
       transactionId,
       { status: status },

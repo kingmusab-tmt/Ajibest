@@ -1,7 +1,34 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, forwardRef } from "react";
 import { createPortal } from "react-dom";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Typography,
+  Box,
+  useTheme,
+  alpha,
+  Slide,
+  Avatar,
+} from "@mui/material";
+import { TransitionProps } from "@mui/material/transitions";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
+import InfoIcon from "@mui/icons-material/Info";
+import WarningIcon from "@mui/icons-material/Warning";
+
+const Transition = forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 interface MessageModalProps {
   isOpen: boolean;
@@ -19,50 +46,128 @@ const MessageModal: FC<MessageModalProps> = ({
   type,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
+  const theme = useTheme();
 
   useEffect(() => {
     setIsMounted(true);
     return () => setIsMounted(false);
   }, []);
 
+  const getTypeConfig = () => {
+    switch (type) {
+      case "success":
+        return {
+          icon: <CheckCircleIcon />,
+          color: theme.palette.success.main,
+          bgColor: alpha(theme.palette.success.main, 0.1),
+        };
+      case "error":
+        return {
+          icon: <ErrorIcon />,
+          color: theme.palette.error.main,
+          bgColor: alpha(theme.palette.error.main, 0.1),
+        };
+      case "info":
+        return {
+          icon: <InfoIcon />,
+          color: theme.palette.info.main,
+          bgColor: alpha(theme.palette.info.main, 0.1),
+        };
+      case "warning":
+        return {
+          icon: <WarningIcon />,
+          color: theme.palette.warning.main,
+          bgColor: alpha(theme.palette.warning.main, 0.1),
+        };
+      default:
+        return {
+          icon: <InfoIcon />,
+          color: theme.palette.primary.main,
+          bgColor: alpha(theme.palette.primary.main, 0.1),
+        };
+    }
+  };
+
+  const typeConfig = getTypeConfig();
+
   if (!isMounted) {
     return null;
   }
 
-  const getBackgroundColor = () => {
-    switch (type) {
-      case "success":
-        return "bg-green-500";
-      case "error":
-        return "bg-red-500";
-      case "info":
-        return "bg-blue-500";
-      case "warning":
-        return "bg-yellow-500";
-      default:
-        return "bg-gray-500";
-    }
-  };
-
   return createPortal(
-    isOpen ? (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="relative bg-white rounded-lg shadow-lg w-full max-w-md mx-auto">
-          <div className={`p-6 rounded-t-lg ${getBackgroundColor()}`}>
-            <h2 className="text-white text-lg font-bold">{title}</h2>
-          </div>
-          <div className="p-6">
-            <p>{message}</p>
-            <button
-              onClick={onClose}
-              className="mt-4 w-full py-2 px-4 bg-gray-800 text-white rounded hover:bg-gray-700"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    ) : null,
+    <Dialog
+      open={isOpen}
+      onClose={onClose}
+      TransitionComponent={Transition}
+      maxWidth="sm"
+      fullWidth
+      sx={{
+        "& .MuiDialog-paper": {
+          borderRadius: 2,
+          boxShadow: theme.shadows[8],
+          backgroundImage: "none",
+        },
+      }}
+    >
+      <DialogContent sx={{ textAlign: "center", padding: theme.spacing(4) }}>
+        <Avatar
+          sx={{
+            backgroundColor: typeConfig.bgColor,
+            color: typeConfig.color,
+            width: 64,
+            height: 64,
+            margin: "0 auto 16px",
+          }}
+        >
+          {typeConfig.icon}
+        </Avatar>
+
+        <DialogTitle
+          sx={{
+            padding: 0,
+            marginBottom: 2,
+            color: theme.palette.text.primary,
+            fontWeight: 600,
+            fontSize: "1.5rem",
+          }}
+        >
+          {title}
+        </DialogTitle>
+
+        <Typography
+          variant="body1"
+          sx={{
+            color: theme.palette.text.secondary,
+            lineHeight: 1.6,
+            marginBottom: 3,
+          }}
+        >
+          {message}
+        </Typography>
+      </DialogContent>
+
+      <DialogActions sx={{ padding: theme.spacing(0, 3, 3, 3) }}>
+        <Button
+          onClick={onClose}
+          variant="contained"
+          sx={{
+            backgroundColor: typeConfig.color,
+            color: theme.palette.getContrastText(typeConfig.color),
+            "&:hover": {
+              backgroundColor: typeConfig.color,
+              filter: "brightness(0.9)",
+            },
+            borderRadius: 1,
+            textTransform: "none",
+            fontWeight: 500,
+            padding: theme.spacing(1, 4),
+            minWidth: 120,
+          }}
+        >
+          Close
+        </Button>
+      </DialogActions>
+    </Dialog>,
     document.body
   );
 };

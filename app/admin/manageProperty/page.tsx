@@ -1,6 +1,30 @@
 "use client";
-import classNames from "classnames";
 import { useState } from "react";
+import {
+  Box,
+  Typography,
+  Paper,
+  Tabs,
+  Tab,
+  AppBar,
+  Toolbar,
+  Chip,
+  Container,
+  useTheme,
+  useMediaQuery,
+  BottomNavigation,
+  BottomNavigationAction,
+  Card,
+  CardContent,
+  alpha,
+} from "@mui/material";
+import {
+  Add as AddIcon,
+  Edit as EditIcon,
+  Link as LinkIcon,
+  Payment as PaymentIcon,
+  AdminPanelSettings as AdminIcon,
+} from "@mui/icons-material";
 import NewProperty from "./createNewProperty";
 import Properties from "./propertylisting";
 import PropertyAssignmentForm from "./PropertyAssignmentForm";
@@ -15,6 +39,9 @@ type Section =
 const ManageProperty: React.FC = () => {
   const [currentSection, setCurrentSection] =
     useState<Section>("Update Property");
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isTablet = useMediaQuery(theme.breakpoints.down("lg"));
 
   const renderSection = () => {
     switch (currentSection) {
@@ -41,121 +68,279 @@ const ManageProperty: React.FC = () => {
   const getSectionIcon = (section: Section) => {
     switch (section) {
       case "Create New Property":
-        return "🏗️";
+        return <AddIcon />;
       case "Update Property":
-        return "📋";
+        return <EditIcon />;
       case "Assign Property":
-        return "🔗";
+        return <LinkIcon />;
       case "Withdrawal Requests":
-        return "💰";
+        return <PaymentIcon />;
       default:
-        return "📄";
+        return <AddIcon />;
     }
   };
 
+  const getTabLabel = (section: Section) => {
+    if (!isMobile) return section;
+
+    // Mobile abbreviations
+    switch (section) {
+      case "Create New Property":
+        return "Create";
+      case "Update Property":
+        return "Update";
+      case "Assign Property":
+        return "Assign";
+      case "Withdrawal Requests":
+        return "Withdrawals";
+      default:
+        return section;
+    }
+  };
+
+  // Desktop Tabs Component
+  const DesktopTabs = () => (
+    <Paper
+      sx={{
+        borderRadius: 2,
+        mb: 3,
+        background: theme.palette.background.paper,
+        border: `1px solid ${theme.palette.divider}`,
+      }}
+    >
+      <Tabs
+        value={currentSection}
+        onChange={(_, newValue) => setCurrentSection(newValue)}
+        variant="scrollable"
+        scrollButtons="auto"
+        sx={{
+          minHeight: 72,
+          "& .MuiTab-root": {
+            minHeight: 72,
+            fontSize: { xs: "0.75rem", sm: "0.875rem" },
+            fontWeight: 600,
+            textTransform: "none",
+            borderRadius: 2,
+            mx: 0.5,
+            my: 1,
+            transition: "all 0.2s ease-in-out",
+            "&:hover": {
+              transform: "translateY(-1px)",
+              backgroundColor: alpha(theme.palette.primary.main, 0.08),
+            },
+          },
+          "& .Mui-selected": {
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.primary.contrastText,
+            boxShadow: theme.shadows[4],
+            "&:hover": {
+              backgroundColor: theme.palette.primary.dark,
+            },
+          },
+        }}
+      >
+        {sections.map((section) => (
+          <Tab
+            key={section}
+            value={section}
+            label={
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                {getSectionIcon(section)}
+                <span>{getTabLabel(section)}</span>
+              </Box>
+            }
+          />
+        ))}
+      </Tabs>
+    </Paper>
+  );
+
+  // Mobile Bottom Navigation
+  const MobileBottomNav = () => (
+    <BottomNavigation
+      value={currentSection}
+      onChange={(_, newValue) => setCurrentSection(newValue)}
+      sx={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: theme.zIndex.appBar,
+        backgroundColor: theme.palette.background.paper,
+        borderTop: `1px solid ${theme.palette.divider}`,
+        height: 70,
+      }}
+    >
+      {sections.map((section) => (
+        <BottomNavigationAction
+          key={section}
+          value={section}
+          label={getTabLabel(section)}
+          icon={getSectionIcon(section)}
+          sx={{
+            minWidth: "auto",
+            padding: "8px 12px",
+            "& .MuiBottomNavigationAction-label": {
+              fontSize: "0.75rem",
+              fontWeight: 600,
+              transition: "all 0.2s ease-in-out",
+            },
+            "&.Mui-selected": {
+              color: theme.palette.primary.main,
+              "& .MuiBottomNavigationAction-label": {
+                fontSize: "0.8rem",
+                fontWeight: 700,
+              },
+            },
+          }}
+        />
+      ))}
+    </BottomNavigation>
+  );
+
   return (
-    <div className="min-h-screen bg-gray-50/30">
+    <Box
+      sx={{
+        minHeight: "100vh",
+        backgroundColor: theme.palette.background.default,
+        pb: isMobile ? 10 : 0, // Add padding for mobile bottom nav
+      }}
+    >
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-                Property Management
-              </h1>
-              <p className="mt-1 text-sm text-gray-600">
-                Manage properties, assignments, and withdrawal requests
-              </p>
-            </div>
-            <div className="hidden sm:block">
-              <div className="bg-blue-50 px-3 py-1 rounded-full">
-                <span className="text-sm font-medium text-blue-700">
-                  Admin Panel
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <AppBar
+        position="static"
+        color="transparent"
+        elevation={0}
+        sx={{
+          backgroundColor: theme.palette.background.paper,
+          borderBottom: `1px solid ${theme.palette.divider}`,
+        }}
+      >
+        <Toolbar>
+          <Container maxWidth="xl" sx={{ py: 2 }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: { xs: "flex-start", sm: "center" },
+                flexDirection: { xs: "column", sm: "row" },
+                gap: 2,
+              }}
+            >
+              <Box>
+                <Typography
+                  variant="h4"
+                  component="h1"
+                  sx={{
+                    fontWeight: 700,
+                    fontSize: { xs: "1.5rem", sm: "2rem", lg: "2.5rem" },
+                    color: theme.palette.text.primary,
+                    background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                    backgroundClip: "text",
+                    WebkitBackgroundClip: "text",
+                  }}
+                >
+                  Property Management
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: theme.palette.text.secondary,
+                    mt: 1,
+                    fontSize: { xs: "0.875rem", sm: "1rem" },
+                  }}
+                >
+                  Manage properties, assignments, and withdrawal requests
+                </Typography>
+              </Box>
 
-      {/* Navigation */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-1 py-4 overflow-x-auto scrollbar-hide">
-            {sections.map((section) => (
-              <button
-                key={section}
-                onClick={() => setCurrentSection(section)}
-                className={classNames(
-                  "flex items-center space-x-2 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap min-w-max",
-                  "hover:scale-105 transform",
-                  {
-                    "bg-blue-600 text-white shadow-lg shadow-blue-500/25":
-                      currentSection === section,
-                    "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200":
-                      currentSection !== section,
-                  }
-                )}
-              >
-                <span className="text-base">{getSectionIcon(section)}</span>
-                <span className="hidden sm:inline">{section}</span>
-                <span className="sm:hidden">
-                  {section
-                    .split(" ")
-                    .map((word) => word[0])
-                    .join("")}
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
+              <Chip
+                icon={<AdminIcon />}
+                label="Admin Panel"
+                variant="filled"
+                color="primary"
+                sx={{
+                  px: 1,
+                  py: 2,
+                  fontSize: "0.875rem",
+                  fontWeight: 600,
+                  "& .MuiChip-icon": {
+                    color: "inherit",
+                  },
+                }}
+              />
+            </Box>
+          </Container>
+        </Toolbar>
+      </AppBar>
 
-      {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-6">
-          <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
+      {/* Navigation & Content */}
+      <Container maxWidth="xl" sx={{ py: 3 }}>
+        {/* Desktop Navigation */}
+        {!isMobile && <DesktopTabs />}
+
+        {/* Content Header */}
+        <Box sx={{ mb: 4 }}>
+          <Typography
+            variant="h5"
+            component="h2"
+            sx={{
+              fontWeight: 600,
+              fontSize: { xs: "1.25rem", sm: "1.5rem", lg: "1.75rem" },
+              color: theme.palette.text.primary,
+              mb: 1,
+            }}
+          >
             {currentSection}
-          </h2>
-          <div className="mt-2 w-12 h-1 bg-blue-600 rounded-full"></div>
-        </div>
+          </Typography>
+          <Box
+            sx={{
+              width: 60,
+              height: 4,
+              background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+              borderRadius: 2,
+            }}
+          />
+        </Box>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="p-4 sm:p-6 lg:p-8">
-            <div className="transition-all duration-300 ease-in-out transform">
+        {/* Content */}
+        <Card
+          sx={{
+            borderRadius: 3,
+            boxShadow: theme.shadows[2],
+            border: `1px solid ${theme.palette.divider}`,
+            background: theme.palette.background.paper,
+            transition: "all 0.3s ease-in-out",
+            "&:hover": {
+              boxShadow: theme.shadows[6],
+            },
+            overflow: "hidden",
+          }}
+        >
+          <CardContent
+            sx={{
+              p: { xs: 2, sm: 3, lg: 4 },
+              "&:last-child": { pb: { xs: 2, sm: 3, lg: 4 } },
+            }}
+          >
+            <Box
+              sx={{
+                transition: "all 0.3s ease-in-out",
+                transform: "translateY(0)",
+                "&:hover": {
+                  transform: "translateY(-2px)",
+                },
+              }}
+            >
               {renderSection()}
-            </div>
-          </div>
-        </div>
-      </div>
+            </Box>
+          </CardContent>
+        </Card>
+      </Container>
 
       {/* Mobile Bottom Navigation */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-2">
-        <div className="flex justify-around">
-          {sections.map((section) => (
-            <button
-              key={section}
-              onClick={() => setCurrentSection(section)}
-              className={classNames(
-                "flex flex-col items-center p-2 rounded-lg text-xs transition-all duration-200 min-w-0 flex-1 mx-1",
-                {
-                  "bg-blue-50 text-blue-600": currentSection === section,
-                  "text-gray-600": currentSection !== section,
-                }
-              )}
-            >
-              <span className="text-lg mb-1">{getSectionIcon(section)}</span>
-              <span className="text-xs font-medium truncate w-full text-center">
-                {section.split(" ")[0]}
-              </span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Add padding for mobile bottom nav */}
-      <div className="sm:hidden h-20"></div>
-    </div>
+      {isMobile && <MobileBottomNav />}
+    </Box>
   );
 };
 

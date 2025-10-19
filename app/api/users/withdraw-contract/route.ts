@@ -1,8 +1,8 @@
-// app/api/withdraw-contract/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import User from "@/models/user";
 import dbConnect from "@/utils/connectDB";
+import mongoose from "mongoose";
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
     if (propertyIndex === -1) {
       return NextResponse.json(
-        { error: "Property not found" },
+        { error: "Property not found in your ongoing payments" },
         { status: 404 }
       );
     }
@@ -45,30 +45,97 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Mark property as withdrawn
-    user.propertyUnderPayment[propertyIndex].isWithdrawn = true;
-    user.propertyUnderPayment[propertyIndex].isWithdrawnApproved = false;
-
-    // Create withdrawn property record
+    // Create withdrawn property record with all available data
     const withdrawnProperty = {
-      ...property,
+      // Basic property information
+      title: property.title || "",
+      description: property.description || "",
+      location: property.location || "",
+      image: property.image || "",
+      userEmail: property.userEmail || userEmail,
+      propertyId: property.propertyId,
+      propertyType: property.propertyType,
+      listingPurpose: property.listingPurpose,
+      paymentMethod: property.paymentMethod,
+
+      // Financial information
+      initialPayment: property.initialPayment || 0,
+      price: property.propertyPrice || 0,
+
+      // Property details
+      bedrooms: property.bedrooms,
+      bathrooms: property.bathrooms,
+      amenities: property.amenities || "",
+      utilities: property.utilities || "",
+      plotNumber: property.plotNumber || "",
+      city: property.city || "",
+      size: property.size,
+      instalmentAllowed: property.instalmentAllowed || false,
+
+      // Payment history
+      paymentHistory: property.paymentHistory || [],
+
+      // Withdrawal information
       withdrawnDate: new Date(),
+      isWithdrawn: true,
       isWithdrawnApproved: false,
-      withdrawalReason,
-      approvedAt: property.approvedAt ?? new Date(),
-      approvedBy: property.approvedBy ?? "",
+      withdrawalReason: withdrawalReason || "",
+      approvedAt: property.approvedAt || null,
+      approvedBy: property.approvedBy || "",
     };
 
-    // Remove from propertyUnderPayment and add to propertyWithdrawn
-    user.propertyUnderPayment.splice(propertyIndex, 1);
-    user.propertyWithdrawn.push(withdrawnProperty);
+    // Update user's financial totals
+    const totalPaidForProperty =
+      property.paymentHistory?.reduce(
+        (total: number, payment: any) => total + (payment.amount || 0),
+        0
+      ) || 0;
 
-    await user.save();
+    const newTotalPaymentMade = Math.max(
+      0,
+      user.totalPaymentMade - totalPaidForProperty
+    );
+    const newTotalPaymentToBeMade = Math.max(
+      0,
+      user.totalPaymentToBeMade - (property.propertyPrice || 0)
+    );
+    const newRemainingBalance = Math.max(
+      0,
+      newTotalPaymentToBeMade - newTotalPaymentMade
+    );
+    const newTotalPropertyPurchased = Math.max(
+      0,
+      user.totalPropertyPurchased - 1
+    );
+
+    // Update user document
+    await User.findByIdAndUpdate(user._id, {
+      $set: {
+        totalPaymentMade: newTotalPaymentMade,
+        totalPaymentToBeMade: newTotalPaymentToBeMade,
+        remainingBalance: newRemainingBalance,
+        totalPropertyPurchased: newTotalPropertyPurchased,
+      },
+      $pull: {
+        propertyUnderPayment: {
+          propertyId: new mongoose.Types.ObjectId(propertyId),
+        },
+      },
+      $push: {
+        propertyWithdrawn: withdrawnProperty,
+      },
+    });
 
     return NextResponse.json(
       {
         message: "Withdrawal request submitted successfully",
         property: withdrawnProperty,
+        financialUpdate: {
+          totalPaymentMade: newTotalPaymentMade,
+          totalPaymentToBeMade: newTotalPaymentToBeMade,
+          remainingBalance: newRemainingBalance,
+          totalPropertyPurchased: newTotalPropertyPurchased,
+        },
       },
       { status: 200 }
     );

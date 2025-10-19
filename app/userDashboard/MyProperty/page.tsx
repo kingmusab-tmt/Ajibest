@@ -36,23 +36,16 @@ import { useRouter } from "next/navigation";
 import PropertyDetail from "./propertydetail";
 import {
   Home,
-  CalendarToday,
   Payments,
   Visibility,
   CheckCircle,
   Schedule,
-  AccountBalanceWallet,
-  ArrowForward,
-  Favorite,
-  Share,
   LocationOn,
   SquareFoot,
-  Bed,
-  Bathroom,
   Cancel,
   ExitToApp,
 } from "@mui/icons-material";
-import LoadingSpinner from "../generalcomponents/loadingSpinner";
+import LoadingSpinner from "@/app/components/generalcomponents/loadingSpinner";
 
 interface paymentHistory {
   paymentDate: Date;
@@ -152,6 +145,7 @@ const MyProperty = () => {
   );
   const [withdrawalReason, setWithdrawalReason] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [withdrawLoading, setWithdrawLoading] = useState<boolean>(false); // New loading state for withdrawal
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -162,7 +156,7 @@ const MyProperty = () => {
             "Cache-Control": "no-store",
           },
         });
-        console.log(response.data.user);
+        // console.log(response.data.user);
         setUserData(response.data.user);
       } catch (error) {
         setError("Error fetching user properties");
@@ -195,9 +189,27 @@ const MyProperty = () => {
         paymentMethod: property.paymentMethod,
         listingPurpose: property.listingPurpose,
       };
-      const response = await axios.post("/api/verifyTransaction", data);
+      const response = await axios.post(
+        "/api/verifyTransaction/subsequent-payment",
+        data
+      );
       if (response.status === 200) {
-        router.push("/userprofile");
+        // Close the payment modal
+        setOpen(false);
+        setSelectedProperty(null);
+        setAmount(null);
+
+        // Refresh user data
+        const userResponse = await axios.get("/api/users/userproperty", {
+          headers: {
+            "Cache-Control": "no-store",
+          },
+        });
+        setUserData(userResponse.data.user);
+
+        setSuccessMessage(
+          "Payment successful! Your properties have been updated."
+        );
       } else {
         setError("Transaction Failed. Please try again.");
       }
@@ -211,6 +223,8 @@ const MyProperty = () => {
       setError("Please provide a reason for withdrawal");
       return;
     }
+
+    setWithdrawLoading(true); // Start loading
 
     try {
       const response = await axios.post("/api/users/withdraw-contract", {
@@ -237,6 +251,8 @@ const MyProperty = () => {
       }
     } catch (error: any) {
       setError(error.response?.data?.error || "Error withdrawing contract");
+    } finally {
+      setWithdrawLoading(false); // End loading regardless of success or error
     }
   };
 
@@ -259,7 +275,7 @@ const MyProperty = () => {
     },
     text: "Pay Now",
     onSuccess: ({ reference }) => handleSuccess(reference, property),
-    onClose: () => console.log("Payment closed"),
+    // onClose: () =>  console.log("Payment closed"),
   });
 
   const handleClickOpen = (property: Property) => {
@@ -1179,9 +1195,10 @@ const MyProperty = () => {
           <DialogContentText
             sx={{ mb: 2, fontSize: { xs: "0.9rem", md: "1rem" } }}
           >
-            Are you sure you want to withdraw from{" "}
-            <strong>{withdrawProperty?.title}</strong>? This action will
-            initiate a refund process and requires admin approval.
+            Are you sure you want to withdraw from Paying your installmental
+            payment for plot Number <strong>{withdrawProperty?.title}</strong>?
+            This action will initiate a refund process and requires admin
+            approval.
           </DialogContentText>
 
           <TextField
@@ -1211,7 +1228,7 @@ const MyProperty = () => {
                 • Your withdrawal request will be reviewed by admin
               </Typography>
               <Typography variant="body2" sx={{ mb: 1 }}>
-                • Refunds may take 3-5 business days after approval
+                • You would be paid back according to your payment history and
               </Typography>
               <Typography variant="body2">
                 • You cannot make further payments once withdrawal is requested
@@ -1235,10 +1252,10 @@ const MyProperty = () => {
             color="error"
             size={isMobile ? "medium" : "large"}
             startIcon={<ExitToApp />}
-            disabled={!withdrawalReason.trim()}
+            disabled={!withdrawalReason.trim() || withdrawLoading}
             sx={{ borderRadius: 2 }}
           >
-            Confirm Withdrawal
+            {withdrawLoading ? <LoadingSpinner /> : "Confirm Withdrawal"}
           </Button>
         </DialogActions>
       </Dialog>

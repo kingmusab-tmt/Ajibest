@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Carousel from "react-material-ui-carousel";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
@@ -9,25 +8,23 @@ import {
   CardMedia,
   CardContent,
   Typography,
-  Button,
   Box,
   Grid,
   Chip,
-  Rating,
-  IconButton,
-  Alert,
   Skeleton,
   useTheme,
-  useMediaQuery,
   Container,
-  Paper,
+  alpha,
+  Fade,
+  Zoom,
 } from "@mui/material";
 import {
-  LocationOn,
+  CheckCircle,
+  Cancel,
+  SquareFoot,
   Hotel,
   Bathtub,
-  SquareFoot,
-  Visibility,
+  LocationOn,
 } from "@mui/icons-material";
 
 interface IProperty {
@@ -46,8 +43,14 @@ interface IProperty {
   utilities?: string;
   purchased: boolean;
   rented: boolean;
+  status: string;
   size?: string;
   rating?: number;
+  plotNumber?: string;
+  instalmentAllowed?: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }
 
 interface ApiResponse {
@@ -57,16 +60,17 @@ interface ApiResponse {
   message?: string;
 }
 
+// Base64 placeholder image as fallback
+const PLACEHOLDER_IMAGE =
+  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xMjUgODBDMTI1IDcyLjM4NjEgMTMxLjM4NiA2NiAxMzkgNjZDMTQ2LjYxNCA2NiAxNTMgNzIuMzg2MSAxNTMgODBDMTUzIDg3LjYxMzkgMTQ2LjYxNCA5NCAxMzkgOTRDMTMxLjM4NiA5NCAxMjUgODcuNjEzOSAxMjUgODBaIiBmaWxsPSIjOEU5MEEyIi8+CjxwYXRoIGQ9Ik0xMDAgMTM1SDE4MEMxODMuODYgMTM1IDE4NyAxMzEuODYgMTg3IDEyOFY5OEMxODcgOTQuMTM5OCAxODMuODYgOTEgMTgwIDkxSDEwMEM5Ni4xMzk4IDkxIDkzIDk0LjEzOTggOTMgOThWMTI4QzkzIDEzMS44NiA5Ni4xMzk4IDEzNSAxMDAgMTM1WiIgZmlsbD0iIzhFOTBBMiIvPgo8cmVjdCB4PSIxMzAiIHk9IjEwMSIgd2lkdGg9IjE4IiBoZWlnaHQ9IjI0IiByeD0iMiIgZmlsbD0iI0YzRjRGNiIvPgo8L3N2Zz4K";
+
 const FeaturedProperties: React.FC = () => {
   const { data: session } = useSession();
   const [properties, setProperties] = useState<IProperty[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const theme = useTheme();
   const router = useRouter();
-
-  const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
-  const isMediumScreen = useMediaQuery(theme.breakpoints.up("md"));
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     fetchProperties();
@@ -79,51 +83,56 @@ const FeaturedProperties: React.FC = () => {
         "/api/property/getproperties"
       );
 
-      if (response.data.success) {
-        setProperties(response.data.data);
-        // setIsFallback(response.data.isFallback || false);
-
-        // if (response.data.isFallback) {
-        //   setError(response.data.message || "Using demo properties");
-        // }
+      if (response.data.success && response.data.data) {
+        // Filter to only show available properties and limit to 8 for gallery
+        const availableProperties = response.data.data
+          .filter((property) => property.status === "available")
+          .slice(0, 8);
+        setProperties(availableProperties);
       } else {
         throw new Error("Failed to fetch properties");
       }
     } catch (err) {
-      // setError("Failed to load properties. Showing demo properties.");
-      // setIsFallback(true);
-      // Use fallback from component if API fails completely
+      console.error("Error fetching properties:", err);
+      // Use fallback data
       setProperties([
         {
           _id: "1",
-          title: "Luxury Villa in Lekki",
+          title: "Modern Luxury Villa",
           description: "Beautiful 5-bedroom villa with modern amenities",
           location: "Lekki, Lagos",
-          image: "/images/ajibest1ca30fa2-a97f-4d72-bf2e-14c6345c455a.jpeg",
+          image: PLACEHOLDER_IMAGE,
           propertyType: "House",
           price: 85000000,
           listingPurpose: "For Sale",
           bedrooms: 5,
           bathrooms: 4,
-          amenities: "Pool, Gym, Garden",
           purchased: false,
           rented: false,
+          status: "available",
           size: "4500 sq ft",
-          rating: 4.8,
+          instalmentAllowed: true,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          __v: 0,
         },
         {
           _id: "2",
-          title: "Commercial Farm Land",
+          title: "Premium Farm Land",
           description: "Prime agricultural land for large-scale farming",
           location: "Ogun State",
-          image: "/images/ajibest1cff1055-ae88-4327-b05f-37c14084e1f7.jpeg",
+          image: PLACEHOLDER_IMAGE,
           propertyType: "Land",
           price: 25000000,
           listingPurpose: "For Sale",
           purchased: false,
           rented: false,
+          status: "available",
           size: "10 acres",
-          rating: 4.5,
+          instalmentAllowed: false,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          __v: 0,
         },
       ]);
     } finally {
@@ -132,386 +141,485 @@ const FeaturedProperties: React.FC = () => {
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("en-NG", {
-      style: "currency",
-      currency: "NGN",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
-
-  const getItemsPerSlide = () => {
-    if (isLargeScreen) return 4;
-    if (isMediumScreen) return 3;
-    if (isSmallScreen) return 1;
-    return 2;
-  };
-
-  const getSlides = (
-    properties: IProperty[],
-    itemsPerSlide: number
-  ): IProperty[][] => {
-    const slides: IProperty[][] = [];
-    for (let i = 0; i < properties.length; i += itemsPerSlide) {
-      slides.push(properties.slice(i, i + itemsPerSlide));
+    if (price >= 1000000) {
+      return `₦${(price / 1000000).toFixed(1)}M`;
+    } else if (price >= 1000) {
+      return `₦${(price / 1000).toFixed(1)}K`;
     }
-    return slides;
+    return `₦${price}`;
   };
 
-  const isUrl = (str: string) => {
-    try {
-      new URL(str);
-      return true;
-    } catch {
-      return false;
-    }
+  const getImageUrl = (imagePath: string): string => {
+    if (!imagePath) return PLACEHOLDER_IMAGE;
+    if (imagePath.startsWith("http")) return imagePath;
+    if (imagePath.startsWith("/")) return imagePath;
+    return PLACEHOLDER_IMAGE;
   };
 
   if (loading) {
-    return <LoadingSkeleton />;
+    return <GallerySkeleton />;
   }
 
   return (
-    <Container
-      maxWidth="xl"
-      sx={{ py: { xs: 4, md: 8 }, px: { xs: 2, sm: 3 } }}
+    <Box
+      sx={{
+        background: `linear-gradient(135deg, ${alpha(
+          theme.palette.primary.main,
+          0.02
+        )} 0%, ${alpha(theme.palette.secondary.main, 0.02)} 100%)`,
+        py: { xs: 6, md: 10 },
+        position: "relative",
+        overflow: "hidden",
+      }}
     >
-      {/* Header */}
-      <Box sx={{ textAlign: "center", mb: { xs: 4, md: 6 } }}>
-        <Typography
-          variant="h3"
-          component="h2"
-          sx={{
-            fontWeight: "bold",
-            color: "primary.main",
-            mb: 2,
-            fontSize: { xs: "2rem", md: "2.5rem" },
-          }}
-          id="featured-properties"
-        >
-          Featured Properties
-        </Typography>
-        <Typography
-          variant="h6"
-          sx={{
-            color: "text.secondary",
-            maxWidth: 600,
-            mx: "auto",
-          }}
-        >
-          Discover our exclusive selection of premium properties
-        </Typography>
-      </Box>
+      {/* Background Decoration */}
+      <Box
+        sx={{
+          position: "absolute",
+          top: -100,
+          right: -100,
+          width: 300,
+          height: 300,
+          borderRadius: "50%",
+          background: `radial-gradient(circle, ${alpha(
+            theme.palette.primary.main,
+            0.1
+          )} 0%, transparent 70%)`,
+          zIndex: 0,
+        }}
+      />
 
-      {/* {error && (
-        <Alert severity="info" sx={{ mb: 4, mx: "auto", maxWidth: 600 }}>
-          {error}
-        </Alert>
-      )} */}
+      <Container maxWidth="xl">
+        {/* Gallery Header */}
+        <Box
+          sx={{ textAlign: "center", mb: 8, position: "relative", zIndex: 1 }}
+        >
+          <Fade in timeout={1000}>
+            <Typography
+              variant="h2"
+              component="h2"
+              sx={{
+                fontWeight: "bold",
+                background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                color: "transparent",
+                mb: 2,
+                fontSize: { xs: "2.5rem", md: "3.5rem" },
+              }}
+            >
+              Featured Properties
+            </Typography>
+          </Fade>
+          <Fade in timeout={1200}>
+            <Typography
+              variant="h6"
+              sx={{
+                color: "text.secondary",
+                maxWidth: 600,
+                mx: "auto",
+                fontSize: { xs: "1rem", md: "1.25rem" },
+              }}
+            >
+              Discover our curated collection of premium properties
+            </Typography>
+          </Fade>
+        </Box>
 
-      {properties.length === 0 ? (
-        <Box sx={{ textAlign: "center", py: 8 }}>
-          <Typography variant="h6" color="text.secondary">
-            No properties available at the moment
-          </Typography>
-        </Box>
-      ) : (
-        <Box sx={{ position: "relative" }}>
-          <Carousel
-            animation="slide"
-            autoPlay
-            interval={6000}
-            indicators={true}
-            navButtonsAlwaysVisible={isMediumScreen}
-            cycleNavigation={true}
-            fullHeightHover={false}
-            sx={{
-              "& .Carousel-indicators": {
-                bottom: -40,
-              },
-            }}
-          >
-            {getSlides(properties, getItemsPerSlide()).map((slide, index) => (
-              <Grid container spacing={3} key={index} justifyContent="center">
-                {slide.map((property) => (
-                  <Grid item xs={12} sm={6} md={4} lg={3} key={property._id}>
-                    <PropertyCard
-                      property={property}
-                      onViewDetails={() => {
-                        if (!session) {
-                          router.push("/login");
-                        } else {
-                          router.push(`/properties/${property._id}`);
-                        }
-                      }}
-                      session={session}
-                      isUrl={isUrl}
-                      formatPrice={formatPrice}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            ))}
-          </Carousel>
-        </Box>
-      )}
-    </Container>
+        {properties.length === 0 ? (
+          <Box sx={{ textAlign: "center", py: 8 }}>
+            <Typography variant="h6" color="text.secondary">
+              No properties available at the moment
+            </Typography>
+          </Box>
+        ) : (
+          <Zoom in timeout={800}>
+            <Grid container spacing={3} justifyContent="center">
+              {properties.map((property, index) => (
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  lg={3}
+                  key={property._id}
+                  sx={{
+                    transition: "transform 0.3s ease-in-out",
+                    "&:hover": {
+                      transform: "translateY(-8px)",
+                    },
+                  }}
+                >
+                  <PropertyCard
+                    property={property}
+                    getImageUrl={getImageUrl}
+                    formatPrice={formatPrice}
+                    isHovered={hoveredCard === property._id}
+                    onHover={(isHovering) =>
+                      setHoveredCard(isHovering ? property._id : null)
+                    }
+                    animationDelay={index * 100}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </Zoom>
+        )}
+      </Container>
+    </Box>
   );
 };
 
 interface PropertyCardProps {
   property: IProperty;
-  onViewDetails: () => void;
-  session: any;
-  isUrl: (str: string) => boolean;
+  getImageUrl: (imagePath: string) => string;
   formatPrice: (price: number) => string;
+  isHovered: boolean;
+  onHover: (isHovering: boolean) => void;
+  animationDelay: number;
 }
 
 const PropertyCard: React.FC<PropertyCardProps> = ({
   property,
-  onViewDetails,
-  session,
-  isUrl,
+  getImageUrl,
   formatPrice,
+  isHovered,
+  onHover,
+  animationDelay,
 }) => {
   const theme = useTheme();
+  const [imageError, setImageError] = useState(false);
+
+  const isAvailable =
+    property.status === "available" && !property.purchased && !property.rented;
 
   return (
-    <Card
-      sx={{
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
-        "&:hover": {
-          transform: "translateY(-4px)",
-          boxShadow: theme.shadows[8],
-        },
-        position: "relative",
-      }}
-    >
-      {/* Favorite Button */}
-      <IconButton
+    <Fade in timeout={800} style={{ transitionDelay: `${animationDelay}ms` }}>
+      <Card
+        onMouseEnter={() => onHover(true)}
+        onMouseLeave={() => onHover(false)}
         sx={{
-          position: "absolute",
-          top: 8,
-          right: 8,
-          zIndex: 10,
-          backgroundColor: "rgba(255, 255, 255, 0.9)",
-          "&:hover": {
-            backgroundColor: "rgba(255, 255, 255, 1)",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          cursor: "pointer",
+          transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+          border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+          background: "white",
+          borderRadius: 4,
+          overflow: "hidden",
+          boxShadow: isHovered ? theme.shadows[8] : theme.shadows[2],
+          transform: isHovered
+            ? "translateY(-8px) scale(1.02)"
+            : "translateY(0) scale(1)",
+          "&:before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 4,
+            background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+            zIndex: 2,
           },
         }}
-      ></IconButton>
-
-      {/* Property Image */}
-      <Box sx={{ position: "relative" }}>
-        <CardMedia
-          component="img"
-          height="240"
-          image={
-            isUrl(property.image)
-              ? property.image
-              : `/uploads/${property.image}`
-          }
-          alt={property.title}
-          sx={{
-            objectFit: "cover",
-            height: 240,
-          }}
-        />
-
-        {/* Property Type Badge */}
-        <Chip
-          label={property.propertyType}
-          color="primary"
-          size="small"
-          sx={{
-            position: "absolute",
-            top: 12,
-            left: 12,
-            backgroundColor: "primary.main",
-            color: "white",
-            fontWeight: "bold",
-          }}
-        />
-
-        {/* Listing Purpose Badge */}
-        <Chip
-          label={property.listingPurpose}
-          color={property.listingPurpose === "For Sale" ? "success" : "info"}
-          size="small"
-          sx={{
-            position: "absolute",
-            top: 12,
-            right: 12,
-            color: "white",
-            fontWeight: "bold",
-          }}
-        />
-      </Box>
-
-      <CardContent sx={{ flexGrow: 1, p: 3 }}>
-        {/* Title and Rating */}
-        <Box sx={{ mb: 2 }}>
-          <Typography
-            variant="h6"
-            component="h3"
+        onClick={() => {
+          // router.push(`/properties/${property._id}`);
+        }}
+      >
+        {/* Property Image with Overlay */}
+        <Box sx={{ position: "relative", height: 240, overflow: "hidden" }}>
+          <CardMedia
+            component="img"
+            image={imageError ? PLACEHOLDER_IMAGE : getImageUrl(property.image)}
+            alt={property.title}
             sx={{
-              fontWeight: "bold",
-              mb: 1,
-              lineHeight: 1.3,
-              height: "2.6em",
-              overflow: "hidden",
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
+              height: "100%",
+              objectFit: "cover",
+              transition: "transform 0.4s ease-in-out",
+              transform: isHovered ? "scale(1.1)" : "scale(1)",
+            }}
+            onError={() => setImageError(true)}
+          />
+
+          {/* Gradient Overlay */}
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: isHovered
+                ? `linear-gradient(to bottom, ${alpha(
+                    theme.palette.common.black,
+                    0.2
+                  )} 0%, ${alpha(theme.palette.common.black, 0.6)} 100%)`
+                : `linear-gradient(to bottom, transparent 0%, ${alpha(
+                    theme.palette.common.black,
+                    0.3
+                  )} 100%)`,
+              transition: "all 0.3s ease-in-out",
+            }}
+          />
+
+          {/* Top Badges */}
+          <Box
+            sx={{
+              position: "absolute",
+              top: 12,
+              left: 12,
+              right: 12,
+              display: "flex",
+              justifyContent: "space-between",
             }}
           >
-            {property.title}
-          </Typography>
+            <Chip
+              label={property.propertyType}
+              size="small"
+              sx={{
+                backgroundColor: alpha(theme.palette.primary.main, 0.9),
+                color: "white",
+                fontWeight: "bold",
+                fontSize: "0.75rem",
+              }}
+            />
+            <Chip
+              icon={isAvailable ? <CheckCircle /> : <Cancel />}
+              label={isAvailable ? "Available" : "Sold"}
+              color={isAvailable ? "success" : "error"}
+              size="small"
+              sx={{
+                fontWeight: "bold",
+                fontSize: "0.75rem",
+              }}
+            />
+          </Box>
 
-          {property.rating && (
+          {/* Bottom Info Overlay */}
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              p: 2,
+              color: "white",
+              transform: isHovered ? "translateY(0)" : "translateY(8px)",
+              opacity: isHovered ? 1 : 0.9,
+              transition: "all 0.3s ease-in-out",
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: "bold",
+                fontSize: "1.1rem",
+                mb: 0.5,
+                textShadow: "1px 1px 3px rgba(0,0,0,0.5)",
+              }}
+            >
+              {property.title}
+            </Typography>
             <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-              <Rating value={property.rating} size="small" readOnly />
-              <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
-                {property.rating}
+              <LocationOn sx={{ fontSize: 16, mr: 0.5 }} />
+              <Typography
+                variant="body2"
+                sx={{
+                  fontSize: "0.8rem",
+                  textShadow: "1px 1px 2px rgba(0,0,0,0.5)",
+                }}
+              >
+                {property.location}
               </Typography>
             </Box>
-          )}
+          </Box>
         </Box>
 
-        {/* Location */}
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-          <LocationOn sx={{ fontSize: 18, color: "text.secondary", mr: 0.5 }} />
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {property.location}
-          </Typography>
-        </Box>
-
-        {/* Features */}
-        <Grid container spacing={1} sx={{ mb: 2 }}>
-          {property.bedrooms && (
-            <Grid item xs={4}>
-              <Box sx={{ textAlign: "center" }}>
-                <Hotel sx={{ fontSize: 20, color: "primary.main" }} />
-                <Typography variant="body2" color="text.secondary">
-                  {property.bedrooms} Bed
-                </Typography>
-              </Box>
-            </Grid>
-          )}
-          {property.bathrooms && (
-            <Grid item xs={4}>
-              <Box sx={{ textAlign: "center" }}>
-                <Bathtub sx={{ fontSize: 20, color: "primary.main" }} />
-                <Typography variant="body2" color="text.secondary">
-                  {property.bathrooms} Bath
-                </Typography>
-              </Box>
-            </Grid>
-          )}
-          {property.size && (
-            <Grid item xs={4}>
-              <Box sx={{ textAlign: "center" }}>
-                <SquareFoot sx={{ fontSize: 20, color: "primary.main" }} />
-                <Typography variant="body2" color="text.secondary">
-                  {property.size}
-                </Typography>
-              </Box>
-            </Grid>
-          )}
-        </Grid>
-
-        {/* Price */}
-        <Typography
-          variant="h5"
-          color="primary"
+        {/* Card Content */}
+        <CardContent
           sx={{
-            fontWeight: "bold",
-            mb: 2,
-            textAlign: "center",
+            flexGrow: 1,
+            p: 2.5,
+            background: `linear-gradient(135deg, ${
+              theme.palette.background.paper
+            } 0%, ${alpha(theme.palette.background.default, 0.8)} 100%)`,
           }}
         >
-          {formatPrice(property.price)}
-          {property.listingPurpose === "For Renting" && "/month"}
-        </Typography>
+          {/* Price - Featured */}
+          <Box sx={{ textAlign: "center", mb: 2 }}>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: "bold",
+                background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                color: "transparent",
+                lineHeight: 1.2,
+              }}
+            >
+              {formatPrice(property.price)}
+            </Typography>
+            <Typography
+              variant="caption"
+              sx={{
+                color: "text.secondary",
+                fontWeight: "medium",
+                fontSize: "0.8rem",
+              }}
+            >
+              {property.listingPurpose}
+            </Typography>
+          </Box>
 
-        {/* Action Button */}
-        <Button
-          variant="contained"
-          fullWidth
-          size="large"
-          startIcon={<Visibility />}
-          onClick={onViewDetails}
-          disabled={property.purchased || property.rented}
-          sx={{
-            py: 1.5,
-            fontWeight: "bold",
-            borderRadius: 2,
-          }}
-        >
-          {property.purchased || property.rented
-            ? "Not Available"
-            : "View Details"}
-        </Button>
-      </CardContent>
-    </Card>
+          {/* Features Grid */}
+          <Grid container spacing={1} sx={{ mb: 2 }}>
+            {property.bedrooms && (
+              <Grid item xs={4}>
+                <Box sx={{ textAlign: "center" }}>
+                  <Hotel
+                    sx={{ fontSize: 20, color: "primary.main", mb: 0.5 }}
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{ fontWeight: "bold", color: "text.primary" }}
+                  >
+                    {property.bedrooms} Bed
+                  </Typography>
+                </Box>
+              </Grid>
+            )}
+            {property.bathrooms && (
+              <Grid item xs={4}>
+                <Box sx={{ textAlign: "center" }}>
+                  <Bathtub
+                    sx={{ fontSize: 20, color: "primary.main", mb: 0.5 }}
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{ fontWeight: "bold", color: "text.primary" }}
+                  >
+                    {property.bathrooms} Bath
+                  </Typography>
+                </Box>
+              </Grid>
+            )}
+            {property.size && (
+              <Grid item xs={4}>
+                <Box sx={{ textAlign: "center" }}>
+                  <SquareFoot
+                    sx={{ fontSize: 20, color: "primary.main", mb: 0.5 }}
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{ fontWeight: "bold", color: "text.primary" }}
+                  >
+                    {property.size}
+                  </Typography>
+                </Box>
+              </Grid>
+            )}
+          </Grid>
+
+          {/* Additional Badges */}
+          <Box sx={{ display: "flex", justifyContent: "center", gap: 1 }}>
+            {property.instalmentAllowed && (
+              <Chip
+                label="Installment Available"
+                size="small"
+                color="success"
+                variant="outlined"
+                sx={{ fontSize: "0.7rem", fontWeight: "bold" }}
+              />
+            )}
+            {property.plotNumber && (
+              <Chip
+                label={`Plot ${property.plotNumber}`}
+                size="small"
+                color="primary"
+                variant="outlined"
+                sx={{ fontSize: "0.7rem", fontWeight: "bold" }}
+              />
+            )}
+          </Box>
+        </CardContent>
+      </Card>
+    </Fade>
   );
 };
 
-const LoadingSkeleton = () => {
-  const items = Array.from({ length: 4 }, (_, i) => i);
-
+const GallerySkeleton = () => {
   return (
-    <Container
-      maxWidth="xl"
-      sx={{ py: { xs: 4, md: 8 }, px: { xs: 2, sm: 3 } }}
+    <Box
+      sx={{
+        background: `linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)`,
+        py: { xs: 6, md: 10 },
+      }}
     >
-      <Box sx={{ textAlign: "center", mb: 6 }}>
-        <Skeleton
-          variant="text"
-          width={300}
-          height={60}
-          sx={{ mx: "auto", mb: 2 }}
-        />
-        <Skeleton variant="text" width={400} height={30} sx={{ mx: "auto" }} />
-      </Box>
+      <Container maxWidth="xl">
+        <Box sx={{ textAlign: "center", mb: 8 }}>
+          <Skeleton
+            variant="text"
+            width={300}
+            height={80}
+            sx={{ mx: "auto", mb: 2 }}
+          />
+          <Skeleton
+            variant="text"
+            width={400}
+            height={40}
+            sx={{ mx: "auto" }}
+          />
+        </Box>
 
-      <Grid container spacing={3}>
-        {items.map((item) => (
-          <Grid item xs={12} sm={6} md={3} key={item}>
-            <Card sx={{ height: "100%" }}>
-              <Skeleton variant="rectangular" height={240} />
-              <CardContent>
-                <Skeleton variant="text" height={40} />
-                <Skeleton variant="text" height={20} width="60%" />
-                <Skeleton variant="text" height={20} width="40%" />
-                <Skeleton
-                  variant="text"
-                  height={30}
-                  width="80%"
-                  sx={{ mt: 2 }}
-                />
-                <Skeleton
-                  variant="rectangular"
-                  height={40}
-                  sx={{ mt: 2, borderRadius: 2 }}
-                />
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
+        <Grid container spacing={3} justifyContent="center">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <Grid item xs={12} sm={6} lg={3} key={index}>
+              <Card
+                sx={{
+                  height: "100%",
+                  borderRadius: 4,
+                  overflow: "hidden",
+                  boxShadow: 2,
+                }}
+              >
+                <Skeleton variant="rectangular" height={240} />
+                <CardContent sx={{ p: 2.5 }}>
+                  <Skeleton
+                    variant="text"
+                    height={40}
+                    sx={{ mb: 2, mx: "auto", width: "80%" }}
+                  />
+                  <Skeleton
+                    variant="text"
+                    height={20}
+                    width="60%"
+                    sx={{ mx: "auto", mb: 2 }}
+                  />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      mb: 2,
+                    }}
+                  >
+                    <Skeleton variant="circular" width={40} height={40} />
+                    <Skeleton variant="circular" width={40} height={40} />
+                    <Skeleton variant="circular" width={40} height={40} />
+                  </Box>
+                  <Skeleton
+                    variant="text"
+                    height={30}
+                    width="80%"
+                    sx={{ mx: "auto" }}
+                  />
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </Box>
   );
 };
 

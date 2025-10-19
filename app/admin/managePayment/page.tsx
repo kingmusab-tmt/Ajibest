@@ -1,59 +1,3 @@
-// "use client";
-// import classNames from "classnames";
-// import { useState } from "react";
-// import AdminPayment from "./adminpayment";
-
-// type Section =
-//   // | "Verify User Payment"
-//   "Make Payment for User";
-// // | "Update User Payments";
-
-// const ManagePayments: React.FC = () => {
-//   const [currentSection, setCurrentSection] = useState<Section>(
-//     "Make Payment for User"
-//   );
-
-//   const renderSection = () => {
-//     switch (currentSection) {
-//       // case "Verify User Payment":
-//       //   return <p>Payment</p>;
-//       case "Make Payment for User":
-//         return <AdminPayment />;
-//       // case "Update User Payments":
-//       //   return <p>Payment</p>;
-//       default:
-//         return null;
-//     }
-//   };
-
-//   return (
-//     <div className="p-2">
-//       <nav className="mb-6">
-//         {["Make Payment for User"].map((section) => (
-//           <button
-//             key={section}
-//             onClick={() => setCurrentSection(section as Section)}
-//             className={classNames(
-//               "px-4 py-2 rounded-md mr-2",
-//               {
-//                 "bg-blue-500 text-white": currentSection === section,
-//                 "bg-gray-200 text-gray-700": currentSection !== section,
-//               },
-//               "transition-colors duration-300"
-//             )}
-//           >
-//             {section}
-//           </button>
-//         ))}
-//       </nav>
-//       <div className="transition-opacity duration-500 ease-in-out">
-//         {renderSection()}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ManagePayments;
 "use client";
 import React, { useState } from "react";
 import {
@@ -135,21 +79,6 @@ const ManagePayments: React.FC = () => {
       description: "Process payments on behalf of users",
       badge: "Active",
     },
-    // Uncomment and add more tabs when needed:
-    // {
-    //   label: "Verify User Payment",
-    //   icon: <VerifyIcon />,
-    //   content: <p>Payment Verification Content</p>,
-    //   description: "Verify and validate user payments",
-    //   badge: "Coming Soon"
-    // },
-    // {
-    //   label: "Update User Payments",
-    //   icon: <UpdateIcon />,
-    //   content: <p>Payment Update Content</p>,
-    //   description: "Modify existing payment records",
-    //   badge: "Coming Soon"
-    // }
   ];
 
   return (
@@ -164,42 +93,6 @@ const ManagePayments: React.FC = () => {
       }}
     >
       <Container maxWidth="xl">
-        {/* Header */}
-        <Card
-          sx={{
-            mb: 4,
-            background:
-              theme.palette.mode === "dark"
-                ? "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)"
-                : "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-            color: "white",
-            borderRadius: 3,
-            boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
-          }}
-        >
-          <CardContent sx={{ p: 4, "&:last-child": { pb: 4 } }}>
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-              <PaymentIcon sx={{ fontSize: 32, mr: 2 }} />
-              <Box>
-                <Typography variant="h4" component="h1" fontWeight="bold">
-                  Payment Management
-                </Typography>
-                <Typography variant="subtitle1" sx={{ opacity: 0.9 }}>
-                  Manage user payments and transactions
-                </Typography>
-              </Box>
-            </Box>
-            <Chip
-              label="Admin Panel"
-              sx={{
-                background: "rgba(255,255,255,0.2)",
-                color: "white",
-                backdropFilter: "blur(10px)",
-              }}
-            />
-          </CardContent>
-        </Card>
-
         {/* Navigation and Content */}
         <Box
           sx={{
@@ -275,43 +168,6 @@ const ManagePayments: React.FC = () => {
                   ))}
                 </Tabs>
               </Paper>
-
-              {/* Stats Card */}
-              <Card sx={{ mt: 3, borderRadius: 3 }}>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>
-                    Quick Stats
-                  </Typography>
-                  <Box
-                    sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-                  >
-                    <Box
-                      sx={{ display: "flex", justifyContent: "space-between" }}
-                    >
-                      <Typography variant="body2" color="textSecondary">
-                        Active Payments
-                      </Typography>
-                      <Chip label="24" size="small" color="primary" />
-                    </Box>
-                    <Box
-                      sx={{ display: "flex", justifyContent: "space-between" }}
-                    >
-                      <Typography variant="body2" color="textSecondary">
-                        Pending
-                      </Typography>
-                      <Chip label="8" size="small" color="warning" />
-                    </Box>
-                    <Box
-                      sx={{ display: "flex", justifyContent: "space-between" }}
-                    >
-                      <Typography variant="body2" color="textSecondary">
-                        Completed
-                      </Typography>
-                      <Chip label="156" size="small" color="success" />
-                    </Box>
-                  </Box>
-                </CardContent>
-              </Card>
             </Box>
           )}
 

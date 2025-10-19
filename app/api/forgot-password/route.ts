@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
           </div>
         `,
       });
-      console.log("OTP email sent to:", email);
+      // console.log("OTP email sent to:", email);
     } catch (emailError) {
       console.error("Failed to send email:", emailError);
       // Still return success to prevent email enumeration

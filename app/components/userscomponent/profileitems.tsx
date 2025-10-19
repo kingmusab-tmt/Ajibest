@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { User } from "@/types/usertypes";
 import { useSession } from "next-auth/react";
 import {
   Container,
@@ -268,12 +267,12 @@ const UserInfo: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="xl" sx={{ py: 2, px: { xs: 1, sm: 2 } }}>
+    <Container maxWidth="xs" sx={{ py: 1, px: { xs: 1, sm: 2 } }}>
       {/* Header Section */}
       <Paper
         elevation={0}
         sx={{
-          p: { xs: 2, md: 4 },
+          p: { xs: 1, md: 2 },
           mb: 3,
           background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
           color: "white",
@@ -325,6 +324,10 @@ const UserInfo: React.FC = () => {
                 }
                 size="small"
                 variant="outlined"
+                sx={{
+                  backgroundColor: "white",
+                  color: theme.palette.primary.main,
+                }}
               />
               <Typography
                 variant="body2"
@@ -365,7 +368,7 @@ const UserInfo: React.FC = () => {
                   variant="h6"
                   fontWeight="bold"
                   gutterBottom
-                  sx={{ fontSize: { xs: "0.9rem", md: "1.25rem" } }}
+                  sx={{ fontSize: { xs: "0.7rem", md: "1.0rem" } }}
                 >
                   {stat.format === "currency"
                     ? formatter.format(stat.value as number)
@@ -719,22 +722,7 @@ const UserInfo: React.FC = () => {
                                 variant="outlined"
                               />
                             </Box>
-                            <LinearProgress
-                              variant="determinate"
-                              value={property.paymentProgress.percentage}
-                              sx={{
-                                height: 8,
-                                borderRadius: 4,
-                                mb: 1,
-                                backgroundColor: alpha(
-                                  theme.palette.warning.main,
-                                  0.2
-                                ),
-                                "& .MuiLinearProgress-bar": {
-                                  backgroundColor: theme.palette.warning.main,
-                                },
-                              }}
-                            />
+
                             <Box
                               sx={{
                                 display: "flex",
@@ -743,9 +731,9 @@ const UserInfo: React.FC = () => {
                                 mb: 1,
                               }}
                             >
-                              <Typography variant="body2">
+                              {/* <Typography variant="body2">
                                 Paid: {formatter.format(property.totalPaid)}
-                              </Typography>
+                              </Typography> */}
                               <Typography variant="body2">
                                 Remaining:{" "}
                                 {formatter.format(property.remainingBalance)}
@@ -769,7 +757,7 @@ const UserInfo: React.FC = () => {
                                 </Typography>
                               </Box>
                             )}
-                            <Button
+                            {/* <Button
                               variant="outlined"
                               size="small"
                               fullWidth
@@ -777,7 +765,7 @@ const UserInfo: React.FC = () => {
                               startIcon={<Payment />}
                             >
                               Continue Payment
-                            </Button>
+                            </Button> */}
                           </Paper>
                         )
                       )}
@@ -899,7 +887,7 @@ const UserInfo: React.FC = () => {
                                 {formatDate(property.paymentDate)}
                               </Typography>
                             </Box>
-                            <Button
+                            {/* <Button
                               variant="contained"
                               size="small"
                               fullWidth
@@ -907,7 +895,7 @@ const UserInfo: React.FC = () => {
                               startIcon={<Home />}
                             >
                               View Property
-                            </Button>
+                            </Button> */}
                           </Paper>
                         )
                       )}

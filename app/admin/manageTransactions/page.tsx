@@ -85,47 +85,6 @@ const ManageTransactions: React.FC = () => {
       badge: "Live",
       color: "#1976d2",
     },
-    // Uncomment and add more tabs when needed:
-    // {
-    //   label: "One Time Payments",
-    //   icon: <PaymentIcon />,
-    //   content: <TransactionHistory filter="one-time" />,
-    //   description: "Single payment transactions",
-    //   badge: "24",
-    //   color: "#2e7d32"
-    // },
-    // {
-    //   label: "Installment Payments",
-    //   icon: <CreditCardIcon />,
-    //   content: <TransactionHistory filter="installment" />,
-    //   description: "Payment plans and installments",
-    //   badge: "156",
-    //   color: "#ed6c02"
-    // },
-    // {
-    //   label: "Rent Transactions",
-    //   icon: <HouseIcon />,
-    //   content: <TransactionHistory filter="rent" />,
-    //   description: "Rental property payments",
-    //   badge: "89",
-    //   color: "#9c27b0"
-    // },
-    // {
-    //   label: "User Summaries",
-    //   icon: <PeopleIcon />,
-    //   content: <TransactionHistory filter="summary" />,
-    //   description: "User transaction overviews",
-    //   badge: "1.2K",
-    //   color: "#0288d1"
-    // },
-    // {
-    //   label: "Gateway Transactions",
-    //   icon: <AccountBalanceIcon />,
-    //   content: <TransactionHistory filter="gateway" />,
-    //   description: "Payment gateway records",
-    //   badge: "2.8K",
-    //   color: "#d32f2f"
-    // }
   ];
 
   // Mock transaction stats
@@ -252,79 +211,6 @@ const ManageTransactions: React.FC = () => {
                   ))}
                 </Tabs>
               </Paper>
-
-              {/* Quick Actions Card */}
-              <Card sx={{ mt: 3, borderRadius: 3 }}>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>
-                    Quick Actions
-                  </Typography>
-                  <Box
-                    sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}
-                  >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 2,
-                        p: 1.5,
-                        borderRadius: 2,
-                        "&:hover": { bgcolor: "action.hover" },
-                      }}
-                    >
-                      <Download color="primary" />
-                      <Box>
-                        <Typography variant="body2" fontWeight="medium">
-                          Export Report
-                        </Typography>
-                        <Typography variant="caption" color="textSecondary">
-                          Download transaction data
-                        </Typography>
-                      </Box>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 2,
-                        p: 1.5,
-                        borderRadius: 2,
-                        "&:hover": { bgcolor: "action.hover" },
-                      }}
-                    >
-                      <FilterList color="primary" />
-                      <Box>
-                        <Typography variant="body2" fontWeight="medium">
-                          Advanced Filters
-                        </Typography>
-                        <Typography variant="caption" color="textSecondary">
-                          Custom date ranges & status
-                        </Typography>
-                      </Box>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 2,
-                        p: 1.5,
-                        borderRadius: 2,
-                        "&:hover": { bgcolor: "action.hover" },
-                      }}
-                    >
-                      <Refresh color="primary" />
-                      <Box>
-                        <Typography variant="body2" fontWeight="medium">
-                          Refresh Data
-                        </Typography>
-                        <Typography variant="caption" color="textSecondary">
-                          Sync latest transactions
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </Box>
-                </CardContent>
-              </Card>
             </Box>
           )}
 

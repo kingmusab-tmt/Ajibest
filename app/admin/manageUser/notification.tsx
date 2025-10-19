@@ -124,7 +124,7 @@ const NotificationForm = () => {
 
       if (phoneNumbers) {
         const smsResponse = await sendSMS(phoneNumbers, message);
-        console.log(smsResponse);
+        // console.log(smsResponse);
         if (!smsResponse.success) {
           throw new Error(smsResponse.message);
         } else {
@@ -132,7 +132,7 @@ const NotificationForm = () => {
         }
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setError("Sending SMS Failed");
     } finally {
       setLoading(false);
@@ -216,7 +216,7 @@ const NotificationForm = () => {
       setNotifications(notifications.filter((n) => n._id !== id));
     } catch (error) {
       // setError(error.message);
-      console.log(error);
+      // console.log(error);
     }
   };
 

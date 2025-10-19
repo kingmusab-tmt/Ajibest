@@ -30,214 +30,179 @@ export async function POST(req) {
         success: false,
       });
     }
-    const property = await Property.findOne({ propertyId });
+
+    // console.log("propertyId:", propertyId);
+
+    // Find property
+    let property;
+    if (mongoose.Types.ObjectId.isValid(propertyId)) {
+      property = await Property.findById(propertyId);
+    } else {
+      property = await Property.findOne({ propertyId: propertyId });
+    }
+
     if (!property) {
       return Response.json({
         message: "Property not found",
         status: 404,
         success: false,
       });
-      // } else if (property.rented === true || property.purchased === true) {
-      //   return Response.json({
-      //     message: "Property Sold/Rented already",
-      //     status: 200,
-      //     success: false,
-      //   });
     }
 
     const transactionId = uuidv4();
     const referenceId = reference || uuidv4();
 
-    if (propertyPrice) {
-      // New transaction
-      const transaction = await Transaction.create({
-        userName: user?.name,
-        email,
-        transactionId,
-        referenceId,
-        userId: user?._id,
-        title: property?.title,
-        propertyId,
-        propertyType,
-        paymentType: "automatic",
-        paymentMethod,
-        propertyPrice,
-        listingPurpose,
-        amount,
-        status: "pending",
+    // Create transaction record
+    const transaction = await Transaction.create({
+      userName: user.name,
+      email,
+      transactionId,
+      referenceId,
+      userId: user._id,
+      title: property.title,
+      propertyId: property._id,
+      propertyType,
+      paymentType: "automatic",
+      paymentMethod,
+      propertyPrice: propertyPrice || property.price,
+      listingPurpose,
+      amount,
+      status: "pending", // Changed to completed since payment was successful
+    });
+
+    // Check if this is a new purchase or subsequent payment
+    const existingPropertyUnderPayment = user.propertyUnderPayment.find(
+      (p) => p.propertyId.toString() === property._id.toString()
+    );
+
+    const existingPropertyPurOrRented = user.propertyPurOrRented.find(
+      (p) => p.propertyId.toString() === property._id.toString()
+    );
+
+    // If property already exists in either array, this is a subsequent payment
+    if (existingPropertyUnderPayment || existingPropertyPurOrRented) {
+      return Response.json({
+        message: "Property already purchased or under payment",
+        status: 400,
+        success: false,
       });
+    }
 
-      await transaction.save();
-
-      const propertyUpdate =
-        listingPurpose === "For Renting"
-          ? { rented: true }
-          : { purchased: true };
-      await Property.findByIdAndUpdate(propertyId, propertyUpdate);
-
-      const newTotalPaymentMade = user?.totalPaymentMade + amount;
-      const newTotalPaymentToBeMade =
-        user?.totalPaymentToBeMade + propertyPrice;
-
-      if (paymentMethod === "payOnce") {
-        await User.findByIdAndUpdate(user?._id, {
-          $inc: { totalPropertyPurchased: 1 },
-          $set: {
-            totalPaymentMade: newTotalPaymentMade,
-            totalPaymentToBeMade: newTotalPaymentToBeMade,
-            remainingBalance: newTotalPaymentToBeMade - newTotalPaymentMade,
-          },
-          $push: {
-            propertyPurOrRented: {
-              title: property.title,
-              userEmail: email,
-              propertyId: propertyId,
-              paymentDate: Date.now(),
-              propertyType,
-              paymentType: "automatic",
-              paymentMethod,
-              listingPurpose,
-              propertyPrice,
-            },
-          },
-        });
-      } else if (paymentMethod === "installment") {
-        await User.findByIdAndUpdate(user._id, {
-          $inc: { totalPropertyPurchased: 1 },
-          $set: {
-            totalPaymentMade: newTotalPaymentMade,
-            totalPaymentToBeMade: newTotalPaymentToBeMade,
-            remainingBalance: newTotalPaymentToBeMade - newTotalPaymentMade,
-          },
-          $push: {
-            propertyUnderPayment: {
-              title: property.title,
-              userEmail: email,
-              propertyId: propertyId,
-              propertyType,
-              paymentMethod,
-              paymentType: "automatic",
-              listingPurpose,
-              initialPayment: amount,
-              paymentHistory: [
-                {
-                  paymentDate: Date.now(),
-                  nextPaymentDate: new Date(
-                    Date.now() + 30 * 24 * 60 * 60 * 1000
-                  ),
-                  amount,
-                  propertyPrice,
-                  totalPaymentMade: amount,
-                  remainingBalance: propertyPrice - amount,
-                  paymentCompleted: false,
-                },
-              ],
-            },
-          },
-        });
-      }
-    } else {
-      // Subsequent payment
-      const transaction = await Transaction.create({
-        userName: user.name,
-        email,
-        transactionId,
-        referenceId,
-        userId: user._id,
-        title: property.title,
-        propertyId,
-        propertyType,
-        paymentType: "automatic",
-        paymentMethod,
-        listingPurpose,
-        amount,
-        status: "pending",
-      });
-
-      await transaction.save();
-
-      const userProperty = user.propertyUnderPayment.find(
-        (p) => p.propertyId.toString() === propertyId
-      );
-
-      const totalPaymentMadeForProperty =
-        userProperty?.paymentHistory.reduce(
-          (acc, payment) => acc + payment.amount,
-          0
-        ) + amount;
-
-      const remainingBalanceForProperty =
-        userProperty &&
-        userProperty.paymentHistory &&
-        userProperty.paymentHistory[0]
-          ? userProperty.paymentHistory[0].propertyPrice -
-            totalPaymentMadeForProperty
-          : 0;
-
-      // const remainingBalanceForProperty =
-      //   userProperty.paymentHistory[0].propertyPrice -
-      //   totalPaymentMadeForProperty;
-
-      userProperty?.paymentHistory.push({
-        paymentDate: new Date(Date.now()),
-        nextPaymentDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-        amount,
-        propertyPrice: userProperty.paymentHistory[0].propertyPrice,
-        totalPaymentMade: totalPaymentMadeForProperty,
-        remainingBalance: remainingBalanceForProperty,
-        paymentCompleted: remainingBalanceForProperty === 0,
-      });
-
+    // NEW PURCHASE - First time buying this property
+    if (paymentMethod === "payOnce") {
+      // Pay Once - Full payment
       const newTotalPaymentMade = user.totalPaymentMade + amount;
-      const newRemainingBalance =
-        user.totalPaymentToBeMade - newTotalPaymentMade;
+      const newTotalPaymentsGross = user.totalPaymentsGross + propertyPrice;
+      const newTotalPaymentToBeMade =
+        newTotalPaymentsGross - newTotalPaymentMade;
 
-      await User.findByIdAndUpdate(
-        user._id,
-        {
-          $set: {
-            totalPaymentMade: newTotalPaymentMade,
-            remainingBalance: newRemainingBalance,
-            "propertyUnderPayment.$[elem].paymentHistory":
-              userProperty?.paymentHistory,
-            "propertyUnderPayment.$[elem].paymentCompleted":
-              remainingBalanceForProperty === 0,
+      await User.findByIdAndUpdate(user._id, {
+        $inc: { totalPropertyPurchased: 1 },
+        $set: {
+          totalPaymentsGross: newTotalPaymentsGross,
+          totalPaymentMade: newTotalPaymentMade,
+          totalPaymentToBeMade: newTotalPaymentToBeMade,
+          remainingBalance: newTotalPaymentToBeMade,
+        },
+        $push: {
+          propertyPurOrRented: {
+            propertyId: property._id,
+            title: property.title,
+            description: property.description,
+            location: property.location,
+            image: property.image,
+            propertyType,
+            listingPurpose,
+            paymentMethod,
+            propertyPrice: propertyPrice,
+            bedrooms: property.bedrooms,
+            bathrooms: property.bathrooms,
+            amenities: property.amenities,
+            utilities: property.utilities,
+            plotNumber: property.plotNumber,
+            city: property.city,
+            size: property.size,
+            userEmail: email,
+            paymentDate: new Date(),
+            rentalDuration: property.rentalDuration,
+            instalmentAllowed: property.instalmentAllowed,
           },
         },
-        {
-          arrayFilters: [
-            { "elem.propertyId": new mongoose.Types.ObjectId(propertyId) },
-          ],
-        }
-      );
+      });
 
-      if (remainingBalanceForProperty === 0) {
-        await User.findByIdAndUpdate(user._id, {
-          $push: {
-            propertyPurOrRented: {
-              title: property.title,
-              propertyId: propertyId,
-              paymentDate: Date.now(),
-              propertyType,
-              paymentType: "automatic",
-              paymentMethod,
-              listingPurpose,
-              propertyPrice: userProperty?.paymentHistory[0].propertyPrice,
-            },
+      // Update property status
+      const propertyUpdate =
+        listingPurpose === "For Renting"
+          ? { rented: true, rentedBy: user._id }
+          : { purchased: true, purchasedBy: user._id };
+
+      await Property.findByIdAndUpdate(property._id, propertyUpdate);
+    } else if (paymentMethod === "installment") {
+      // Installment Payment - First payment
+      const newTotalPaymentMade = user.totalPaymentMade + amount;
+      const newTotalPaymentsGross = user.totalPaymentsGross + propertyPrice;
+      const newTotalPaymentToBeMade =
+        newTotalPaymentsGross - newTotalPaymentMade;
+
+      const nextPaymentDate = new Date();
+      nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 1);
+
+      await User.findByIdAndUpdate(user._id, {
+        $inc: { totalPropertyPurchased: 1 },
+        $set: {
+          totalPaymentsGross: newTotalPaymentsGross,
+          totalPaymentMade: newTotalPaymentMade,
+          totalPaymentToBeMade: newTotalPaymentToBeMade,
+          remainingBalance: newTotalPaymentToBeMade,
+        },
+        $push: {
+          propertyUnderPayment: {
+            propertyId: property._id,
+            title: property.title,
+            description: property.description,
+            location: property.location,
+            image: property.image,
+            propertyType,
+            listingPurpose,
+            paymentMethod,
+            initialPayment: amount,
+            propertyPrice: propertyPrice,
+            bedrooms: property.bedrooms,
+            bathrooms: property.bathrooms,
+            amenities: property.amenities,
+            utilities: property.utilities,
+            plotNumber: property.plotNumber,
+            city: property.city,
+            size: property.size,
+            userEmail: email,
+            instalmentAllowed: true,
+            paymentHistory: [
+              {
+                paymentDate: new Date(),
+                nextPaymentDate: nextPaymentDate,
+                amount: amount,
+                propertyPrice: propertyPrice,
+                totalPaymentMade: amount,
+                remainingBalance: propertyPrice - amount,
+                paymentCompleted: false,
+              },
+            ],
           },
-          $pull: {
-            propertyUnderPayment: {
-              propertyId: new mongoose.Types.ObjectId(propertyId),
-            },
-          },
-        });
-      }
+        },
+      });
+
+      // Update property status to indicate it's under payment
+      await Property.findByIdAndUpdate(property._id, {
+        underPayment: true,
+        underPaymentBy: user._id,
+      });
     }
 
     return Response.json({
       message: "Transaction successful",
       status: 200,
       success: true,
+      transactionId: transaction._id,
     });
   } catch (error) {
     console.error("Error in transaction:", error);

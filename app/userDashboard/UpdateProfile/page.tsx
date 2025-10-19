@@ -14,7 +14,7 @@ import {
 import PersonalInformation from "./userprofile";
 import BankAccountDetail from "./userBankdetail";
 import NextOfKinDetail from "./nextOfkin";
-import ChangePassword from "../generalcomponents/updatepassword";
+import ChangePassword from "./updatepassword";
 
 type Section =
   | "Personal Information"

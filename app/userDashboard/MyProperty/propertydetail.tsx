@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import {
   Dialog,
@@ -29,7 +30,7 @@ import {
   Cancel,
   Visibility,
 } from "@mui/icons-material";
-import LoadingSpinner from "../generalcomponents/loadingSpinner";
+import LoadingSpinner from "../../components/generalcomponents/loadingSpinner";
 
 interface PropertyDetailProps {
   open: boolean;
@@ -418,7 +419,7 @@ const PropertyDetail: React.FC<PropertyDetailProps> = ({
             sx={{ minWidth: 120 }}
             onClick={() => {
               // Add your inquiry/contact logic here
-              console.log("Contact about property:", propertyData.title);
+              // console.log("Contact about property:", propertyData.title);
             }}
           >
             Contact Agent

@@ -1,7 +1,4 @@
-// models/subscription.ts
-
 import mongoose, { Schema, Document, Model } from "mongoose";
-// import dbConnect from "../utils/connectDB";
 
 interface ISubscription extends Document {
   endpoint: string;

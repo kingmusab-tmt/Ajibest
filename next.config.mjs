@@ -7,9 +7,9 @@ const nextConfig = {
   //   lastModified: false,
   // },
 
-  experimental: {
-    serverExternalPackages: ["mongodb"],
-  },
+  // experimental: {
+  //   serverExternalPackages: ["mongodb"],
+  // },
 
   images: {
     remotePatterns: [

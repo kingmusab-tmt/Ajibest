@@ -25,6 +25,7 @@ import {
   Logout as LogoutIcon,
   CreditCard as CreditCardIcon,
   Adjust as AdjustIcon,
+  MoneyOffCsredSharp,
 } from "@mui/icons-material";
 
 interface User {
@@ -74,11 +75,16 @@ const UserDashboardSidebar: React.FC<UserDashboardSidebarProps> = ({
       component: "ManagePayments",
     },
     {
+      icon: <MoneyOffCsredSharp />,
+      label: "Manage Refund Requests",
+      component: "RefundRequestsAdminPage",
+    },
+    {
       icon: <AdjustIcon />,
       label: "Manage Web Content",
       component: "ManageWebContent",
     },
-    { icon: <PersonIcon />, label: "Profile", component: "UpdateProfile" },
+    // { icon: <PersonIcon />, label: "Profile", component: "UpdateProfile" },
   ];
 
   const drawerContent = (

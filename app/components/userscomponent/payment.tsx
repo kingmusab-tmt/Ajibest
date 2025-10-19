@@ -166,7 +166,7 @@ const PaymentPage = ({
         setSuccess(true);
         setTimeout(() => {
           onClose();
-          router.push("/userprofile");
+          router.push("/userDashboard");
         }, 2000);
       } else {
         throw new Error("Transaction verification failed");
