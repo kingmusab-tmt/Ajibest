@@ -15,6 +15,8 @@ interface ITransaction extends Document {
   amount: number;
   status: "pending" | "successful" | "failed" | "canceled";
   paymentType: "automatic" | "manual";
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const transactionSchema = new Schema<ITransaction>(

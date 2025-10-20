@@ -29,10 +29,15 @@ import {
   Tab,
   Avatar,
   LinearProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
 } from "@mui/material";
 import { PaystackButton } from "react-paystack";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import PropertyDetail from "./propertydetail";
 import {
   Home,
@@ -44,6 +49,7 @@ import {
   SquareFoot,
   Cancel,
   ExitToApp,
+  History,
 } from "@mui/icons-material";
 import LoadingSpinner from "@/app/components/generalcomponents/loadingSpinner";
 
@@ -119,10 +125,8 @@ function TabPanel(props: TabPanelProps) {
 }
 
 const MyProperty = () => {
-  const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const isSmallMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [userProperties, setUserProperties] = useState<UserProperties | null>(
     null
@@ -145,7 +149,10 @@ const MyProperty = () => {
   );
   const [withdrawalReason, setWithdrawalReason] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [withdrawLoading, setWithdrawLoading] = useState<boolean>(false); // New loading state for withdrawal
+  const [withdrawLoading, setWithdrawLoading] = useState<boolean>(false);
+  const [paymentHistoryOpen, setPaymentHistoryOpen] = useState<boolean>(false);
+  const [paymentHistoryProperty, setPaymentHistoryProperty] =
+    useState<Property | null>(null);
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -156,7 +163,6 @@ const MyProperty = () => {
             "Cache-Control": "no-store",
           },
         });
-        // console.log(response.data.user);
         setUserData(response.data.user);
       } catch (error) {
         setError("Error fetching user properties");
@@ -194,12 +200,10 @@ const MyProperty = () => {
         data
       );
       if (response.status === 200) {
-        // Close the payment modal
         setOpen(false);
         setSelectedProperty(null);
         setAmount(null);
 
-        // Refresh user data
         const userResponse = await axios.get("/api/users/userproperty", {
           headers: {
             "Cache-Control": "no-store",
@@ -224,7 +228,7 @@ const MyProperty = () => {
       return;
     }
 
-    setWithdrawLoading(true); // Start loading
+    setWithdrawLoading(true);
 
     try {
       const response = await axios.post("/api/users/withdraw-contract", {
@@ -241,7 +245,6 @@ const MyProperty = () => {
         setWithdrawalReason("");
         setWithdrawProperty(null);
 
-        // Refresh user data
         const userResponse = await axios.get("/api/users/userproperty", {
           headers: {
             "Cache-Control": "no-store",
@@ -252,8 +255,18 @@ const MyProperty = () => {
     } catch (error: any) {
       setError(error.response?.data?.error || "Error withdrawing contract");
     } finally {
-      setWithdrawLoading(false); // End loading regardless of success or error
+      setWithdrawLoading(false);
     }
+  };
+
+  const handlePaymentHistoryOpen = (property: Property) => {
+    setPaymentHistoryProperty(property);
+    setPaymentHistoryOpen(true);
+  };
+
+  const handlePaymentHistoryClose = () => {
+    setPaymentHistoryOpen(false);
+    setPaymentHistoryProperty(null);
   };
 
   const config = (property: Property, amount: number) => ({
@@ -275,7 +288,6 @@ const MyProperty = () => {
     },
     text: "Pay Now",
     onSuccess: ({ reference }) => handleSuccess(reference, property),
-    // onClose: () =>  console.log("Payment closed"),
   });
 
   const handleClickOpen = (property: Property) => {
@@ -338,6 +350,16 @@ const MyProperty = () => {
     });
   };
 
+  const formatDateTime = (date: Date | string) => {
+    return new Date(date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   const getPaymentProgress = (property: Property) => {
     if (!property.paymentHistory || property.paymentHistory.length === 0)
       return 0;
@@ -379,6 +401,18 @@ const MyProperty = () => {
   const ownedProperties = userProperties?.propertyPurOrRented || [];
   const paymentProperties = userProperties?.propertyUnderPayment || [];
   const withdrawnProperties = userProperties?.propertyWithdrawn || [];
+
+  const isUrl = (str: string) => {
+    if (typeof str !== "string") {
+      return false;
+    }
+    try {
+      new URL(str);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  };
 
   return (
     <Container maxWidth="lg">
@@ -494,7 +528,11 @@ const MyProperty = () => {
                     <Box sx={{ position: "relative", height: 160 }}>
                       <Avatar
                         variant="rounded"
-                        src={property.image}
+                        src={
+                          property?.image && isUrl(property.image)
+                            ? property.image
+                            : `${property.image}`
+                        }
                         sx={{
                           width: "100%",
                           height: "100%",
@@ -678,7 +716,11 @@ const MyProperty = () => {
                       <Box sx={{ position: "relative", height: 160 }}>
                         <Avatar
                           variant="rounded"
-                          src={property.image}
+                          src={
+                            property?.image && isUrl(property.image)
+                              ? property.image
+                              : `${property.image}`
+                          }
                           sx={{
                             width: "100%",
                             height: "100%",
@@ -776,6 +818,23 @@ const MyProperty = () => {
                                 : "N/A"}
                             </Typography>
                           </Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Typography variant="body2">Total Paid:</Typography>
+                            <Typography
+                              variant="body2"
+                              fontWeight="bold"
+                              color="success.main"
+                            >
+                              {lastPayment
+                                ? formatter.format(lastPayment.totalPaymentMade)
+                                : "N/A"}
+                            </Typography>
+                          </Box>
                         </Stack>
 
                         <Typography
@@ -806,9 +865,19 @@ const MyProperty = () => {
                         <Button
                           size={isMobile ? "small" : "medium"}
                           variant="outlined"
+                          fullWidth
+                          // startIcon={<History />}
+                          onClick={() => handlePaymentHistoryOpen(property)}
+                          sx={{ borderRadius: 2 }}
+                        >
+                          History
+                        </Button>
+                        <Button
+                          size={isMobile ? "small" : "medium"}
+                          variant="outlined"
                           color="error"
                           fullWidth
-                          startIcon={<ExitToApp />}
+                          // startIcon={<ExitToApp />}
                           onClick={() => handleWithdrawOpen(property)}
                           sx={{ borderRadius: 2 }}
                         >
@@ -880,7 +949,11 @@ const MyProperty = () => {
                       <Box sx={{ position: "relative", height: 160 }}>
                         <Avatar
                           variant="rounded"
-                          src={property.image}
+                          src={
+                            property?.image && isUrl(property.image)
+                              ? property.image
+                              : `${property.image}`
+                          }
                           sx={{
                             width: "100%",
                             height: "100%",
@@ -1167,6 +1240,184 @@ const MyProperty = () => {
               {...componentProps(selectedProperty!, amount!)}
             />
           </Box>
+        </DialogActions>
+      </Dialog>
+
+      {/* Payment History Dialog */}
+      <Dialog
+        open={paymentHistoryOpen}
+        onClose={handlePaymentHistoryClose}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          sx: { borderRadius: 2 },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            fontSize: { xs: "1.2rem", md: "1.5rem" },
+            fontWeight: "bold",
+            background: `linear-gradient(135deg, ${theme.palette.info.main} 0%, ${theme.palette.info.dark} 100%)`,
+            color: "white",
+          }}
+        >
+          <History sx={{ mr: 1, verticalAlign: "middle" }} />
+          Payment History - {paymentHistoryProperty?.title}
+        </DialogTitle>
+        <DialogContent sx={{ p: { xs: 2, md: 3 } }}>
+          {paymentHistoryProperty?.paymentHistory &&
+          paymentHistoryProperty.paymentHistory.length > 0 ? (
+            <>
+              <Typography variant="body1" sx={{ mb: 2 }}>
+                Here&apos;s your complete payment history for this property:
+              </Typography>
+
+              <TableContainer
+                component={Paper}
+                variant="outlined"
+                sx={{ borderRadius: 2 }}
+              >
+                <Table>
+                  <TableHead>
+                    <TableRow sx={{ backgroundColor: theme.palette.grey[50] }}>
+                      <TableCell sx={{ fontWeight: "bold" }}>
+                        Payment Date
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>
+                        Amount Paid
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>
+                        Total Paid
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>
+                        Remaining Balance
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>
+                        Next Payment Due
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {paymentHistoryProperty.paymentHistory.map(
+                      (payment, index) => (
+                        <TableRow
+                          key={index}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                            backgroundColor:
+                              index % 2 === 0
+                                ? "white"
+                                : theme.palette.grey[50],
+                          }}
+                        >
+                          <TableCell>
+                            {formatDateTime(payment.paymentDate)}
+                          </TableCell>
+                          <TableCell
+                            sx={{ fontWeight: "bold", color: "success.main" }}
+                          >
+                            {formatter.format(payment.amount)}
+                          </TableCell>
+                          <TableCell>
+                            {formatter.format(payment.totalPaymentMade)}
+                          </TableCell>
+                          <TableCell sx={{ color: "error.main" }}>
+                            {formatter.format(payment.remainingBalance)}
+                          </TableCell>
+                          <TableCell>
+                            {formatDate(payment.nextPaymentDate)}
+                          </TableCell>
+                        </TableRow>
+                      )
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+
+              {/* Summary Section */}
+              <Box
+                sx={{
+                  mt: 3,
+                  p: 2,
+                  backgroundColor: alpha(theme.palette.info.main, 0.05),
+                  borderRadius: 2,
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  sx={{ fontWeight: "bold" }}
+                >
+                  Payment Summary
+                </Typography>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="body2">
+                      Total Property Price:{" "}
+                      <strong>
+                        {formatter.format(paymentHistoryProperty.propertyPrice)}
+                      </strong>
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="body2">
+                      Total Paid:{" "}
+                      <strong style={{ color: theme.palette.success.main }}>
+                        {formatter.format(
+                          paymentHistoryProperty.paymentHistory[
+                            paymentHistoryProperty.paymentHistory.length - 1
+                          ].totalPaymentMade
+                        )}
+                      </strong>
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="body2">
+                      Remaining Balance:{" "}
+                      <strong style={{ color: theme.palette.error.main }}>
+                        {formatter.format(
+                          paymentHistoryProperty.paymentHistory[
+                            paymentHistoryProperty.paymentHistory.length - 1
+                          ].remainingBalance
+                        )}
+                      </strong>
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="body2">
+                      Progress:{" "}
+                      <strong>
+                        {getPaymentProgress(paymentHistoryProperty).toFixed(1)}%
+                      </strong>
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Box>
+            </>
+          ) : (
+            <Box sx={{ textAlign: "center", py: 4 }}>
+              <History
+                sx={{ fontSize: 64, color: theme.palette.text.disabled, mb: 2 }}
+              />
+              <Typography variant="h6" gutterBottom>
+                No Payment History
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                No payments have been made for this property yet.
+              </Typography>
+            </Box>
+          )}
+        </DialogContent>
+
+        <DialogActions sx={{ p: { xs: 2, md: 3 } }}>
+          <Button
+            onClick={handlePaymentHistoryClose}
+            variant="contained"
+            size={isMobile ? "medium" : "large"}
+            sx={{ borderRadius: 2 }}
+          >
+            Close
+          </Button>
         </DialogActions>
       </Dialog>
 

@@ -26,12 +26,68 @@ import {
   Paper,
   Chip,
   Alert,
+  Snackbar,
+  CircularProgress,
 } from "@mui/material";
+import { useState } from "react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  // Newsletter subscription state
+  const [email, setEmail] = useState("");
+  const [newsletterLoading, setNewsletterLoading] = useState(false);
+  const [newsletterMessage, setNewsletterMessage] = useState("");
+  const [newsletterSeverity, setNewsletterSeverity] = useState<
+    "success" | "error"
+  >("success");
+  const [showNewsletterAlert, setShowNewsletterAlert] = useState(false);
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!email) {
+      setNewsletterMessage("Please enter your email address");
+      setNewsletterSeverity("error");
+      setShowNewsletterAlert(true);
+      return;
+    }
+
+    setNewsletterLoading(true);
+
+    try {
+      const response = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          subscriptionSource: "website",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setNewsletterMessage(data.message);
+        setNewsletterSeverity("success");
+        setEmail(""); // Clear the input
+      } else {
+        setNewsletterMessage(data.message);
+        setNewsletterSeverity("error");
+      }
+    } catch (error: unknown) {
+      console.error("Newsletter subscription error:", error);
+      setNewsletterMessage("Failed to subscribe. Please try again.");
+      setNewsletterSeverity("error");
+    } finally {
+      setNewsletterLoading(false);
+      setShowNewsletterAlert(true);
+    }
+  };
 
   return (
     <Box
@@ -291,21 +347,47 @@ const Footer = () => {
             </Typography>
 
             {/* Newsletter Signup */}
-            <Box sx={{ display: "flex", mb: 2 }}>
-              <TextField
-                placeholder="Your email"
-                size="small"
-                sx={{
-                  mr: 1,
-                  flexGrow: 1,
-                  "& .MuiOutlinedInput-root": {
-                    fontSize: "0.8rem",
-                  },
-                }}
-              />
-              <Button variant="contained" size="small">
-                Subscribe
-              </Button>
+            <Box
+              component="form"
+              onSubmit={handleNewsletterSubmit}
+              sx={{ mb: 2 }}
+            >
+              <Box sx={{ display: "flex" }}>
+                <TextField
+                  placeholder="Your email"
+                  size="small"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  required
+                  disabled={newsletterLoading}
+                  sx={{
+                    mr: 1,
+                    flexGrow: 1,
+                    "& .MuiOutlinedInput-root": {
+                      fontSize: "0.8rem",
+                    },
+                  }}
+                />
+                <Button
+                  variant="contained"
+                  size="small"
+                  type="submit"
+                  disabled={newsletterLoading}
+                >
+                  {newsletterLoading ? (
+                    <CircularProgress size={20} />
+                  ) : (
+                    "Subscribe"
+                  )}
+                </Button>
+              </Box>
+              <Typography
+                variant="caption"
+                sx={{ color: "text.secondary", mt: 0.5, display: "block" }}
+              >
+                Subscribe to our newsletter for property updates and tips
+              </Typography>
             </Box>
 
             {/* Social Media */}
@@ -387,6 +469,22 @@ const Footer = () => {
             </MuiLink>
           </Typography>
         </Box>
+
+        {/* Newsletter Subscription Alert */}
+        <Snackbar
+          open={showNewsletterAlert}
+          autoHideDuration={6000}
+          onClose={() => setShowNewsletterAlert(false)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert
+            onClose={() => setShowNewsletterAlert(false)}
+            severity={newsletterSeverity}
+            sx={{ width: "100%" }}
+          >
+            {newsletterMessage}
+          </Alert>
+        </Snackbar>
       </Container>
     </Box>
   );

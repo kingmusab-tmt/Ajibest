@@ -8,6 +8,13 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
+  if (!session) {
+    return Response.json({
+      success: false,
+      message: "Unauthorized",
+      status: 401,
+    });
+  }
   const email = session?.user?.email;
 
   if (typeof email !== "string") {

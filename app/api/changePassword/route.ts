@@ -5,7 +5,17 @@ import { getServerSession } from "next-auth";
 import bcrypt from "bcrypt";
 
 export const dynamic = "force-dynamic";
+
 export async function PUT(req) {
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user) {
+    return Response.json({
+      success: false,
+      message: "Unauthorized",
+      status: 401,
+    });
+  }
+
   await dbConnect();
   const data = await req.json();
   const { _id, ...UserInfo } = data;
@@ -14,7 +24,6 @@ export async function PUT(req) {
   if (_id) {
     filter = { _id };
   } else {
-    const session = await getServerSession(authOptions);
     const email = session?.user?.email;
     filter = { email };
   }

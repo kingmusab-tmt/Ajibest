@@ -1,5 +1,5 @@
 // app/api/admin/withdrawals/route.ts
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/auth";
 import User from "@/models/user";
@@ -11,8 +11,6 @@ export async function GET() {
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email || session?.user?.role !== "Admin") {
-      // console.log(session?.user.role);
-      // console.log("Unauthorized access attempt to GET /api/aapi/withdrawals");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     await dbConnect();

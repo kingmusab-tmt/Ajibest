@@ -1,13 +1,24 @@
-import dbConnect from "../../../../utils/connectDB";
-import Property from "../../../../models/properties";
-import User from "../../../../models/user";
-import Transaction from "../../../../models/transaction";
+import dbConnect from "@/utils/connectDB";
+import Property from "@/models/properties";
+import User from "@/models/user";
+import Transaction from "@/models/transaction";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/auth";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
+  const session = await getServerSession(authOptions);
+
+  if (!session || session.user.role !== "Admin") {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
   await dbConnect();
 
   try {

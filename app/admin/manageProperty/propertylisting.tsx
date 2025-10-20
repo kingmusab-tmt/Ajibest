@@ -201,7 +201,7 @@ export default function Properties() {
     if (propertyToDelete) {
       try {
         await axios.delete(
-          `/api/property/deleteproperty?id=${propertyToDelete}`
+          `/api/aapi/property/deleteproperty?id=${propertyToDelete}`
         );
         setProperties(
           properties.filter((property) => property._id !== propertyToDelete)

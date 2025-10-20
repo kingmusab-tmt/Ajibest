@@ -201,7 +201,7 @@ const NewProperty = () => {
     }
 
     try {
-      const response = await fetch("/api/property/newproperty", {
+      const response = await fetch("/api/aapi/property/newproperty", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

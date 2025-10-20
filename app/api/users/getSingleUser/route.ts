@@ -7,6 +7,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized" },
+      { status: 401 }
+    );
+  }
   const _id = req.nextUrl.searchParams.get("id");
   const email = req.nextUrl.searchParams.get("email");
   await dbConnect();
@@ -17,13 +24,6 @@ export async function GET(req: NextRequest) {
   } else if (email) {
     filterUser = { email };
   } else {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized" },
-        { status: 401 }
-      );
-    }
     const email = session?.user?.email;
     if (!email) {
       return Response.json(

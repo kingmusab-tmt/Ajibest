@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import {
   Box,
   Button,
@@ -37,24 +36,10 @@ const NotificationForm = () => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const smsResponseMessages: { [key: string]: string } = {
-    TG00: "MESSAGE PROCESSED",
-    TG11: "Invalid Authentication Credentials",
-    TG14: "Empty Recipients",
-    TG15: "Empty Message",
-    TG17: "Not Enough Units Balance",
-    TG20: "Recipients above the maximum target",
-    "0000": "MESSAGE SENT TO PROVIDER",
-    "1111": "MESSAGE DELIVERED TO HANDSET",
-    "2222": "MESSAGE REJECTED",
-    "0014": "MESSAGE SENT THROUGH COOPERATE",
-    "3333": "DND_REJECTED_NUMBER",
-  };
-
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("/api/users/getUsers", {
+        const response = await fetch("/api/aapi/users/getUsers", {
           headers: {
             "Cache-Control": "no-cache, no-store",
           },
@@ -123,74 +108,30 @@ const NotificationForm = () => {
           : users.find((user) => user.email === recipient)?.phoneNumber || "";
 
       if (phoneNumbers) {
-        const smsResponse = await sendSMS(phoneNumbers, message);
-        // console.log(smsResponse);
-        if (!smsResponse.success) {
-          throw new Error(smsResponse.message);
+        const smsResponse = await fetch("/api/send-sms", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            recipient: phoneNumbers,
+            message: message,
+          }),
+        });
+
+        const smsData = await smsResponse.json();
+
+        if (!smsData.success) {
+          throw new Error(smsData.message);
         } else {
-          setSuccess("SMS Sent successfully");
+          setSuccess("Notification and SMS sent successfully");
         }
       }
     } catch (error) {
-      // console.log(error);
-      setError("Sending SMS Failed");
+      console.error("Error:", error);
+      setError(error instanceof Error ? error.message : "Sending SMS Failed");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const sendSMS = async (recipient: string, message: string) => {
-    const senderName = process.env.NEXT_PUBLIC_SMS_SENDER as string;
-    const headers = {
-      "X-Token": process.env.NEXT_PUBLIC_VT_TOKEN as string,
-      "X-Secret": process.env.NEXT_PUBLIC_VT_SECRET as string,
-    };
-
-    try {
-      const response = await axios.get(
-        "https://messaging.vtpass.com/api/sms/sendsms",
-        {
-          params: {
-            sender: senderName,
-            recipient,
-            message,
-            responsetype: "json",
-          },
-          headers: {
-            ...headers,
-            "Cache-Control": "no-cache, no-store",
-          },
-        }
-      );
-
-      const responseCode = response.data?.responseCode;
-      const responseMessage =
-        smsResponseMessages[responseCode] || "Failed to send SMS";
-
-      if (responseCode === "TG00") {
-        const messageDetails = response.data.messages[0];
-        const messageStatus = messageDetails.statusCode;
-
-        if (messageStatus === "0000" || messageStatus === "1111") {
-          return { success: true, message: messageDetails.description };
-        } else {
-          return { success: false, message: messageDetails.description };
-        }
-      } else {
-        return { success: false, message: responseMessage };
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        return {
-          success: false,
-          message: error.response?.data?.message || "Error sending SMS",
-        };
-      } else {
-        return {
-          success: false,
-          message: "Unexpected error occurred while sending SMS",
-        };
-      }
     }
   };
 
@@ -215,8 +156,8 @@ const NotificationForm = () => {
       setSuccess("Notification deleted successfully");
       setNotifications(notifications.filter((n) => n._id !== id));
     } catch (error) {
-      // setError(error.message);
-      // console.log(error);
+      console.error("Error deleting notification:", error);
+      setError("Failed to delete notification");
     }
   };
 
@@ -242,6 +183,7 @@ const NotificationForm = () => {
             fullWidth
             value={recipient}
             onChange={(e) => setRecipient(e.target.value)}
+            sx={{ mt: 2 }}
           >
             <MenuItem value="all">All Users</MenuItem>
             {users.map((user) => (

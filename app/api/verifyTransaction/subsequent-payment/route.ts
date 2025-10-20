@@ -4,9 +4,20 @@ import Property from "@/models/properties";
 import User from "@/models/user";
 import dbConnect from "@/utils/connectDB";
 import { v4 as uuidv4 } from "uuid";
+import { authOptions } from "@/app/auth";
+import { getServerSession } from "next-auth";
+import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 export async function POST(req) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized" },
+      { status: 401 }
+    );
+  }
   await dbConnect();
 
   const body = await req.json();

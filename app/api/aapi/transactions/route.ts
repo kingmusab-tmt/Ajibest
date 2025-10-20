@@ -1,4 +1,4 @@
-import Transaction from "../../../models/transaction";
+import Transaction from "@/models/transaction";
 import dbConnect from "@/utils/connectDB";
 import { NextResponse } from "next/server";
 import { authOptions } from "@/app/auth";
@@ -8,19 +8,18 @@ export const dynamic = "force-dynamic";
 export async function GET(req) {
   await dbConnect();
   const session = await getServerSession(authOptions);
-  if (!session) {
-    return Response.json({
-      success: false,
-      message: "Unauthorized",
-      status: 401,
-    });
-  }
-
   const body = await req.nextUrl.searchParams;
   const sortField = body.get("sortField") || "date";
   const sortOrder = body.get("sortOrder") || "desc";
   const transactionType = body.get("transactionType");
   const transactionStatus = body.get("transactionStatus");
+
+  if (!session?.user && session?.user?.role !== "Admin") {
+    return NextResponse.json(
+      { success: false, error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
 
   const sort = {};
   sort[sortField] = sortOrder === "desc" ? -1 : 1;
@@ -29,9 +28,6 @@ export async function GET(req) {
   if (session?.user?.role === "Admin") {
     filters = filters;
     // session?.user?.role === "Admin" ? {} :
-  } else if (session?.user?.role === "User") {
-    // Fetch transactions for the current user
-    filters.email = session.user.email;
   }
   if (transactionType) filters.paymentMethod = transactionType;
   if (transactionStatus) filters.status = transactionStatus;

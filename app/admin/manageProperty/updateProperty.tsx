@@ -258,11 +258,15 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({
     }
 
     axios
-      .put(`/api/property/updateproperty?id=${propertyId}`, updateProperty, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      .put(
+        `/api/aapi/property/updateproperty?id=${propertyId}`,
+        updateProperty,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((response) => {
         handleSuccess(
           "Property Updated Successfully",
@@ -290,9 +294,9 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({
 
   const imageSrc = isUrl(image) ? image : `/uploads/${image}`;
   const listPurposes = ["For Renting", "For Sale"];
-  const propTypes = ["House", "Farm", "Land"];
+  const propTypes = ["House", "Farm", "Land", "Office", "Shop", "Commercial"];
   const propSizes = ["Quarter Plot", "Half Plot", "Full Plot"];
-  const bedrooms = [1, 2, 3, 4];
+  const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   if (loading) {
     return <LoadingSpinner />;

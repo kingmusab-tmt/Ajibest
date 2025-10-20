@@ -35,7 +35,7 @@ const UsersPage = () => {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch("/api/users/getUsers", {
+      const res = await fetch("/api/aapi/users/getUsers", {
         headers: {
           "Cache-Control": "no-cache, no-store",
         },

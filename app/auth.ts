@@ -72,6 +72,9 @@ export const authOptions = {
     maxAge: 30 * 60,
     updateAge: 1 * 60,
   },
+  pages: {
+    error: "/auth/error",
+  },
   callbacks: {
     async redirect({ url, baseUrl }) {
       return baseUrl + "/userDashboard";

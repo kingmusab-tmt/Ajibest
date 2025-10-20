@@ -169,7 +169,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         });
 
         const fetchedNotifications = await response.json();
-        const filteredNotifications = fetchedNotifications.data.filter(
+        const filteredNotifications = fetchedNotifications?.data?.filter(
           (notification: any) =>
             notification.recipient === "all" ||
             notification.recipient === session?.user?.email
@@ -558,7 +558,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                   }}
                 >
                   <Badge
-                    badgeContent={notifications.length}
+                    badgeContent={notifications?.length}
                     color="error"
                     overlap="circular"
                     sx={{
@@ -637,7 +637,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                     >
                       Notifications
                     </Typography>
-                    {notifications.length > 0 && (
+                    {notifications?.length > 0 && (
                       <Chip
                         label={notifications.length}
                         size="small"
@@ -650,7 +650,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
                 <Divider />
 
-                {notifications.length > 0 ? (
+                {notifications?.length > 0 ? (
                   <Box sx={{ maxHeight: 300, overflow: "auto" }}>
                     {notifications.map((notification, index) => (
                       <React.Fragment key={notification.id}>
@@ -677,7 +677,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                             }}
                           />
                         </MenuItem>
-                        {index < notifications.length - 1 && (
+                        {index < notifications?.length - 1 && (
                           <Divider variant="inset" component="li" />
                         )}
                       </React.Fragment>
@@ -824,6 +824,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             <Container
               maxWidth="xl"
               sx={{
+                width: "100%",
                 height: "100%",
                 display: "flex",
                 flexDirection: "column",
