@@ -7,10 +7,21 @@ import {
 import { NextResponse } from "next/server";
 import { sendNotification } from "@/app/actions";
 import dbConnect from "@/utils/connectDB";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/auth";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
   await dbConnect();
   try {
     const notifications = await getAllNotifications();
@@ -29,6 +40,15 @@ export async function GET() {
 }
 
 export async function POST(req) {
+  const session = await getServerSession(authOptions);
+
+  if (!session || session.user.role !== "Admin") {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
   await dbConnect();
   const body = await req.json();
   const { message, recipient } = body;
@@ -52,6 +72,15 @@ export async function POST(req) {
 }
 
 export async function PUT(req) {
+  const session = await getServerSession(authOptions);
+
+  if (!session || session.user.role !== "Admin") {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
   await dbConnect();
   const _id = req.nextUrl.searchParams.get("id");
   const body = await req.json();
@@ -76,6 +105,15 @@ export async function PUT(req) {
 }
 
 export async function DELETE(req) {
+  const session = await getServerSession(authOptions);
+
+  if (!session || session.user.role !== "Admin") {
+    return NextResponse.json(
+      { success: false, message: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
   await dbConnect();
   const _id = req.nextUrl.searchParams.get("id");
 

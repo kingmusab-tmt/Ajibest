@@ -12,12 +12,12 @@ interface DashboardData {
 const fetchData = async (): Promise<DashboardData> => {
   try {
     const [transactionsRes, usersRes, propertiesRes] = await Promise.all([
-      fetch("/api/transactions", {
+      fetch("/api/aapi/transactions", {
         headers: {
           "Cache-Control": "no-cache, no-store",
         },
       }),
-      fetch("/api/users/getUsers", {
+      fetch("/api/aapi/users/getUsers", {
         headers: {
           "Cache-Control": "no-cache, no-store",
         },

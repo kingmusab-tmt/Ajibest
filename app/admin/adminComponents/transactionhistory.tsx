@@ -62,7 +62,7 @@ const TransactionHistory: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.get("/api/transactions", {
+        const response = await axios.get("/api/aapi/transactions", {
           params: {
             page: page + 1, // Material UI pagination starts at 0, API at 1
             limit: rowsPerPage,
@@ -112,7 +112,7 @@ const TransactionHistory: React.FC = () => {
         transactionId,
         status,
       };
-      await axios.put("/api/transactions/updateTransaction", data);
+      await axios.put("/api/aapi/transactions/updateTransaction", data);
       setTransactions((prev) =>
         prev.map((transaction) =>
           transaction._id === transactionId

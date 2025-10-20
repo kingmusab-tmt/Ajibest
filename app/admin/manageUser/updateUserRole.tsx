@@ -47,7 +47,7 @@ const UserRoleComponent: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get("/api/users/getUsers", {
+      const response = await axios.get("/api/aapi/users/getUsers", {
         headers: {
           "Cache-Control": "no-cache, no-store",
         },
@@ -64,7 +64,9 @@ const UserRoleComponent: React.FC = () => {
   const handleRoleChange = async (id: number, newRole: User["role"]) => {
     setLoading(true);
     try {
-      await axios.patch(`/api/users/updateuser?id=${id}`, { role: newRole });
+      await axios.patch(`/api/aapi/users/updateuser?id=${id}`, {
+        role: newRole,
+      });
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
           user._id === id ? { ...user, role: newRole } : user

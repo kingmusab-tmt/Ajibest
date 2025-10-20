@@ -75,7 +75,7 @@ const PropertyAssignmentForm: React.FC = () => {
       setLoading(true);
       try {
         const [usersRes, propertiesRes] = await Promise.all([
-          fetch("/api/users/getUsers"),
+          fetch("/api/aapi/users/getUsers"),
           fetch("/api/property/getproperties"),
         ]);
 
@@ -204,7 +204,7 @@ const PropertyAssignmentForm: React.FC = () => {
         assignmentDate: new Date().toISOString(),
       };
 
-      const response = await fetch("/api/aapi/assign-property", {
+      const response = await fetch("/api/aapi/property/assign-property", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

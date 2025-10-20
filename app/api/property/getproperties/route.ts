@@ -1,3 +1,5 @@
+//publicly accessible route to get properties with filtering and pagination
+
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/utils/connectDB";
 import Property from "@/models/properties";

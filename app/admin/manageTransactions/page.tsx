@@ -14,8 +14,6 @@ import {
   Chip,
   Fade,
   Grid,
-  Avatar,
-  LinearProgress,
   IconButton,
 } from "@mui/material";
 import {
