@@ -64,7 +64,6 @@ const newsletterSubscriptionSchema = new Schema<INewsletterSubscription>(
 );
 
 // Index for better query performance
-newsletterSubscriptionSchema.index({ email: 1 });
 newsletterSubscriptionSchema.index({ isSubscribed: 1 });
 newsletterSubscriptionSchema.index({ subscribedAt: -1 });
 

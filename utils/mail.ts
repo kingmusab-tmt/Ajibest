@@ -1,12 +1,12 @@
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  host: "mail.triplemultipurposetechnology.com.ng",
+  host: process.env.EMAIL_SERVER_HOST!,
   port: 465,
   secure: true, // true for 465, false for other ports
   auth: {
-    user: process.env.COMPANY_EMAIL_USER,
-    pass: process.env.COMPANY_EMAIL_PASS,
+    user: process.env.COMPANY_EMAIL_USER!,
+    pass: process.env.COMPANY_EMAIL_PASS!,
   },
 });
 
