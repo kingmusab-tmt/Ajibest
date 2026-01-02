@@ -113,26 +113,40 @@ export const authOptions = {
       return token;
     },
     async session({ session, token }) {
-      await connectDB();
-      const userEmail = session?.user?.email;
-      const dbUser = await User.findOne({ email: userEmail });
+      try {
+        await connectDB();
+        const userEmail = session?.user?.email;
+        const dbUser = await User.findOne({ email: userEmail });
 
-      if (dbUser) {
-        session.user.email = dbUser.email;
-        session.user.name = dbUser.name;
-        session.user.id = dbUser.id;
-        session.user.image = dbUser.image;
-        session.user.isActive = dbUser.isActive;
-        session.user.role = dbUser.role;
-      } else {
-        session.user.email = token.email;
-        session.user.name = token.name;
-        session.user.id = token.id;
-        session.user.image = token.image;
-        session.user.isActive = token.isActive;
-        session.user.role = token.role;
+        if (dbUser) {
+          // Log successful login on session creation
+          console.log("🔐 [AUTH SESSION] Session created for user:", dbUser.email);
+          await logSuccessfulLogin(
+            dbUser.id,
+            dbUser.email,
+            dbUser.name,
+            dbUser.role
+          );
+
+          session.user.email = dbUser.email;
+          session.user.name = dbUser.name;
+          session.user.id = dbUser.id;
+          session.user.image = dbUser.image;
+          session.user.isActive = dbUser.isActive;
+          session.user.role = dbUser.role;
+        } else {
+          session.user.email = token.email;
+          session.user.name = token.name;
+          session.user.id = token.id;
+          session.user.image = token.image;
+          session.user.isActive = token.isActive;
+          session.user.role = token.role;
+        }
+        return session;
+      } catch (error) {
+        console.error("❌ [AUTH SESSION] Session callback error:", error);
+        throw error;
       }
-      return session;
     },
   },
 } as NextAuthOptions;
