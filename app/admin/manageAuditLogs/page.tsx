@@ -85,6 +85,7 @@ const AuditLogsPage = () => {
   const fetchLogs = async () => {
     setLoading(true);
     setError(null);
+    console.log("📊 [AUDIT UI] Fetching audit logs with filters...");
     try {
       const params = new URLSearchParams({
         page: (page + 1).toString(),
@@ -98,24 +99,41 @@ const AuditLogsPage = () => {
       if (startDate) params.append("startDate", startDate);
       if (endDate) params.append("endDate", endDate);
 
+      console.log(
+        "🔗 [AUDIT UI] Requesting URL:",
+        `/api/admin/audit-logs?${params}`
+      );
       const response = await fetch(`/api/admin/audit-logs?${params}`);
       const data = await response.json();
+
+      console.log("📥 [AUDIT UI] Response received:", {
+        success: data.success,
+        logsCount: data.data?.logs?.length,
+        pagination: data.data?.pagination,
+      });
 
       if (data.success) {
         setLogs(data.data.logs);
         setPagination(data.data.pagination);
+        console.log(
+          "✅ [AUDIT UI] Logs loaded successfully:",
+          data.data.logs.length,
+          "logs"
+        );
       } else {
         setError(data.message || "Failed to fetch logs");
+        console.error("❌ [AUDIT UI] API error:", data.message);
       }
     } catch (err) {
       setError("Error fetching audit logs");
-      console.error(err);
+      console.error("❌ [AUDIT UI] Fetch error:", err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    console.log("📍 [AUDIT UI] useEffect triggered - fetching logs");
     fetchLogs();
   }, [page, rowsPerPage, category, status]);
 

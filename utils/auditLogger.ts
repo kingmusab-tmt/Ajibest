@@ -73,12 +73,21 @@ export async function logAudit(params: AuditLogParams): Promise<void> {
 
     // Append to log file
     fs.appendFileSync(filePath, logLine, "utf8");
+
+    // Log to console for testing
+    console.log("✅ [AUDIT LOG] New entry logged:", {
+      id: logEntry._id,
+      timestamp: logEntry.timestamp,
+      action: logEntry.action,
+      category: logEntry.category,
+      status: logEntry.status,
+      userEmail: logEntry.userEmail,
+      filePath: filePath,
+    });
   } catch (error) {
     // Don't throw errors for audit logging failures
     // Log to console in development
-    if (process.env.NODE_ENV === "development") {
-      console.error("Audit logging failed:", error);
-    }
+    console.error("❌ [AUDIT LOG ERROR] Audit logging failed:", error);
   }
 }
 
@@ -115,6 +124,10 @@ export async function logFailedLogin(
   reason: string,
   req?: NextRequest
 ): Promise<void> {
+  console.log("🔒 [LOGIN FAILED] Logging failed login attempt:", {
+    email,
+    reason,
+  });
   await logAudit({
     userEmail: email,
     action: "LOGIN_FAILED",
@@ -137,6 +150,12 @@ export async function logSuccessfulLogin(
   role: string,
   req?: NextRequest
 ): Promise<void> {
+  console.log("✅ [LOGIN SUCCESS] Logging successful login:", {
+    userId,
+    email,
+    name,
+    role,
+  });
   await logAudit({
     userId,
     userEmail: email,
