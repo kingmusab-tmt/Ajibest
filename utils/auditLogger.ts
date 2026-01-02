@@ -32,9 +32,17 @@ interface AuditLogEntry extends AuditLogParams {
 function getLogsDirectory(): string {
   const logsDir = path.join(process.cwd(), "logs", "audit");
 
-  // Ensure directory exists
-  if (!fs.existsSync(logsDir)) {
-    fs.mkdirSync(logsDir, { recursive: true });
+  try {
+    // Ensure directory exists - use synchronous API
+    if (!fs.existsSync(logsDir)) {
+      console.log("📁 [AUDIT LOGGER] Creating logs directory:", logsDir);
+      fs.mkdirSync(logsDir, { recursive: true, mode: 0o777 });
+      console.log("✅ [AUDIT LOGGER] Logs directory created successfully");
+    }
+  } catch (err) {
+    console.error("❌ [AUDIT LOGGER] Failed to create logs directory:", err);
+    console.error("Attempted path:", logsDir);
+    console.error("Current working directory:", process.cwd());
   }
 
   return logsDir;
@@ -71,9 +79,17 @@ export async function logAudit(params: AuditLogParams): Promise<void> {
     const logLine = JSON.stringify(logEntry) + "\n";
     const filePath = getLogFilePath();
 
-    // Append to log file
-    fs.appendFileSync(filePath, logLine, "utf8");
-
+    console.log("📝 [AUDIT LOG] About to write to:", filePath);
+    
+    // Append to log file synchronously
+    try {
+      fs.appendFileSync(filePath, logLine, "utf8");
+    } catch (writeErr) {
+      console.error("❌ [AUDIT LOG] Failed to write to file:", writeErr);
+      console.error("File path:", filePath);
+      throw writeErr;
+    }
+    
     // Log to console for testing
     console.log("✅ [AUDIT LOG] New entry logged:", {
       id: logEntry._id,
@@ -86,8 +102,14 @@ export async function logAudit(params: AuditLogParams): Promise<void> {
     });
   } catch (error) {
     // Don't throw errors for audit logging failures
-    // Log to console in development
+    // Log to console for debugging
     console.error("❌ [AUDIT LOG ERROR] Audit logging failed:", error);
+    if (error instanceof Error) {
+      console.error("Error details:", {
+        message: error.message,
+        stack: error.stack,
+      });
+    }
   }
 }
 
