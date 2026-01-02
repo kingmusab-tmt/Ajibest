@@ -102,7 +102,7 @@ const Footer = () => {
       <Container maxWidth="lg">
         <Grid container spacing={4}>
           {/* Services */}
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
               Our Services
             </Typography>
@@ -132,7 +132,7 @@ const Footer = () => {
           </Grid>
 
           {/* Company */}
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
               Company
             </Typography>
@@ -167,7 +167,7 @@ const Footer = () => {
           </Grid>
 
           {/* Support */}
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
               Support
             </Typography>
@@ -218,7 +218,7 @@ const Footer = () => {
           </Grid>
 
           {/* Contact & Legal */}
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Box
               sx={{
                 display: "flex",
@@ -292,7 +292,7 @@ const Footer = () => {
 
         {/* Legal & Trust Section */}
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Typography
               variant="subtitle2"
               gutterBottom
@@ -337,7 +337,7 @@ const Footer = () => {
             </Alert>
           </Grid>
 
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Typography
               variant="subtitle2"
               gutterBottom

@@ -40,9 +40,20 @@ export async function GET(req) {
     const transactions = await Transaction.find(filters).sort(sort);
     return NextResponse.json({ success: true, transactions, status: 200 });
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: "Failed to Fetch Transaction", details: error },
-      { status: 500 }
-    );
+    if (process.env.NODE_ENV === "development") {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Failed to Fetch Transaction",
+          details: error,
+        },
+        { status: 500 }
+      );
+    } else {
+      return NextResponse.json(
+        { success: false, message: "Operation failed" },
+        { status: 500 }
+      );
+    }
   }
 }

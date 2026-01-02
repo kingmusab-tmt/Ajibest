@@ -317,7 +317,7 @@ const PropertyCalculator = () => {
 
         <Box component="form" sx={{ mt: 2 }}>
           <Grid container spacing={3}>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel>Property Type</InputLabel>
                 <Select
@@ -343,7 +343,7 @@ const PropertyCalculator = () => {
             </Grid>
 
             {propertyType && (
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <FormControl fullWidth variant="outlined">
                   <InputLabel>
                     {propertyType === "land"
@@ -374,7 +374,7 @@ const PropertyCalculator = () => {
             )}
 
             {propertyDetail && (
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <FormControl fullWidth variant="outlined">
                   <InputLabel>Payment Duration</InputLabel>
                   <Select
@@ -395,7 +395,7 @@ const PropertyCalculator = () => {
               </Grid>
             )}
 
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Button
                 variant="contained"
                 color="primary"
@@ -418,7 +418,7 @@ const PropertyCalculator = () => {
             </Grid>
 
             {propertyDetail && !loading && (
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <Card variant="outlined" sx={{ bgcolor: "background.default" }}>
                   <CardContent>
                     <Typography variant="h6" gutterBottom>
@@ -484,7 +484,7 @@ const PropertyCalculator = () => {
           <Box sx={{ mt: 2 }}>
             {/* Summary Section */}
             <Grid container spacing={2} sx={{ mb: 3 }}>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <Typography variant="body2" color="text.secondary">
                   Property Type:
                 </Typography>
@@ -496,7 +496,7 @@ const PropertyCalculator = () => {
                 </Typography>
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <Typography variant="body2" color="text.secondary">
                   {propertyType === "land" ? "Plot Size" : "Specification"}:
                 </Typography>
@@ -505,7 +505,7 @@ const PropertyCalculator = () => {
                 </Typography>
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <Typography variant="body2" color="text.secondary">
                   Total Property Price:
                 </Typography>
@@ -514,7 +514,7 @@ const PropertyCalculator = () => {
                 </Typography>
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <Typography variant="body2" color="text.secondary">
                   Payment Duration:
                 </Typography>

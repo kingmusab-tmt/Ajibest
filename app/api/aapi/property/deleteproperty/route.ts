@@ -4,6 +4,7 @@ import Properties from "@/models/properties";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/auth";
+import { logAdminAction } from "@/utils/auditLogger";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +30,20 @@ export async function DELETE(req) {
         { status: 404 }
       );
     }
+
+    // Log admin action
+    await logAdminAction(
+      session.user.id || "",
+      session.user.email || "",
+      session.user.name || "",
+      "PROPERTY_DELETED",
+      "Property",
+      _id,
+      undefined,
+      {},
+      req
+    );
+
     return NextResponse.json({ success: true, data: {} });
   } catch (error) {
     return NextResponse.json({ success: false, error: error }, { status: 400 });

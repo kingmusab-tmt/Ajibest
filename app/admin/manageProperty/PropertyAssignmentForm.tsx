@@ -263,7 +263,7 @@ const PropertyAssignmentForm: React.FC = () => {
       <form onSubmit={handleSubmit}>
         <Grid container spacing={3}>
           {/* User Selection */}
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <FormControl fullWidth>
               <InputLabel>Select User</InputLabel>
               <Select
@@ -287,7 +287,7 @@ const PropertyAssignmentForm: React.FC = () => {
           </Grid>
 
           {/* Property Selection */}
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <FormControl fullWidth>
               <InputLabel>Select Property</InputLabel>
               <Select
@@ -316,7 +316,7 @@ const PropertyAssignmentForm: React.FC = () => {
 
           {/* Selected Property Details */}
           {selectedProperty && (
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Card variant="outlined">
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
@@ -345,7 +345,7 @@ const PropertyAssignmentForm: React.FC = () => {
           )}
 
           {/* Payment Method */}
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <FormControl fullWidth>
               <InputLabel>Payment Method</InputLabel>
               <Select
@@ -362,7 +362,7 @@ const PropertyAssignmentForm: React.FC = () => {
           </Grid>
 
           {/* Initial Payment */}
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <TextField
               fullWidth
               label="Initial Payment"
@@ -382,7 +382,7 @@ const PropertyAssignmentForm: React.FC = () => {
           {/* Next Payment Date (for installment) */}
           {formData.paymentMethod === "installment" &&
             !formData.paymentCompleted && (
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <TextField
                   fullWidth
                   label="Next Payment Date"
@@ -399,7 +399,7 @@ const PropertyAssignmentForm: React.FC = () => {
             )}
 
           {/* Payment Status */}
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <FormControlLabel
               control={
                 <Checkbox
@@ -414,7 +414,7 @@ const PropertyAssignmentForm: React.FC = () => {
 
           {/* Summary */}
           {selectedProperty && (
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Card variant="outlined" sx={{ bgcolor: "grey.50" }}>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
@@ -448,7 +448,7 @@ const PropertyAssignmentForm: React.FC = () => {
           )}
 
           {/* Submit Button */}
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Button
               type="submit"
               variant="contained"

@@ -26,6 +26,7 @@ import {
   CreditCard as CreditCardIcon,
   Adjust as AdjustIcon,
   MoneyOffCsredSharp,
+  Assessment as AssessmentIcon,
 } from "@mui/icons-material";
 
 interface User {
@@ -83,6 +84,11 @@ const UserDashboardSidebar: React.FC<UserDashboardSidebarProps> = ({
       icon: <AdjustIcon />,
       label: "Manage Web Content",
       component: "ManageWebContent",
+    },
+    {
+      icon: <AssessmentIcon />,
+      label: "Audit Logs",
+      component: "ManageAuditLogs",
     },
     // { icon: <PersonIcon />, label: "Profile", component: "UpdateProfile" },
   ];

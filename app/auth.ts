@@ -1,11 +1,12 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import bcryptjs from "bcryptjs";
+import bcrypt from "bcrypt";
 import User from "@/models/user";
 import connectDB from "@/utils/connectDB";
 import clientPromise from "@/utils/mongoConnect";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import { NextAuthOptions, SessionStrategy } from "next-auth";
+import { logFailedLogin, logSuccessfulLogin } from "@/utils/auditLogger";
 
 export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET!,
@@ -50,18 +51,31 @@ export const authOptions = {
           await connectDB();
           const user = await User.findOne({ email });
           if (!user) {
+            // Log failed login attempt - user not found
+            await logFailedLogin(email, "User not found");
             throw new Error("Invalid email or password");
           }
-          const isPasswordValid = await bcryptjs.compare(
-            password,
-            user.password
-          );
+          const isPasswordValid = await bcrypt.compare(password, user.password);
 
           if (!isPasswordValid) {
+            // Log failed login attempt - invalid password
+            await logFailedLogin(email, "Invalid password");
             throw new Error("Invalid email or password");
           }
+
+          // Log successful login
+          await logSuccessfulLogin(user.id, user.email, user.name, user.role);
+
           return user;
         } catch (error) {
+          // Log general authentication error if not already logged
+          if (
+            error instanceof Error &&
+            error.message === "Invalid email or password"
+          ) {
+            throw error;
+          }
+          await logFailedLogin(email, "Authentication error");
           throw new Error("Invalid email or password");
         }
       },
@@ -69,8 +83,8 @@ export const authOptions = {
   ],
   session: {
     strategy: "jwt" as SessionStrategy,
-    maxAge: 30 * 60,
-    updateAge: 1 * 60,
+    maxAge: 1 * 60 * 60, // 1 hour
+    updateAge: 1 * 60, // 1 minute
   },
   pages: {
     error: "/auth/error",

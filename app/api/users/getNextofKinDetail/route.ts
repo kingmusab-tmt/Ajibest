@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth/next";
 import dbConnect from "../../../../utils/connectDB";
 import User from "../../../../models/user";
 import { NextRequest, NextResponse } from "next/server";
+import { logSensitiveDataAccess } from "@/utils/auditLogger";
 
 export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
@@ -34,6 +35,16 @@ export async function GET(req: NextRequest) {
         { status: 404 }
       );
     }
+
+    // Log sensitive data access - Next of Kin information
+    await logSensitiveDataAccess(
+      session.user.id || "",
+      session.user.email || "",
+      "NEXT_OF_KIN_DATA",
+      user._id?.toString(),
+      email,
+      req
+    );
 
     // Return only the nextOfKin data
     return NextResponse.json({

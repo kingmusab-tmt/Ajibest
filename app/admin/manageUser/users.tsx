@@ -150,7 +150,7 @@ const UsersPage = () => {
           }}
         >
           <Grid container spacing={3}>
-            <Grid item xs={6} sm={3}>
+            <Grid size={{ xs: 6, sm: 3 }}>
               <Box sx={{ textAlign: "center" }}>
                 <Typography variant="h4" fontWeight="bold" color="primary">
                   {users.length}
@@ -160,7 +160,7 @@ const UsersPage = () => {
                 </Typography>
               </Box>
             </Grid>
-            <Grid item xs={6} sm={3}>
+            <Grid size={{ xs: 6, sm: 3 }}>
               <Box sx={{ textAlign: "center" }}>
                 <Typography variant="h4" fontWeight="bold" color="success.main">
                   {users.filter((u) => u.isActive).length}
@@ -170,7 +170,7 @@ const UsersPage = () => {
                 </Typography>
               </Box>
             </Grid>
-            <Grid item xs={6} sm={3}>
+            <Grid size={{ xs: 6, sm: 3 }}>
               <Box sx={{ textAlign: "center" }}>
                 <Typography variant="h4" fontWeight="bold" color="info.main">
                   {users.filter((u) => u.role === "Admin").length}
@@ -180,7 +180,7 @@ const UsersPage = () => {
                 </Typography>
               </Box>
             </Grid>
-            <Grid item xs={6} sm={3}>
+            <Grid size={{ xs: 6, sm: 3 }}>
               <Box sx={{ textAlign: "center" }}>
                 <Typography variant="h4" fontWeight="bold" color="warning.main">
                   {users.reduce(
@@ -200,7 +200,7 @@ const UsersPage = () => {
       {/* Users Grid */}
       <Grid container spacing={3}>
         {users.map((user) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={user._id}>
+          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={user._id}>
             <UserCard
               user={user}
               onViewProfile={handleViewProfile}

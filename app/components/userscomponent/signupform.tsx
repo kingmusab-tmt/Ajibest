@@ -172,7 +172,7 @@ const StepOne: React.FC<StepProps> = ({
       </Typography>
 
       <Grid container spacing={2}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <TextField
             fullWidth
             label="Full Name"
@@ -188,7 +188,7 @@ const StepOne: React.FC<StepProps> = ({
           />
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <TextField
             fullWidth
             label="Username"
@@ -197,7 +197,7 @@ const StepOne: React.FC<StepProps> = ({
           />
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             fullWidth
             label="Email Address"
@@ -214,7 +214,7 @@ const StepOne: React.FC<StepProps> = ({
           />
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             fullWidth
             label="Confirm Email"
@@ -548,7 +548,7 @@ const StepThree: React.FC<
       </Typography>
 
       <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             fullWidth
             label="Phone Number"
@@ -564,7 +564,7 @@ const StepThree: React.FC<
           />
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             fullWidth
             label="Country"
@@ -580,7 +580,7 @@ const StepThree: React.FC<
           />
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <TextField
             fullWidth
             label="Address"
@@ -591,7 +591,7 @@ const StepThree: React.FC<
           />
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             fullWidth
             label="State"
@@ -600,7 +600,7 @@ const StepThree: React.FC<
           />
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             fullWidth
             label="LGA"
@@ -609,7 +609,7 @@ const StepThree: React.FC<
           />
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             fullWidth
             label="Password"
@@ -632,7 +632,7 @@ const StepThree: React.FC<
           />
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             fullWidth
             label="Confirm Password"

@@ -122,7 +122,7 @@ const NavigationComponent: React.FC = () => {
   return (
     <Container maxWidth="lg" sx={{ py: 3 }}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={3}>
+        <Grid size={{ xs: 12, md: 3 }}>
           <Paper elevation={3} sx={{ borderRadius: 2 }}>
             <Tabs
               orientation="vertical"
@@ -156,7 +156,7 @@ const NavigationComponent: React.FC = () => {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={9}>
+        <Grid size={{ xs: 12, md: 9 }}>
           <Paper elevation={3} sx={{ borderRadius: 2, p: 2, minHeight: 400 }}>
             <TabPanel value={currentTab} index={0}>
               <PersonalInformation />

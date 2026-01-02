@@ -85,7 +85,7 @@ const Services: React.FC = () => {
 
         <Grid container spacing={4} alignItems="center">
           {/* Left side: Main Image */}
-          <Grid item xs={12} md={5}>
+          <Grid size={{ xs: 12, md: 5 }}>
             <Paper
               elevation={6}
               sx={{
@@ -127,10 +127,10 @@ const Services: React.FC = () => {
           </Grid>
 
           {/* Right side: Services list */}
-          <Grid item xs={12} md={7}>
+          <Grid size={{ xs: 12, md: 7 }}>
             <Grid container spacing={3}>
               {services.map((service, index) => (
-                <Grid item xs={12} sm={6} key={index}>
+                <Grid size={{ xs: 12, sm: 6 }} key={index}>
                   <Card
                     sx={{
                       height: "100%",

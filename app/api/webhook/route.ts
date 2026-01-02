@@ -1,7 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/utils/connectDB";
-import Property from "@/models/properties";
-import User from "@/models/user";
 import Transaction from "@/models/transaction";
 import { NextResponse } from "next/server";
 
@@ -29,10 +26,6 @@ export async function POST(req) {
     .createHmac("sha512", PAYSTACK_SECRET_KEY)
     .update(JSON.stringify(event))
     .digest("hex");
-
-  // console.log(req.headers);
-  // console.log(secret);
-  // console.log(hash);
   if (hash !== secret) {
     return NextResponse.json(
       { message: "Webhook Error: Invalid signature" },

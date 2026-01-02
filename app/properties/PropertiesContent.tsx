@@ -443,10 +443,11 @@ const PropertiesContent = () => {
           <Grid container spacing={isMobile ? 2 : 3} sx={{ mb: 4 }}>
             {properties.map((property) => (
               <Grid
-                item
-                xs={12}
-                sm={viewMode === "grid" ? 6 : 12}
-                md={viewMode === "grid" ? 4 : 12}
+                size={{
+                  xs: 12,
+                  sm: viewMode === "grid" ? 6 : 12,
+                  md: viewMode === "grid" ? 4 : 12,
+                }}
                 key={property._id}
               >
                 <Card

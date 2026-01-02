@@ -123,7 +123,10 @@ const CustomerStats: React.FC<CustomerStatsProps> = ({ initialData }) => {
         sx={{ mb: { xs: 8, md: 12 } }}
       >
         {activeStats.map((stat: any, index: number) => (
-          <Grid item xs={12} sm={6} md={3} key={stat._id?.toString() || index}>
+          <Grid
+            size={{ xs: 12, sm: 6, md: 3 }}
+            key={stat._id?.toString() || index}
+          >
             <StatCard stat={stat} inView={inView} ref={ref} />
           </Grid>
         ))}
@@ -194,7 +197,7 @@ const LoadingSkeleton = () => (
   <Container maxWidth="xl" sx={{ py: { xs: 6, md: 10 }, px: { xs: 2, sm: 3 } }}>
     <Grid container spacing={{ xs: 3, md: 4 }} justifyContent="center">
       {[1, 2, 3, 4].map((item) => (
-        <Grid item xs={12} sm={6} md={3} key={item}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }} key={item}>
           <Paper
             sx={{
               height: 200,

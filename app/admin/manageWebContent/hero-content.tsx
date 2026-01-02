@@ -154,7 +154,7 @@ const AdminHeroEditor: React.FC = () => {
 
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 label="Title"
@@ -164,7 +164,7 @@ const AdminHeroEditor: React.FC = () => {
               />
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 label="Subtitle"
@@ -176,7 +176,7 @@ const AdminHeroEditor: React.FC = () => {
               />
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 label="Button Text"
@@ -186,7 +186,7 @@ const AdminHeroEditor: React.FC = () => {
               />
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Box
                 display="flex"
                 justifyContent="space-between"
@@ -205,7 +205,7 @@ const AdminHeroEditor: React.FC = () => {
 
               <Grid container spacing={2}>
                 {heroContent.backgrounds.map((url, index) => (
-                  <Grid item xs={12} sm={6} md={4} key={index}>
+                  <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
                     <Card>
                       <CardMedia
                         component="img"
@@ -229,7 +229,7 @@ const AdminHeroEditor: React.FC = () => {
               </Grid>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Box display="flex" justifyContent="flex-end">
                 <Button
                   type="submit"

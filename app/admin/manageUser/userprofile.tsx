@@ -290,9 +290,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
         <CardContent sx={{ p: { xs: 2, md: 4 } }}>
           <Grid container spacing={2} alignItems="center">
             <Grid
-              item
-              xs={12}
-              md={3}
+              size={{ xs: 12, md: 3 }}
               sx={{ textAlign: { xs: "center", md: "left" } }}
             >
               <Avatar
@@ -308,7 +306,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
               </Avatar>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Typography
                 variant="h4"
                 component="h1"
@@ -380,7 +378,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
               </Box>
             </Grid>
 
-            <Grid item xs={12} md={3}>
+            <Grid size={{ xs: 12, md: 3 }}>
               <Paper
                 sx={{
                   p: 2,
@@ -404,7 +402,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
 
       {/* Financial Summary */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card sx={{ textAlign: "center", borderRadius: 2 }}>
             <CardContent>
               <AccountBalanceWallet
@@ -420,7 +418,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
           </Card>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card sx={{ textAlign: "center", borderRadius: 2 }}>
             <CardContent>
               <Payment sx={{ fontSize: 40, color: "success.main", mb: 1 }} />
@@ -434,7 +432,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
           </Card>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card sx={{ textAlign: "center", borderRadius: 2 }}>
             <CardContent>
               <TrendingUp sx={{ fontSize: 40, color: "info.main", mb: 1 }} />
@@ -448,7 +446,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
           </Card>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card sx={{ textAlign: "center", borderRadius: 2 }}>
             <CardContent>
               <People sx={{ fontSize: 40, color: "secondary.main", mb: 1 }} />
@@ -485,7 +483,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
         {/* Personal Information Tab */}
         <TabPanel value={tabValue} index={0}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Paper sx={{ p: 3, borderRadius: 2 }}>
                 <Typography
                   variant="h6"
@@ -539,7 +537,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
               </Paper>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Paper sx={{ p: 3, borderRadius: 2 }}>
                 <Typography
                   variant="h6"
@@ -586,7 +584,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
         {/* Bank Details Tab */}
         <TabPanel value={tabValue} index={1}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Paper sx={{ p: 3, borderRadius: 2 }}>
                 <Typography
                   variant="h6"
@@ -621,7 +619,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
               </Paper>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Paper sx={{ p: 3, borderRadius: 2, height: "100%" }}>
                 <Typography variant="h6" gutterBottom>
                   Financial Summary
@@ -669,7 +667,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
         <TabPanel value={tabValue} index={2}>
           {user.nextOfKin ? (
             <Grid container spacing={3}>
-              <Grid item xs={12} md={4}>
+              <Grid size={{ xs: 12, md: 4 }}>
                 <Box sx={{ textAlign: "center", mb: 3 }}>
                   <Avatar
                     src={nextOfKinImageSrc || ""}
@@ -688,13 +686,13 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
                 </Box>
               </Grid>
 
-              <Grid item xs={12} md={8}>
+              <Grid size={{ xs: 12, md: 8 }}>
                 <Paper sx={{ p: 3, borderRadius: 2 }}>
                   <Typography variant="h6" gutterBottom>
                     Next of Kin Details
                   </Typography>
                   <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                       <Typography variant="body2" color="text.secondary">
                         Phone Number
                       </Typography>
@@ -702,7 +700,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
                         {user.nextOfKin.phoneNumber}
                       </Typography>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                       <Typography variant="body2" color="text.secondary">
                         Email
                       </Typography>
@@ -710,7 +708,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
                         {user.nextOfKin.email}
                       </Typography>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid size={{ xs: 12 }}>
                       <Typography variant="body2" color="text.secondary">
                         Address
                       </Typography>
@@ -718,7 +716,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
                         {user.nextOfKin.address}
                       </Typography>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                       <Typography variant="body2" color="text.secondary">
                         Account Number
                       </Typography>
@@ -726,7 +724,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
                         {user.nextOfKin.userAccountNumber}
                       </Typography>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                       <Typography variant="body2" color="text.secondary">
                         Bank Name
                       </Typography>
@@ -734,7 +732,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
                         {user.nextOfKin.userBankName}
                       </Typography>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid size={{ xs: 12 }}>
                       <Typography variant="body2" color="text.secondary">
                         Account Name
                       </Typography>
@@ -766,7 +764,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
               Property Portfolio Summary
             </Typography>
             <Grid container spacing={2}>
-              <Grid item xs={6} sm={3}>
+              <Grid size={{ xs: 6, sm: 3 }}>
                 <Paper
                   sx={{
                     p: 2,
@@ -782,7 +780,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
                   <Typography variant="body2">Owned/Rented</Typography>
                 </Paper>
               </Grid>
-              <Grid item xs={6} sm={3}>
+              <Grid size={{ xs: 6, sm: 3 }}>
                 <Paper
                   sx={{
                     p: 2,
@@ -798,7 +796,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
                   <Typography variant="body2">In Progress</Typography>
                 </Paper>
               </Grid>
-              <Grid item xs={6} sm={3}>
+              <Grid size={{ xs: 6, sm: 3 }}>
                 <Paper
                   sx={{
                     p: 2,
@@ -814,7 +812,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
                   <Typography variant="body2">Withdrawn</Typography>
                 </Paper>
               </Grid>
-              <Grid item xs={6} sm={3}>
+              <Grid size={{ xs: 6, sm: 3 }}>
                 <Paper
                   sx={{
                     p: 2,

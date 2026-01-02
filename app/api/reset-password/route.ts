@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/utils/connectDB";
 import User from "@/models/user";
 import bcrypt from "bcrypt";
+import { logPasswordResetComplete } from "@/utils/auditLogger";
 
 export async function PUT(request: NextRequest) {
   try {
@@ -62,6 +63,9 @@ export async function PUT(request: NextRequest) {
     user.resetToken = null;
     user.resetTokenExpiry = null;
     await user.save();
+
+    // Log successful password reset
+    await logPasswordResetComplete(user.email, request);
 
     return NextResponse.json(
       { success: true, message: "Password reset successfully" },

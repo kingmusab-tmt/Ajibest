@@ -280,7 +280,7 @@ const UserInfo: React.FC = () => {
         }}
       >
         <Grid container spacing={2} alignItems="center">
-          <Grid item>
+          <Grid size={{ xs: 12, sm: 1 }}>
             <Avatar
               src={session?.user?.image || ""}
               sx={{
@@ -292,7 +292,7 @@ const UserInfo: React.FC = () => {
               {session?.user?.name?.[0] || "U"}
             </Avatar>
           </Grid>
-          <Grid item xs>
+          <Grid size={{ xs: 12, sm: 8 }}>
             <Typography
               variant="h5"
               fontWeight="bold"
@@ -344,7 +344,7 @@ const UserInfo: React.FC = () => {
       {/* Stats Grid */}
       <Grid container spacing={2} sx={{ mb: 3 }}>
         {statsCards.map((stat, index) => (
-          <Grid item xs={6} sm={4} md={3} lg={2} key={index}>
+          <Grid size={{ xs: 6, sm: 4, md: 3, lg: 2 }} key={index}>
             <Card
               elevation={1}
               sx={{
@@ -405,7 +405,7 @@ const UserInfo: React.FC = () => {
             <CalendarToday color="primary" /> Payment Summary
           </Typography>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <Box textAlign="center">
                 <Typography variant="body2" color="text.secondary" gutterBottom>
                   Next Payment Date
@@ -415,7 +415,7 @@ const UserInfo: React.FC = () => {
                 </Typography>
               </Box>
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <Box textAlign="center">
                 <Typography variant="body2" color="text.secondary" gutterBottom>
                   Next Payment Amount
@@ -427,7 +427,7 @@ const UserInfo: React.FC = () => {
                 </Typography>
               </Box>
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <Box textAlign="center">
                 <Typography variant="body2" color="text.secondary" gutterBottom>
                   Total Paid
@@ -439,7 +439,7 @@ const UserInfo: React.FC = () => {
                 </Typography>
               </Box>
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <Box textAlign="center">
                 <Typography variant="body2" color="text.secondary" gutterBottom>
                   Remaining Balance
@@ -484,7 +484,7 @@ const UserInfo: React.FC = () => {
         {/* Profile Info Tab */}
         <TabPanel value={tabValue} index={0}>
           <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Card
                 elevation={0}
                 sx={{
@@ -563,7 +563,7 @@ const UserInfo: React.FC = () => {
               </Card>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Card
                 elevation={0}
                 sx={{
@@ -652,7 +652,7 @@ const UserInfo: React.FC = () => {
         <TabPanel value={tabValue} index={1}>
           <Grid container spacing={2}>
             {/* Properties Under Payment Card */}
-            <Grid item xs={12} lg={6}>
+            <Grid size={{ xs: 12, lg: 6 }}>
               <Card
                 elevation={1}
                 sx={{
@@ -796,7 +796,7 @@ const UserInfo: React.FC = () => {
             </Grid>
 
             {/* Owned Properties Card */}
-            <Grid item xs={12} lg={6}>
+            <Grid size={{ xs: 12, lg: 6 }}>
               <Card
                 elevation={1}
                 sx={{

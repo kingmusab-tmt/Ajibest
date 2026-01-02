@@ -265,7 +265,7 @@ const BankAccountDetail: React.FC = () => {
         <CardContent sx={{ p: 3 }}>
           <Grid container spacing={3}>
             {/* Account Name */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextField
                 fullWidth
                 label="Account Name"
@@ -288,7 +288,7 @@ const BankAccountDetail: React.FC = () => {
             </Grid>
 
             {/* Account Number */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextField
                 fullWidth
                 label="Account Number"
@@ -314,7 +314,7 @@ const BankAccountDetail: React.FC = () => {
             </Grid>
 
             {/* Bank Name */}
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <FormControl fullWidth error={!!errors.userBankName}>
                 <InputLabel>Bank Name</InputLabel>
                 <Select

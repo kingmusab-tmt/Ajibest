@@ -274,7 +274,7 @@ const AdminWithdrawalsPage = () => {
             const averagePayment = getAveragePayment(request.paymentHistory);
 
             return (
-              <Grid item xs={12} key={request._id}>
+              <Grid size={{ xs: 12 }} key={request._id}>
                 <Card>
                   <CardContent>
                     <Box
@@ -333,7 +333,7 @@ const AdminWithdrawalsPage = () => {
 
                     <Grid container spacing={3}>
                       {/* User Information */}
-                      <Grid item xs={12} md={4}>
+                      <Grid size={{ xs: 12, md: 4 }}>
                         <Typography
                           variant="subtitle2"
                           gutterBottom
@@ -389,7 +389,7 @@ const AdminWithdrawalsPage = () => {
                       </Grid>
 
                       {/* Payment Information */}
-                      <Grid item xs={12} md={4}>
+                      <Grid size={{ xs: 12, md: 4 }}>
                         <Typography
                           variant="subtitle2"
                           gutterBottom
@@ -486,7 +486,7 @@ const AdminWithdrawalsPage = () => {
                       </Grid>
 
                       {/* Payment History Details */}
-                      <Grid item xs={12} md={4}>
+                      <Grid size={{ xs: 12, md: 4 }}>
                         <Typography
                           variant="subtitle2"
                           gutterBottom

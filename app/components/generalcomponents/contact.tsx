@@ -222,7 +222,7 @@ const Contactus = () => {
 
       <Grid container spacing={isMobile ? 2 : 4}>
         {/* Contact Information Section */}
-        <Grid item xs={12} lg={5}>
+        <Grid size={{ xs: 12, lg: 5 }}>
           <Paper
             elevation={0}
             sx={{
@@ -271,7 +271,7 @@ const Contactus = () => {
             {/* Contact Information Grid */}
             <Grid container spacing={2}>
               {contactInfo.map((item, index) => (
-                <Grid item xs={12} sm={6} key={index}>
+                <Grid size={{ xs: 12, sm: 6 }} key={index}>
                   <Box
                     sx={{
                       display: "flex",
@@ -363,7 +363,7 @@ const Contactus = () => {
         </Grid>
 
         {/* Contact Form Section */}
-        <Grid item xs={12} lg={7}>
+        <Grid size={{ xs: 12, lg: 7 }}>
           <Card
             elevation={2}
             sx={{
@@ -427,7 +427,7 @@ const Contactus = () => {
                     Personal Information
                   </Typography>
                   <Grid container spacing={2}>
-                    <Grid item xs={12}>
+                    <Grid size={{ xs: 12 }}>
                       <FormControl fullWidth variant="outlined">
                         <InputLabel htmlFor="name">Full Name *</InputLabel>
                         <OutlinedInput
@@ -441,7 +441,7 @@ const Contactus = () => {
                         />
                       </FormControl>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                       <FormControl fullWidth variant="outlined">
                         <InputLabel htmlFor="email">Email Address *</InputLabel>
                         <OutlinedInput
@@ -456,7 +456,7 @@ const Contactus = () => {
                         />
                       </FormControl>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                       <FormControl fullWidth variant="outlined">
                         <InputLabel htmlFor="phone">Phone Number *</InputLabel>
                         <OutlinedInput
@@ -521,7 +521,7 @@ const Contactus = () => {
                     }}
                   >
                     <Grid container spacing={2}>
-                      <Grid item xs={12} sm={6}>
+                      <Grid size={{ xs: 12, sm: 6 }}>
                         <Typography variant="subtitle2" color="text.secondary">
                           Name
                         </Typography>
@@ -529,7 +529,7 @@ const Contactus = () => {
                           {name}
                         </Typography>
                       </Grid>
-                      <Grid item xs={12} sm={6}>
+                      <Grid size={{ xs: 12, sm: 6 }}>
                         <Typography variant="subtitle2" color="text.secondary">
                           Email
                         </Typography>
@@ -537,7 +537,7 @@ const Contactus = () => {
                           {email}
                         </Typography>
                       </Grid>
-                      <Grid item xs={12} sm={6}>
+                      <Grid size={{ xs: 12, sm: 6 }}>
                         <Typography variant="subtitle2" color="text.secondary">
                           Phone
                         </Typography>
@@ -545,7 +545,7 @@ const Contactus = () => {
                           {phone}
                         </Typography>
                       </Grid>
-                      <Grid item xs={12} sm={6}>
+                      <Grid size={{ xs: 12, sm: 6 }}>
                         <Typography variant="subtitle2" color="text.secondary">
                           Subject
                         </Typography>
@@ -553,7 +553,7 @@ const Contactus = () => {
                           {subject}
                         </Typography>
                       </Grid>
-                      <Grid item xs={12}>
+                      <Grid size={{ xs: 12 }}>
                         <Typography variant="subtitle2" color="text.secondary">
                           Message Preview
                         </Typography>

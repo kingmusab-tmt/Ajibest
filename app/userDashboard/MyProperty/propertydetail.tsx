@@ -270,7 +270,7 @@ const PropertyDetail: React.FC<PropertyDetailProps> = ({
 
               {/* Key Features */}
               <Grid container spacing={2} sx={{ mb: 3 }}>
-                <Grid item xs={6} sm={3}>
+                <Grid size={{ xs: 6, sm: 3 }}>
                   <Stack alignItems="center" spacing={1}>
                     <Hotel color="primary" />
                     <Typography variant="body2" fontWeight="bold">
@@ -281,7 +281,7 @@ const PropertyDetail: React.FC<PropertyDetailProps> = ({
                     </Typography>
                   </Stack>
                 </Grid>
-                <Grid item xs={6} sm={3}>
+                <Grid size={{ xs: 6, sm: 3 }}>
                   <Stack alignItems="center" spacing={1}>
                     <Bathtub color="primary" />
                     <Typography variant="body2" fontWeight="bold">
@@ -292,7 +292,7 @@ const PropertyDetail: React.FC<PropertyDetailProps> = ({
                     </Typography>
                   </Stack>
                 </Grid>
-                <Grid item xs={6} sm={3}>
+                <Grid size={{ xs: 6, sm: 3 }}>
                   <Stack alignItems="center" spacing={1}>
                     <SquareFoot color="primary" />
                     <Typography variant="body2" fontWeight="bold">
@@ -303,7 +303,7 @@ const PropertyDetail: React.FC<PropertyDetailProps> = ({
                     </Typography>
                   </Stack>
                 </Grid>
-                <Grid item xs={6} sm={3}>
+                <Grid size={{ xs: 6, sm: 3 }}>
                   <Stack alignItems="center" spacing={1}>
                     <CheckCircle color="primary" />
                     <Typography variant="body2" fontWeight="bold">

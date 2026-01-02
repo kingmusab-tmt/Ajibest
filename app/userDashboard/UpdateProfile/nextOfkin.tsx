@@ -237,7 +237,7 @@ const NextOfKinDetail: React.FC = () => {
             {/* Form Fields */}
             <Grid container spacing={3}>
               {/* Name and Address */}
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
                   label="Full Name"
@@ -252,7 +252,7 @@ const NextOfKinDetail: React.FC = () => {
                   }}
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
                   label="Address"
@@ -269,7 +269,7 @@ const NextOfKinDetail: React.FC = () => {
               </Grid>
 
               {/* Phone and Email */}
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
                   label="Phone Number"
@@ -284,7 +284,7 @@ const NextOfKinDetail: React.FC = () => {
                   }}
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
                   label="Email"
@@ -302,7 +302,7 @@ const NextOfKinDetail: React.FC = () => {
               </Grid>
 
               {/* Account Number and Bank */}
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
                   label="Account Number"
@@ -317,7 +317,7 @@ const NextOfKinDetail: React.FC = () => {
                   }}
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <FormControl fullWidth variant="outlined">
                   <InputLabel id="bank-select-label">Bank Name</InputLabel>
                   <Select
