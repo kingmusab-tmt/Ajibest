@@ -373,7 +373,7 @@ export default function Properties() {
 
       {/* Summary Cards */}
       <Grid container spacing={isMobile ? 2 : 3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card
             elevation={2}
             sx={{
@@ -399,7 +399,7 @@ export default function Properties() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card
             elevation={2}
             sx={{
@@ -425,7 +425,7 @@ export default function Properties() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card
             elevation={2}
             sx={{
@@ -451,7 +451,7 @@ export default function Properties() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card
             elevation={2}
             sx={{
@@ -495,7 +495,7 @@ export default function Properties() {
           <FilterList /> Filters
         </Typography>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <FormControl fullWidth size={isMobile ? "small" : "medium"}>
               <InputLabel>Rented Status</InputLabel>
               <Select
@@ -520,7 +520,7 @@ export default function Properties() {
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <FormControl fullWidth size={isMobile ? "small" : "medium"}>
               <InputLabel>Purchased Status</InputLabel>
               <Select
@@ -547,7 +547,7 @@ export default function Properties() {
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <TextField
               fullWidth
               size={isMobile ? "small" : "medium"}
@@ -560,7 +560,7 @@ export default function Properties() {
             />
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <FormControl fullWidth size={isMobile ? "small" : "medium"}>
               <InputLabel>Size</InputLabel>
               <Select
@@ -576,7 +576,7 @@ export default function Properties() {
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <FormControl fullWidth size={isMobile ? "small" : "medium"}>
               <InputLabel>Property Type</InputLabel>
               <Select
@@ -597,7 +597,7 @@ export default function Properties() {
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Button
               fullWidth
               variant="outlined"
@@ -648,7 +648,7 @@ export default function Properties() {
       ) : (
         <Grid container spacing={isMobile ? 2 : 3}>
           {filteredProperties.map((property) => (
-            <Grid item xs={12} key={property._id}>
+            <Grid size={{ xs: 12 }} key={property._id}>
               <Card
                 sx={{
                   transition: "all 0.3s ease",
@@ -710,7 +710,7 @@ export default function Properties() {
                       </Stack>
 
                       <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6} md={3}>
+                        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                           <Box
                             sx={{
                               display: "flex",
@@ -729,7 +729,7 @@ export default function Properties() {
                           </Box>
                         </Grid>
 
-                        <Grid item xs={12} sm={6} md={2}>
+                        <Grid size={{ xs: 12, sm: 6, md: 2 }}>
                           <Box
                             sx={{
                               display: "flex",
@@ -744,7 +744,7 @@ export default function Properties() {
                           </Box>
                         </Grid>
 
-                        <Grid item xs={12} sm={6} md={2}>
+                        <Grid size={{ xs: 12, sm: 6, md: 2 }}>
                           <Box
                             sx={{
                               display: "flex",
@@ -759,7 +759,7 @@ export default function Properties() {
                           </Box>
                         </Grid>
 
-                        <Grid item xs={12} sm={6} md={3}>
+                        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                           <Box
                             sx={{
                               display: "flex",
@@ -778,7 +778,7 @@ export default function Properties() {
                           </Box>
                         </Grid>
 
-                        <Grid item xs={12} sm={6} md={2}>
+                        <Grid size={{ xs: 12, sm: 6, md: 2 }}>
                           <Box
                             sx={{ display: "flex", justifyContent: "flex-end" }}
                           >

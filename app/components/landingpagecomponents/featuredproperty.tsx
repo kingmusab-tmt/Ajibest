@@ -237,10 +237,7 @@ const FeaturedProperties: React.FC = () => {
             <Grid container spacing={3} justifyContent="center">
               {properties.map((property, index) => (
                 <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  lg={3}
+                  size={{ xs: 12, sm: 6, lg: 3 }}
                   key={property._id}
                   sx={{
                     transition: "transform 0.3s ease-in-out",
@@ -475,7 +472,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
           {/* Features Grid */}
           <Grid container spacing={1} sx={{ mb: 2 }}>
             {property.bedrooms && (
-              <Grid item xs={4}>
+              <Grid size={{ xs: 4 }}>
                 <Box sx={{ textAlign: "center" }}>
                   <Hotel
                     sx={{ fontSize: 20, color: "primary.main", mb: 0.5 }}
@@ -490,7 +487,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
               </Grid>
             )}
             {property.bathrooms && (
-              <Grid item xs={4}>
+              <Grid size={{ xs: 4 }}>
                 <Box sx={{ textAlign: "center" }}>
                   <Bathtub
                     sx={{ fontSize: 20, color: "primary.main", mb: 0.5 }}
@@ -505,7 +502,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
               </Grid>
             )}
             {property.size && (
-              <Grid item xs={4}>
+              <Grid size={{ xs: 4 }}>
                 <Box sx={{ textAlign: "center" }}>
                   <SquareFoot
                     sx={{ fontSize: 20, color: "primary.main", mb: 0.5 }}
@@ -574,7 +571,7 @@ const GallerySkeleton = () => {
 
         <Grid container spacing={3} justifyContent="center">
           {Array.from({ length: 8 }).map((_, index) => (
-            <Grid item xs={12} sm={6} lg={3} key={index}>
+            <Grid size={{ xs: 12, sm: 6, lg: 3 }} key={index}>
               <Card
                 sx={{
                   height: "100%",

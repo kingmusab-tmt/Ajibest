@@ -210,7 +210,7 @@ const AdminPayment: React.FC = () => {
         </Card>
 
         <Grid container spacing={3}>
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <TextField
               label="User Email"
               value={email}
@@ -221,7 +221,7 @@ const AdminPayment: React.FC = () => {
             />
           </Grid>
 
-          <Grid item xs={12} sm={8}>
+          <Grid size={{ xs: 12, sm: 8 }}>
             <TextField
               label="Property Title"
               value={propertyTitle}
@@ -230,7 +230,7 @@ const AdminPayment: React.FC = () => {
               required
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12, sm: 4 }}>
             <Button
               variant="contained"
               onClick={handleSearchProperty}
@@ -242,7 +242,7 @@ const AdminPayment: React.FC = () => {
             </Button>
           </Grid>
 
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <TextField
               label="Property ID"
               value={propertyId}
@@ -250,7 +250,7 @@ const AdminPayment: React.FC = () => {
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <TextField
               label="Property Type"
               value={propertyType}
@@ -259,7 +259,7 @@ const AdminPayment: React.FC = () => {
             />
           </Grid>
 
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <TextField
               label="Listing Purpose"
               value={listingPurpose}
@@ -267,7 +267,7 @@ const AdminPayment: React.FC = () => {
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <TextField
               label="Reference ID"
               value={reference}
@@ -278,7 +278,7 @@ const AdminPayment: React.FC = () => {
 
           {isFirstPayment && (
             <>
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   label="Property Price"
                   type="number"
@@ -294,7 +294,7 @@ const AdminPayment: React.FC = () => {
                 />
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <FormControl fullWidth>
                   <InputLabel>Payment Method</InputLabel>
                   <Select
@@ -311,7 +311,7 @@ const AdminPayment: React.FC = () => {
               </Grid>
 
               {paymentMethod === "installment" && (
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <FormControl fullWidth>
                     <InputLabel>Installment Period</InputLabel>
                     <Select
@@ -332,7 +332,7 @@ const AdminPayment: React.FC = () => {
           )}
 
           {paymentMethod === "installment" && months > 0 && isFirstPayment && (
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Card variant="outlined" sx={{ bgcolor: "action.hover" }}>
                 <CardContent>
                   <Typography variant="h6" color="primary">
@@ -353,7 +353,7 @@ const AdminPayment: React.FC = () => {
           )}
 
           {!isFirstPayment && (
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 label="Payment Amount"
                 type="number"
@@ -368,7 +368,7 @@ const AdminPayment: React.FC = () => {
             </Grid>
           )}
 
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Divider sx={{ my: 2 }} />
             <Button
               variant="contained"

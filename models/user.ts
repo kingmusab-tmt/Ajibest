@@ -367,17 +367,12 @@ const userSchema = new Schema<IUser>(
   }
 );
 
-userSchema.pre("save", async function (next) {
-  try {
-    if (!this.isModified("password") || /\$2[ayb]\$/.test(this.password)) {
-      return next();
-    }
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-  } catch (error) {
-    throw error;
+userSchema.pre("save", async function () {
+  if (!this.isModified("password") || /\$2[ayb]\$/.test(this.password)) {
+    return;
   }
-  next();
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
 });
 
 const User: Model<IUser> =

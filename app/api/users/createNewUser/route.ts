@@ -1,11 +1,11 @@
 import dbConnect from "../../../../utils/connectDB";
 import User from "@/models/user";
-import bcryptjs from "bcryptjs";
+import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 import { sendVerificationEmail } from "@/utils/mail";
 import { v4 as uuidv4 } from "uuid";
 import * as yup from "yup";
-
+import { logUserRegistration } from "@/utils/auditLogger";
 // Validation schema using yup
 const userSchema = yup.object().shape({
   name: yup.string().required("Name is required").trim(),
@@ -95,8 +95,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const salt = await bcryptjs.genSalt(10);
-    const hashedPassword = await bcryptjs.hash(password, salt);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
     const token = uuidv4();
 
     const newUser = new User({
@@ -130,6 +130,9 @@ export async function POST(req: NextRequest) {
 
     await newUser.save();
     await sendVerificationEmail(email, token);
+
+    // Log successful user registration
+    await logUserRegistration(email, name, req);
 
     return NextResponse.json(
       { message: "User registered successfully" },

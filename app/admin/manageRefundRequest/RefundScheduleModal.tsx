@@ -171,7 +171,7 @@ export default function RefundScheduleModal({
           <Card sx={{ mb: 3, bgcolor: "grey.50" }}>
             <CardContent>
               <Grid container spacing={3}>
-                <Grid item xs={12} md={4}>
+                <Grid size={{ xs: 12, md: 4 }}>
                   <Typography
                     variant="body2"
                     color="text.secondary"
@@ -188,7 +188,7 @@ export default function RefundScheduleModal({
                     ₦{refundRequest.totalRefundAmount.toLocaleString()}
                   </Typography>
                 </Grid>
-                <Grid item xs={12} md={4}>
+                <Grid size={{ xs: 12, md: 4 }}>
                   <Typography
                     variant="body2"
                     color="text.secondary"
@@ -205,7 +205,7 @@ export default function RefundScheduleModal({
                     {refundRequest.refundSchedule.length}
                   </Typography>
                 </Grid>
-                <Grid item xs={12} md={4}>
+                <Grid size={{ xs: 12, md: 4 }}>
                   <Typography
                     variant="body2"
                     color="text.secondary"

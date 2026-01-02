@@ -186,7 +186,7 @@ const PersonalInformation = () => {
             {/* Form Fields */}
             <Grid container spacing={3}>
               {/* Row 1 */}
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Full Name"
@@ -197,7 +197,7 @@ const PersonalInformation = () => {
                   size={isMobile ? "small" : "medium"}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Username"
@@ -210,7 +210,7 @@ const PersonalInformation = () => {
               </Grid>
 
               {/* Row 2 */}
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Phone Number"
@@ -221,7 +221,7 @@ const PersonalInformation = () => {
                   size={isMobile ? "small" : "medium"}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Email"
@@ -239,7 +239,7 @@ const PersonalInformation = () => {
               </Grid>
 
               {/* Row 3 */}
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="BVN/NIN"
@@ -250,7 +250,7 @@ const PersonalInformation = () => {
                   size={isMobile ? "small" : "medium"}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Country"
@@ -263,7 +263,7 @@ const PersonalInformation = () => {
               </Grid>
 
               {/* Row 4 */}
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="State"
@@ -274,7 +274,7 @@ const PersonalInformation = () => {
                   size={isMobile ? "small" : "medium"}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Local Government Area"
@@ -287,7 +287,7 @@ const PersonalInformation = () => {
               </Grid>
 
               {/* Row 5 - Full Width */}
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <TextField
                   fullWidth
                   label="Address"

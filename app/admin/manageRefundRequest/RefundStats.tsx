@@ -83,7 +83,7 @@ export default function RefundStats({ refundRequests }: RefundStatsProps) {
       {statCards.map((stat) => {
         const IconComponent = stat.icon;
         return (
-          <Grid item xs={12} sm={6} lg={4} xl={2} key={stat.name}>
+          <Grid size={{ xs: 12, sm: 6, lg: 4, xl: 2 }} key={stat.name}>
             <Card
               sx={{
                 height: "100%",

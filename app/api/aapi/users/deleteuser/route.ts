@@ -3,6 +3,7 @@ import User from "../../../../../models/user";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/auth";
+import { logAdminAction } from "@/utils/auditLogger";
 
 export const dynamic = "force-dynamic";
 export async function DELETE(req) {
@@ -31,6 +32,7 @@ export async function DELETE(req) {
   }
 
   try {
+    const userToDelete = await User.findOne(filterUser);
     const deletedUser = await User.deleteOne(filterUser);
     if (!deletedUser) {
       return NextResponse.json(
@@ -38,6 +40,20 @@ export async function DELETE(req) {
         { status: 404 }
       );
     }
+
+    // Log admin action
+    await logAdminAction(
+      session.user.id || "",
+      session.user.email || "",
+      session.user.name || "",
+      "USER_DELETED",
+      "User",
+      _id || userToDelete?._id?.toString(),
+      userToDelete?.email,
+      { deletedUserName: userToDelete?.name },
+      req
+    );
+
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ success: false, error: error }, { status: 400 });

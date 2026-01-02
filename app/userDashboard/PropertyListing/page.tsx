@@ -471,7 +471,7 @@ const PropertyListing = () => {
         <>
           <Grid container spacing={isMobile ? 2 : 3}>
             {currentProperties.map((property) => (
-              <Grid item xs={12} sm={6} md={4} key={property._id}>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={property._id}>
                 <Card
                   sx={{
                     height: "100%",

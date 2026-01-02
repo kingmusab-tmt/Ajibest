@@ -3,6 +3,7 @@ import dbConnect from "@/utils/connectDB";
 import User from "@/models/user";
 import { sendEmail } from "@/utils/emailService";
 import crypto from "crypto";
+import { logPasswordResetRequest } from "@/utils/auditLogger";
 
 export async function POST(request: NextRequest) {
   try {
@@ -47,6 +48,9 @@ export async function POST(request: NextRequest) {
     const resetLink = `${
       process.env.NEXTAUTH_URL || "http://localhost:3000"
     }/forgotResetPassword?token=${token}`;
+
+    // Log password reset request
+    await logPasswordResetRequest(email, request);
 
     // Send OTP email with reset link
     try {

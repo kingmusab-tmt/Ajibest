@@ -343,7 +343,7 @@ const StatsAdminPanel = () => {
 
       <Grid container spacing={3}>
         {/* Testimonials Management */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Paper sx={{ p: 3 }}>
             <Box
               sx={{
@@ -365,7 +365,7 @@ const StatsAdminPanel = () => {
 
             <Grid container spacing={2}>
               {content.testimonials.map((testimonial: any) => (
-                <Grid item xs={12} key={testimonial._id}>
+                <Grid size={{ xs: 12 }} key={testimonial._id}>
                   <Card variant="outlined">
                     <CardContent>
                       <Box
@@ -441,7 +441,7 @@ const StatsAdminPanel = () => {
                 </Grid>
               ))}
               {content.testimonials.length === 0 && (
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Typography color="text.secondary" textAlign="center">
                     No testimonials yet. Add your first testimonial!
                   </Typography>
@@ -452,7 +452,7 @@ const StatsAdminPanel = () => {
         </Grid>
 
         {/* Stats Management */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Paper sx={{ p: 3 }}>
             <Box
               sx={{
@@ -474,7 +474,7 @@ const StatsAdminPanel = () => {
 
             <Grid container spacing={2}>
               {content.stats.map((stat: any) => (
-                <Grid item xs={12} key={stat._id}>
+                <Grid size={{ xs: 12 }} key={stat._id}>
                   <Card variant="outlined">
                     <CardContent>
                       <Box
@@ -534,7 +534,7 @@ const StatsAdminPanel = () => {
                 </Grid>
               ))}
               {content.stats.length === 0 && (
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Typography color="text.secondary" textAlign="center">
                     No stats yet. Add your first stat!
                   </Typography>

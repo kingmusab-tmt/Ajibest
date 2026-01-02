@@ -321,7 +321,7 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({
 
           <FormGrid container spacing={3}>
             {/* Property Title */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextField
                 fullWidth
                 label="Property Title"
@@ -333,7 +333,7 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({
             </Grid>
 
             {/* Property Description */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextField
                 fullWidth
                 label="Property Description"
@@ -347,7 +347,7 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({
             </Grid>
 
             {/* Property Address */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextField
                 fullWidth
                 label="Property Address"
@@ -359,7 +359,7 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({
             </Grid>
 
             {/* Listing Purpose */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel>Listing Purpose</InputLabel>
                 <Select
@@ -378,7 +378,7 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({
             </Grid>
 
             {/* Property Price */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextField
                 fullWidth
                 label="Property Price"
@@ -391,7 +391,7 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({
             </Grid>
 
             {/* Property Plot Size */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel>Property Plot Size</InputLabel>
                 <Select
@@ -410,7 +410,7 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({
             </Grid>
 
             {/* Rent Duration */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextField
                 fullWidth
                 label="Rent Duration (months)"
@@ -423,7 +423,7 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({
             </Grid>
 
             {/* Amenities */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextField
                 fullWidth
                 label="Amenities"
@@ -436,7 +436,7 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({
             </Grid>
 
             {/* Checkboxes */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -460,7 +460,7 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({
             </Grid>
 
             {/* Property Type */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel>Property Type</InputLabel>
                 <Select
@@ -481,7 +481,7 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({
             {/* Conditional Fields */}
             {(property.propertyType === "Land" ||
               property.propertyType === "Farm") && (
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
                   label="Plot Number"
@@ -495,7 +495,7 @@ const UpdateProperty: React.FC<PropertyFormProps> = ({
             )}
 
             {property.propertyType === "House" && (
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <FormControl fullWidth variant="outlined">
                   <InputLabel>Number of Bedrooms</InputLabel>
                   <Select

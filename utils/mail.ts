@@ -11,7 +11,9 @@ const transporter = nodemailer.createTransport({
 });
 
 export async function sendVerificationEmail(email: string, token: string) {
-  const verificationUrl = `http://localhost:3000/emailverification?token=${token}`; // Nowy format URL
+  const verificationUrl = `${
+    process.env.NEXTAUTH_URL || "http://localhost:3000"
+  }/emailverification?token=${token}`; // Nowy format URL
   await transporter.sendMail({
     from: '"A.A Ajibest Land Vendors Limited" <info@triplemultipurposetechnology.com.ng>',
     to: email,

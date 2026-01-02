@@ -215,7 +215,7 @@ const AdminFAQEditor = () => {
 
         <Grid container spacing={3}>
           {faqs.map((faq, index) => (
-            <Grid item xs={12} key={faq._id}>
+            <Grid size={{ xs: 12 }} key={faq._id}>
               <Paper elevation={2} sx={{ p: 3, position: "relative" }}>
                 <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
                   <DragIndicatorIcon sx={{ mr: 1, color: "text.secondary" }} />

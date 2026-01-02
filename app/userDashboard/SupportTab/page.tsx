@@ -150,7 +150,7 @@ const SupportTab: React.FC = () => {
 
       <Grid container spacing={isMobile ? 2 : 4}>
         {/* Contact Information Section */}
-        <Grid item xs={12} lg={5}>
+        <Grid size={{ xs: 12, lg: 5 }}>
           <Paper
             elevation={0}
             sx={{
@@ -267,7 +267,7 @@ const SupportTab: React.FC = () => {
             {/* Support Stats */}
             <Box sx={{ mt: "auto", pt: 3 }}>
               <Grid container spacing={2} textAlign="center">
-                <Grid item xs={4}>
+                <Grid size={{ xs: 4 }}>
                   <Typography
                     variant="h6"
                     fontWeight="bold"
@@ -279,7 +279,7 @@ const SupportTab: React.FC = () => {
                     Support
                   </Typography>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid size={{ xs: 4 }}>
                   <Typography
                     variant="h6"
                     fontWeight="bold"
@@ -291,7 +291,7 @@ const SupportTab: React.FC = () => {
                     Avg Response
                   </Typography>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid size={{ xs: 4 }}>
                   <Typography
                     variant="h6"
                     fontWeight="bold"
@@ -309,7 +309,7 @@ const SupportTab: React.FC = () => {
         </Grid>
 
         {/* Contact Form Section */}
-        <Grid item xs={12} lg={7}>
+        <Grid size={{ xs: 12, lg: 7 }}>
           <Card
             elevation={2}
             sx={{

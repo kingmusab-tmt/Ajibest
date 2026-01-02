@@ -14,6 +14,7 @@ import RefundRequestsAdminPage from "./manageRefundRequest/page";
 import DashboardPage from "./admindashboard";
 import ProtectedRoute from "../components/generalcomponents/ProtectedRoute";
 import ManageWebContent from "./manageWebContent/page";
+import ManageAuditLogs from "./manageAuditLogs/page";
 import LoadingSpinner from "../components/generalcomponents/loadingSpinner";
 
 interface Notification {
@@ -119,6 +120,8 @@ const AdminPage = () => {
         return <RefundRequestsAdminPage />;
       case "ManageWebContent":
         return <ManageWebContent />;
+      case "ManageAuditLogs":
+        return <ManageAuditLogs />;
       // case "UpdateProfile":
       //   return <UpdateProfile />;
       default:

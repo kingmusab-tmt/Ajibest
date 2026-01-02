@@ -4,6 +4,7 @@ import User from "@/models/user";
 import { NextResponse } from "next/server";
 import { authOptions } from "@/app/auth";
 import { getServerSession } from "next-auth";
+import { logTransactionModification } from "@/utils/auditLogger";
 
 export const dynamic = "force-dynamic";
 export async function PUT(req) {
@@ -11,7 +12,7 @@ export async function PUT(req) {
   const body = await req.json();
   const { transactionId, status } = body;
 
-  if (!session?.user && session?.user?.role !== "Admin") {
+  if (!session?.user || session?.user?.role !== "Admin") {
     return NextResponse.json(
       { success: false, error: "Unauthorized" },
       { status: 401 }
@@ -85,6 +86,20 @@ export async function PUT(req) {
       transactionId,
       { status: status },
       { new: true }
+    );
+
+    // Log transaction modification
+    await logTransactionModification(
+      session.user.id || "",
+      session.user.email || "",
+      session.user.name || "",
+      session.user.role || "",
+      "TRANSACTION_STATUS_UPDATED",
+      transactionId,
+      transaction.status,
+      status,
+      { transactionEmail: transaction.email },
+      req
     );
 
     return NextResponse.json(

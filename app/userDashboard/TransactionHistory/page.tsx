@@ -385,7 +385,7 @@ const TransactionHistory: React.FC = () => {
           <FilterList /> Filters & Sorting
         </Typography>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <FormControl fullWidth size={isMobile ? "small" : "medium"}>
               <InputLabel>Transaction Type</InputLabel>
               <Select
@@ -400,7 +400,7 @@ const TransactionHistory: React.FC = () => {
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <FormControl fullWidth size={isMobile ? "small" : "medium"}>
               <InputLabel>Status</InputLabel>
               <Select
@@ -417,7 +417,7 @@ const TransactionHistory: React.FC = () => {
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <FormControl fullWidth size={isMobile ? "small" : "medium"}>
               <InputLabel>Sort By</InputLabel>
               <Select
@@ -434,7 +434,7 @@ const TransactionHistory: React.FC = () => {
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Button
               variant="outlined"
               onClick={() => {
@@ -515,7 +515,7 @@ const TransactionHistory: React.FC = () => {
 
                   {/* Details */}
                   <Grid container spacing={1}>
-                    <Grid item xs={6}>
+                    <Grid size={{ xs: 6 }}>
                       <Typography variant="caption" color="text.secondary">
                         Amount
                       </Typography>
@@ -523,7 +523,7 @@ const TransactionHistory: React.FC = () => {
                         {formatCurrency(transaction.amount)}
                       </Typography>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid size={{ xs: 6 }}>
                       <Typography variant="caption" color="text.secondary">
                         Method
                       </Typography>
@@ -531,7 +531,7 @@ const TransactionHistory: React.FC = () => {
                         {transaction.paymentMethod}
                       </Typography>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid size={{ xs: 6 }}>
                       <Typography variant="caption" color="text.secondary">
                         Date
                       </Typography>
@@ -539,7 +539,7 @@ const TransactionHistory: React.FC = () => {
                         {formatDate(transaction.createdAt)}
                       </Typography>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid size={{ xs: 6 }}>
                       <Typography variant="caption" color="text.secondary">
                         Type
                       </Typography>

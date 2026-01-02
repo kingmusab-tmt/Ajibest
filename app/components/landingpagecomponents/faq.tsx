@@ -128,7 +128,7 @@ const FAQPage = () => {
         </Typography>
 
         <Grid container spacing={4} alignItems="flex-start">
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             {faqs.map((faq, index) => (
               <Accordion
                 key={faq._id}
@@ -163,7 +163,7 @@ const FAQPage = () => {
             ))}
           </Grid>
 
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Paper
               elevation={3}
               sx={{

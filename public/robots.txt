@@ -1,47 +1,9 @@
-# ----------------------------------
-# Robots.txt for Ajibest Web App
-# Optimized for SEO, Performance & Security
-# ----------------------------------
-
+# *
 User-agent: *
 Allow: /
 
-# 🕐 Crawl rate control
-# Prevents excessive crawling that can overload the server.
-Crawl-delay: 10
+# Host
+Host: ajibestlandvendors.com.ng
 
-# 🚫 Block backend APIs and sensitive routes
-Disallow: /api/
-Disallow: /auth/
-Disallow: /userDashboard/
-Disallow: /forgotResetPassword
-Disallow: /emailverification
-Disallow: /manifest.webmanifest
-
-# 🧩 Block uploads, private files, and temporary data
-Disallow: /uploads/
-Disallow: /public/uploads/
-Disallow: /assets/uploads/
-Disallow: /api/upload
-Disallow: /api/newupload
-
-# ✅ Allow main public pages for indexing
-Allow: /contact
-Allow: /privacy
-Allow: /terms
-Allow: /properties
-Allow: /signup
-Allow: /login
-
-# 🏠 Host Declaration
-Host: https://ajibestlandvendors.com.ng
-
-# 🗺️ Sitemap for search engines
-Sitemap: https://ajibestlandvendors.com.ng/sitemap.xml
-
-# ----------------------------------
-# Notes:
-# - Crawl-delay: 10 seconds between requests per bot.
-# - APIs, dashboard, and upload paths blocked for security.
-# - Public pages open for full SEO visibility.
-# ----------------------------------
+# Sitemaps
+Sitemap: ajibestlandvendors.com.ng/sitemap.xml

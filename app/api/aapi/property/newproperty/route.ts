@@ -3,6 +3,7 @@ import Property from "@/models/properties";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/auth";
+import { logAdminAction } from "@/utils/auditLogger";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,20 @@ export async function POST(req) {
   try {
     const property = await Property.create(data);
     await property.save();
+
+    // Log admin action
+    await logAdminAction(
+      session.user.id || "",
+      session.user.email || "",
+      session.user.name || "",
+      "PROPERTY_CREATED",
+      "Property",
+      property._id.toString(),
+      undefined,
+      { title: data.title, propertyType: data.propertyType },
+      req
+    );
+
     return NextResponse.json(
       { success: true, data: property },
       { status: 201 }

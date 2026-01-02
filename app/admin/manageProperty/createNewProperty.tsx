@@ -288,7 +288,7 @@ const NewProperty = () => {
           <SectionTitle variant="h5">Basic Information</SectionTitle>
 
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextField
                 fullWidth
                 label="Property Title"
@@ -301,7 +301,7 @@ const NewProperty = () => {
               />
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <FormControl fullWidth error={!!errors["propertyType"]}>
                 <InputLabel>Property Type</InputLabel>
                 <Select
@@ -325,7 +325,7 @@ const NewProperty = () => {
               </FormControl>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextField
                 fullWidth
                 label="Property Address"
@@ -338,7 +338,7 @@ const NewProperty = () => {
               />
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <FormControl fullWidth error={!!errors["listingPurpose"]}>
                 <InputLabel>Listing Purpose</InputLabel>
                 <Select
@@ -363,7 +363,7 @@ const NewProperty = () => {
             </Grid>
 
             {property.listingPurpose === "For Renting" && (
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <TextField
                   fullWidth
                   label="Rental Duration"
@@ -377,7 +377,7 @@ const NewProperty = () => {
               </Grid>
             )}
 
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 multiline
@@ -401,7 +401,7 @@ const NewProperty = () => {
           <SectionTitle variant="h5">Pricing & Details</SectionTitle>
 
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextField
                 fullWidth
                 type="number"
@@ -418,7 +418,7 @@ const NewProperty = () => {
               />
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <FormControl fullWidth error={!!errors["size"]}>
                 <InputLabel>Property Size</InputLabel>
                 <Select
@@ -454,7 +454,7 @@ const NewProperty = () => {
             {/* Plot Number for Land/Farm */}
             {(property.propertyType === "Land" ||
               property.propertyType === "Farm") && (
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
                   type="number"
@@ -473,7 +473,7 @@ const NewProperty = () => {
               property.propertyType === "Shop" ||
               property.propertyType === "Office") && (
               <>
-                <Grid item xs={12} md={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
                   <FormControl fullWidth error={!!errors["bedrooms"]}>
                     <InputLabel>Bedrooms</InputLabel>
                     <Select
@@ -497,7 +497,7 @@ const NewProperty = () => {
                   </FormControl>
                 </Grid>
 
-                <Grid item xs={12} md={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
                   <TextField
                     fullWidth
                     type="number"
@@ -511,7 +511,7 @@ const NewProperty = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <TextField
                     fullWidth
                     label="Amenities"
@@ -524,7 +524,7 @@ const NewProperty = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <TextField
                     fullWidth
                     label="Utilities"
@@ -548,7 +548,7 @@ const NewProperty = () => {
           <SectionTitle variant="h5">Property Status</SectionTitle>
 
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={4}>
+            <Grid size={{ xs: 12, sm: 4 }}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -561,7 +561,7 @@ const NewProperty = () => {
                 label="Purchased"
               />
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid size={{ xs: 12, sm: 4 }}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -574,7 +574,7 @@ const NewProperty = () => {
                 label="Rented"
               />
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid size={{ xs: 12, sm: 4 }}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -593,7 +593,7 @@ const NewProperty = () => {
         {/* Action Buttons */}
         <Box sx={{ pt: 3, borderTop: 1, borderColor: "divider" }}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Button
                 fullWidth
                 variant="contained"
@@ -610,7 +610,7 @@ const NewProperty = () => {
                   : "Save and Create Another"}
               </Button>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Button
                 fullWidth
                 variant="outlined"

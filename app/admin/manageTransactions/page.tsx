@@ -317,7 +317,7 @@ const ManageTransactions: React.FC = () => {
                   </Typography>
                   <Grid container spacing={2}>
                     {transactionStats.map((stat) => (
-                      <Grid item xs={6} key={stat.label}>
+                      <Grid size={{ xs: 6 }} key={stat.label}>
                         <Box>
                           <Typography variant="body2" color="textSecondary">
                             {stat.label}

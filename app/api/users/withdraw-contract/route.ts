@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import User from "@/models/user";
 import dbConnect from "@/utils/connectDB";
 import mongoose from "mongoose";
+import { logPropertyWithdrawal } from "@/utils/auditLogger";
 
 export async function POST(request: NextRequest) {
   try {
@@ -125,6 +126,15 @@ export async function POST(request: NextRequest) {
         propertyWithdrawn: withdrawnProperty,
       },
     });
+
+    // Log property withdrawal request
+    await logPropertyWithdrawal(
+      user._id.toString(),
+      userEmail,
+      propertyId,
+      withdrawalReason,
+      request
+    );
 
     return NextResponse.json(
       {

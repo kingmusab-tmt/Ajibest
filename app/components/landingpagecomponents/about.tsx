@@ -102,7 +102,7 @@ const About = () => {
 
         <Grid container spacing={4}>
           {/* About Us Section */}
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Paper
               elevation={0}
               sx={{
@@ -132,7 +132,7 @@ const About = () => {
           </Grid>
 
           {/* Mission and Vision Side by Side */}
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Card
               sx={{
                 height: "100%",
@@ -165,7 +165,7 @@ const About = () => {
             </Card>
           </Grid>
 
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Card
               sx={{
                 height: "100%",
@@ -198,7 +198,7 @@ const About = () => {
           </Grid>
 
           {/* Value Proposition */}
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Paper
               sx={{
                 p: 4,
@@ -235,7 +235,7 @@ const About = () => {
                   { icon: <Handshake />, text: "Flexible Payment Options" },
                   { icon: <LocationOn />, text: "Prime Property Locations" },
                 ].map((item, index) => (
-                  <Grid item xs={12} sm={6} key={index}>
+                  <Grid size={{ xs: 12, sm: 6 }} key={index}>
                     <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
                       <Box sx={{ color: "primary.main", mr: 1 }}>
                         {item.icon}
@@ -249,7 +249,7 @@ const About = () => {
           </Grid>
 
           {/* Business Objectives */}
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Paper
               sx={{
                 p: 4,

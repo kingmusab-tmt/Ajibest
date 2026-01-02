@@ -340,12 +340,12 @@ const PaymentPage = ({
             <AccountBalance /> Payment Summary
           </Typography>
           <Grid container spacing={1}>
-            <Grid item xs={6}>
+            <Grid size={{ xs: 6 }}>
               <Typography variant="body2" color="text.secondary">
                 Total Amount:
               </Typography>
             </Grid>
-            <Grid item xs={6} textAlign="right">
+            <Grid size={{ xs: 6 }} textAlign="right">
               <Typography variant="h6" color="primary" fontWeight="bold">
                 {formatter.format(price)}
               </Typography>
@@ -353,21 +353,21 @@ const PaymentPage = ({
 
             {paymentMethod === "installment" && months > 0 && (
               <>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <Typography variant="body2" color="text.secondary">
                     Installment Plan:
                   </Typography>
                 </Grid>
-                <Grid item xs={6} textAlign="right">
+                <Grid size={{ xs: 6 }} textAlign="right">
                   <Typography variant="body2">{months} months</Typography>
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <Typography variant="body2" color="text.secondary">
                     Monthly Payment:
                   </Typography>
                 </Grid>
-                <Grid item xs={6} textAlign="right">
+                <Grid size={{ xs: 6 }} textAlign="right">
                   <Typography
                     variant="h6"
                     color="success.main"

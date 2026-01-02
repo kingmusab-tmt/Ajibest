@@ -17,8 +17,8 @@ const smsResponseMessages: { [key: string]: string } = {
 export const sendSMS = async (recipient: string, message: string) => {
   const senderName = process.env.NEXT_PUBLIC_SMS_SENDER as string;
   const headers = {
-    "X-Token": process.env.NEXT_PUBLIC_VT_TOKEN as string,
-    "X-Secret": process.env.NEXT_PUBLIC_VT_SECRET as string,
+    "X-Token": process.env.VT_TOKEN as string,
+    "X-Secret": process.env.VT_SECRET as string,
   };
 
   try {

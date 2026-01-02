@@ -263,7 +263,7 @@ const AnalyticDashboard = () => {
 
       {/* Core Statistics Grid */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             title="Total Users"
             value={data.stats.totalUsers}
@@ -272,7 +272,7 @@ const AnalyticDashboard = () => {
             progress={75}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             title="Properties"
             value={data.stats.totalProperties}
@@ -282,7 +282,7 @@ const AnalyticDashboard = () => {
             subtitle={`${data.stats.activeListings} active`}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             title="Transactions"
             value={data.stats.totalTransactions}
@@ -292,7 +292,7 @@ const AnalyticDashboard = () => {
             subtitle={`${data.stats.pendingTransactions} pending`}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             title="Total Revenue"
             value={data.stats.totalRevenue}
@@ -306,7 +306,7 @@ const AnalyticDashboard = () => {
 
       {/* Payment Statistics Grid */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             title="Total Payments Made"
             value={data.stats.totalPaymentsMade}
@@ -317,7 +317,7 @@ const AnalyticDashboard = () => {
             subtitle={`${paymentCompletionPercentage.toFixed(1)}% of total`}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             title="Total Payment to be Made"
             value={data.stats.totalPaymentsToBeMade}
@@ -328,7 +328,7 @@ const AnalyticDashboard = () => {
             subtitle="Remaining balance"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             title="Purchased Under Payment"
             value={data.stats.purchasedUnderPayment}
@@ -338,7 +338,7 @@ const AnalyticDashboard = () => {
             subtitle="Installment purchases"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             title="Rented Under Payment"
             value={data.stats.rentedUnderPayment}
@@ -352,7 +352,7 @@ const AnalyticDashboard = () => {
 
       {/* Additional Stats Grid */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             title="Active Listings"
             value={data.stats.activeListings}
@@ -361,7 +361,7 @@ const AnalyticDashboard = () => {
             progress={45}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             title="Sold Properties"
             value={data.stats.soldProperties}
@@ -370,7 +370,7 @@ const AnalyticDashboard = () => {
             progress={30}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             title="Rented Properties"
             value={data.stats.rentedProperties}
@@ -379,7 +379,7 @@ const AnalyticDashboard = () => {
             progress={25}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             title="Success Rate"
             value={`${(
@@ -397,7 +397,7 @@ const AnalyticDashboard = () => {
       {/* Charts Section */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {/* Revenue Chart */}
-        <Grid item xs={12} md={8}>
+        <Grid size={{ xs: 12, md: 8 }}>
           <Card>
             <CardContent>
               <Box
@@ -422,7 +422,7 @@ const AnalyticDashboard = () => {
                 />
                 <Grid container spacing={2} sx={{ mt: 2 }}>
                   {data.revenueData.map((month: any) => (
-                    <Grid item xs={2} key={month.month}>
+                    <Grid size={{ xs: 2 }} key={month.month}>
                       <Box textAlign="center">
                         <Typography variant="body2" color="textSecondary">
                           {month.month}
@@ -440,7 +440,7 @@ const AnalyticDashboard = () => {
         </Grid>
 
         {/* Property Distribution */}
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>

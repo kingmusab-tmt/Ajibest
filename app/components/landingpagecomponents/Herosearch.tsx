@@ -69,7 +69,7 @@ const HeroSearch: React.FC = () => {
       }}
     >
       <Grid container spacing={2} alignItems="center">
-        <Grid item xs={12} md={3}>
+        <Grid size={{ xs: 12, md: 3 }}>
           <FormControl fullWidth size={isMobile ? "small" : "medium"}>
             <InputLabel id="state-label">State</InputLabel>
             <Select
@@ -121,7 +121,7 @@ const HeroSearch: React.FC = () => {
           </FormControl>
         </Grid>
 
-        <Grid item xs={12} md={2}>
+        <Grid size={{ xs: 12, md: 2 }}>
           <FormControl fullWidth size={isMobile ? "small" : "medium"}>
             <InputLabel id="property-type-label">Type</InputLabel>
             <Select
@@ -142,7 +142,7 @@ const HeroSearch: React.FC = () => {
           </FormControl>
         </Grid>
 
-        <Grid item xs={12} md={2}>
+        <Grid size={{ xs: 12, md: 2 }}>
           <FormControl fullWidth size={isMobile ? "small" : "medium"}>
             <InputLabel id="listingPurpose-label">listingPurpose</InputLabel>
             <Select
@@ -158,7 +158,7 @@ const HeroSearch: React.FC = () => {
           </FormControl>
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid size={{ xs: 12, md: 3 }}>
           <FormControl fullWidth size={isMobile ? "small" : "medium"}>
             <InputLabel id="price-range-label">Price Range</InputLabel>
             <Select
@@ -178,7 +178,7 @@ const HeroSearch: React.FC = () => {
           </FormControl>
         </Grid>
 
-        <Grid item xs={12} md={2}>
+        <Grid size={{ xs: 12, md: 2 }}>
           <Button
             variant="contained"
             color="primary"

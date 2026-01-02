@@ -509,7 +509,7 @@ const MyProperty = () => {
           ) : (
             <Grid container spacing={isMobile ? 2 : 3}>
               {ownedProperties.map((property) => (
-                <Grid item xs={12} sm={6} md={4} key={property.propertyId}>
+                <Grid size={{ xs: 12, sm: 6, md: 4 }} key={property.propertyId}>
                   <Card
                     sx={{
                       height: "100%",
@@ -697,7 +697,10 @@ const MyProperty = () => {
                   property.paymentHistory?.[property.paymentHistory.length - 1];
 
                 return (
-                  <Grid item xs={12} sm={6} md={4} key={property.propertyId}>
+                  <Grid
+                    size={{ xs: 12, sm: 6, md: 4 }}
+                    key={property.propertyId}
+                  >
                     <Card
                       sx={{
                         height: "100%",
@@ -930,7 +933,10 @@ const MyProperty = () => {
                   property.paymentHistory?.[property.paymentHistory.length - 1];
 
                 return (
-                  <Grid item xs={12} sm={6} md={4} key={property.propertyId}>
+                  <Grid
+                    size={{ xs: 12, sm: 6, md: 4 }}
+                    key={property.propertyId}
+                  >
                     <Card
                       sx={{
                         height: "100%",
@@ -1351,7 +1357,7 @@ const MyProperty = () => {
                   Payment Summary
                 </Typography>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
+                  <Grid size={{ xs: 12, sm: 6 }}>
                     <Typography variant="body2">
                       Total Property Price:{" "}
                       <strong>
@@ -1359,7 +1365,7 @@ const MyProperty = () => {
                       </strong>
                     </Typography>
                   </Grid>
-                  <Grid item xs={12} sm={6}>
+                  <Grid size={{ xs: 12, sm: 6 }}>
                     <Typography variant="body2">
                       Total Paid:{" "}
                       <strong style={{ color: theme.palette.success.main }}>
@@ -1371,7 +1377,7 @@ const MyProperty = () => {
                       </strong>
                     </Typography>
                   </Grid>
-                  <Grid item xs={12} sm={6}>
+                  <Grid size={{ xs: 12, sm: 6 }}>
                     <Typography variant="body2">
                       Remaining Balance:{" "}
                       <strong style={{ color: theme.palette.error.main }}>
@@ -1383,7 +1389,7 @@ const MyProperty = () => {
                       </strong>
                     </Typography>
                   </Grid>
-                  <Grid item xs={12} sm={6}>
+                  <Grid size={{ xs: 12, sm: 6 }}>
                     <Typography variant="body2">
                       Progress:{" "}
                       <strong>
