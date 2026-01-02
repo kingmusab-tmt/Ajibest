@@ -80,7 +80,7 @@ export async function logAudit(params: AuditLogParams): Promise<void> {
     const filePath = getLogFilePath();
 
     console.log("📝 [AUDIT LOG] About to write to:", filePath);
-    
+
     // Append to log file synchronously
     try {
       fs.appendFileSync(filePath, logLine, "utf8");
@@ -89,7 +89,7 @@ export async function logAudit(params: AuditLogParams): Promise<void> {
       console.error("File path:", filePath);
       throw writeErr;
     }
-    
+
     // Log to console for testing
     console.log("✅ [AUDIT LOG] New entry logged:", {
       id: logEntry._id,
