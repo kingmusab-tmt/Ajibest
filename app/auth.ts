@@ -95,14 +95,20 @@ export const authOptions = {
     },
 
     async jwt({ token, trigger, session, user }) {
-      // Only log on initial authentication when user object exists
-      // (not on every session refresh)
-      if (user) {
+      // Log only on initial authentication (user object only exists on first JWT creation)
+      // For Credentials: logging already happens in authorize callback
+      // For OAuth (Google): this is the only place we get the user object on first auth
+      if (user && !token.loggedAt) {
+        // Only log if we haven't already logged this token
         console.log("🔐 [AUTH JWT] User authenticated:", user.email);
         if (user.id && user.email && user.name && user.role) {
           await logSuccessfulLogin(user.id, user.email, user.name, user.role);
         }
+        // Mark that we've logged this token to avoid duplicate logs
+        token.loggedAt = new Date().getTime();
+      }
 
+      if (user) {
         token.email = user.email;
         token.name = user.name;
         token.id = user.id;
