@@ -95,7 +95,14 @@ export const authOptions = {
     },
 
     async jwt({ token, trigger, session, user }) {
+      // Only log on initial authentication when user object exists
+      // (not on every session refresh)
       if (user) {
+        console.log("🔐 [AUTH JWT] User authenticated:", user.email);
+        if (user.id && user.email && user.name && user.role) {
+          await logSuccessfulLogin(user.id, user.email, user.name, user.role);
+        }
+
         token.email = user.email;
         token.name = user.name;
         token.id = user.id;
@@ -119,15 +126,6 @@ export const authOptions = {
         const dbUser = await User.findOne({ email: userEmail });
 
         if (dbUser) {
-          // Log successful login on session creation
-          console.log("🔐 [AUTH SESSION] Session created for user:", dbUser.email);
-          await logSuccessfulLogin(
-            dbUser.id,
-            dbUser.email,
-            dbUser.name,
-            dbUser.role
-          );
-
           session.user.email = dbUser.email;
           session.user.name = dbUser.name;
           session.user.id = dbUser.id;
