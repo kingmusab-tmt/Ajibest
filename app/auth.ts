@@ -11,6 +11,46 @@ import { logFailedLogin, logSuccessfulLogin } from "@/utils/auditLogger";
 export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET!,
   adapter: MongoDBAdapter(clientPromise),
+  // Explicitly enable secure cookies and CSRF protection
+  useSecureCookies: process.env.NODE_ENV === "production",
+  cookies: {
+    sessionToken: {
+      name:
+        process.env.NODE_ENV === "production"
+          ? "__Secure-next-auth.session-token"
+          : "next-auth.session-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
+    callbackUrl: {
+      name:
+        process.env.NODE_ENV === "production"
+          ? "__Secure-next-auth.callback-url"
+          : "next-auth.callback-url",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
+    csrfToken: {
+      name:
+        process.env.NODE_ENV === "production"
+          ? "__Host-next-auth.csrf-token"
+          : "next-auth.csrf-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -33,6 +73,7 @@ export const authOptions = {
           emailToken: null,
           isActive: true,
           role: "User",
+          provider: "google",
         };
       },
       httpOptions: {
@@ -66,7 +107,7 @@ export const authOptions = {
           // Log successful login
           await logSuccessfulLogin(user.id, user.email, user.name, user.role);
 
-          return user;
+          return { ...user.toObject(), provider: "credentials" };
         } catch (error) {
           // Log general authentication error if not already logged
           if (
@@ -94,57 +135,71 @@ export const authOptions = {
       return baseUrl + "/userDashboard";
     },
 
-    async jwt({ token, trigger, session, user }) {
+    async jwt({ token, trigger, session, user }: any) {
       // Log only on initial authentication (user object only exists on first JWT creation)
       // For Credentials: logging already happens in authorize callback
       // For OAuth (Google): this is the only place we get the user object on first auth
-      if (user && !token.loggedAt) {
+      if (user && !(token as any).loggedAt) {
         // Only log if we haven't already logged this token
-        console.log("🔐 [AUTH JWT] User authenticated:", user.email);
-        if (user.id && user.email && user.name && user.role) {
-          await logSuccessfulLogin(user.id, user.email, user.name, user.role);
+        console.log("🔐 [AUTH JWT] User authenticated:", (user as any).email);
+        if (
+          (user as any).id &&
+          (user as any).email &&
+          (user as any).name &&
+          (user as any).role
+        ) {
+          await logSuccessfulLogin(
+            (user as any).id,
+            (user as any).email,
+            (user as any).name,
+            (user as any).role,
+          );
         }
         // Mark that we've logged this token to avoid duplicate logs
-        token.loggedAt = new Date().getTime();
+        (token as any).loggedAt = new Date().getTime();
       }
 
       if (user) {
-        token.email = user.email;
-        token.name = user.name;
-        token.id = user.id;
-        token.image = user.image;
-        token.isActive = user.isActive;
-        token.role = user.role;
+        (token as any).email = (user as any).email;
+        (token as any).name = (user as any).name;
+        (token as any).id = (user as any).id;
+        (token as any).image = (user as any).image;
+        (token as any).isActive = (user as any).isActive;
+        (token as any).role = (user as any).role;
+        (token as any).provider = (user as any).provider ?? "credentials";
       } else if (trigger === "update" && session?.name) {
-        token.email = user["email"];
-        token.name = user["name"];
-        token.id = user["id"];
-        token.image = user["image"];
-        token.isActive = user["isActive"];
-        token.role = user["role"];
+        (token as any).email = (user as any)?.["email"];
+        (token as any).name = (user as any)?.["name"];
+        (token as any).id = (user as any)?.["id"];
+        (token as any).image = (user as any)?.["image"];
+        (token as any).isActive = (user as any)?.["isActive"];
+        (token as any).role = (user as any)?.["role"];
+        (token as any).provider = (user as any)?.["provider"] ?? "credentials";
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: any) {
       try {
         await connectDB();
         const userEmail = session?.user?.email;
         const dbUser = await User.findOne({ email: userEmail });
 
-        if (dbUser) {
-          session.user.email = dbUser.email;
-          session.user.name = dbUser.name;
-          session.user.id = dbUser.id;
-          session.user.image = dbUser.image;
-          session.user.isActive = dbUser.isActive;
-          session.user.role = dbUser.role;
-        } else {
-          session.user.email = token.email;
-          session.user.name = token.name;
-          session.user.id = token.id;
-          session.user.image = token.image;
-          session.user.isActive = token.isActive;
-          session.user.role = token.role;
+        if (dbUser && session?.user) {
+          (session.user as any).email = dbUser.email;
+          (session.user as any).name = dbUser.name;
+          (session.user as any).id = dbUser.id;
+          (session.user as any).image = dbUser.image;
+          (session.user as any).isActive = dbUser.isActive;
+          (session.user as any).role = dbUser.role;
+          (session.user as any).provider = token.provider ?? "credentials";
+        } else if (session?.user) {
+          (session.user as any).email = token.email;
+          (session.user as any).name = token.name;
+          (session.user as any).id = token.id;
+          (session.user as any).image = token.image;
+          (session.user as any).isActive = token.isActive;
+          (session.user as any).role = token.role;
+          (session.user as any).provider = token.provider ?? "credentials";
         }
         return session;
       } catch (error) {

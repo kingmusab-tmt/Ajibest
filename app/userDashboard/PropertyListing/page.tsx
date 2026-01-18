@@ -65,13 +65,57 @@ const priceRanges = [
   { label: "₦10M+", min: 10000000, max: Infinity },
 ];
 
+// State → City mapping (capital cities)
+const stateCityMap: Record<string, string[]> = {
+  abia: ["umuahia"],
+  adamawa: ["yola"],
+  "akwa ibom": ["uyo"],
+  anambra: ["awka"],
+  bauchi: ["bauchi"],
+  bayelsa: ["yenagoa"],
+  benue: ["makurdi"],
+  borno: ["maiduguri"],
+  "cross river": ["calabar"],
+  delta: ["asaba"],
+  ebonyi: ["abakaliki"],
+  edo: ["benin state"],
+  ekiti: ["ado-ekiti"],
+  enugu: ["enugu"],
+  gombe: ["gombe"],
+  imo: ["owerri"],
+  jigawa: ["dutse"],
+  kaduna: ["kaduna"],
+  kano: ["kano"],
+  katsina: ["katsina"],
+  kebbi: ["birnin kebbi"],
+  kogi: ["lokoja"],
+  kwara: ["ilorin"],
+  lagos: ["lagos"],
+  nasarawa: ["lafia"],
+  niger: ["minna"],
+  ogun: ["abeokuta"],
+  ondo: ["akure"],
+  osun: ["osogbo"],
+  oyo: ["ibadan"],
+  plateau: ["jos"],
+  rivers: ["port harcourt"],
+  sokoto: ["sokoto"],
+  taraba: ["jalingo"],
+  yobe: ["damaturu"],
+  zamfara: ["gusau"],
+  fct: ["abuja"],
+};
+
+const allStates = Object.keys(stateCityMap);
+const allCities = Array.from(new Set(Object.values(stateCityMap).flat()));
+
 const PropertyListing = () => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [favoriteProperties, setFavoriteProperties] = useState<string[]>([]);
   const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
   const [showPayment, setShowPayment] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(
-    null
+    null,
   );
   const [filters, setFilters] = useState({
     size: "",
@@ -79,6 +123,8 @@ const PropertyListing = () => {
     location: "",
     listingPurpose: "",
     propertyType: "",
+    state: "",
+    city: "",
   });
   const [sortBy, setSortBy] = useState("newest");
   const [currentPage, setCurrentPage] = useState(1);
@@ -122,18 +168,18 @@ const PropertyListing = () => {
       // Apply filters
       if (filters.size) {
         filtered = filtered.filter((property) =>
-          property.size?.includes(filters.size)
+          property.size?.includes(filters.size),
         );
       }
       if (filters.price) {
         const selectedPriceRange = priceRanges.find(
-          (range) => range.label === filters.price
+          (range) => range.label === filters.price,
         );
         if (selectedPriceRange) {
           filtered = filtered.filter(
             (property) =>
               property.price >= selectedPriceRange.min &&
-              property.price <= selectedPriceRange.max
+              property.price <= selectedPriceRange.max,
           );
         }
       }
@@ -141,17 +187,29 @@ const PropertyListing = () => {
         filtered = filtered.filter((property) =>
           property.location
             .toLowerCase()
-            .includes(filters.location.toLowerCase())
+            .includes(filters.location.toLowerCase()),
+        );
+      }
+      if (filters.state) {
+        filtered = filtered.filter(
+          (property) =>
+            property.state?.toLowerCase() === filters.state.toLowerCase(),
+        );
+      }
+      if (filters.city) {
+        filtered = filtered.filter(
+          (property) =>
+            property.city?.toLowerCase() === filters.city.toLowerCase(),
         );
       }
       if (filters.listingPurpose) {
         filtered = filtered.filter(
-          (property) => property.listingPurpose === filters.listingPurpose
+          (property) => property.listingPurpose === filters.listingPurpose,
         );
       }
       if (filters.propertyType) {
         filtered = filtered.filter(
-          (property) => property.propertyType === filters.propertyType
+          (property) => property.propertyType === filters.propertyType,
         );
       }
 
@@ -166,13 +224,13 @@ const PropertyListing = () => {
         case "newest":
           filtered.sort(
             (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
           );
           break;
         case "oldest":
           filtered.sort(
             (a, b) =>
-              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
           );
           break;
       }
@@ -187,6 +245,8 @@ const PropertyListing = () => {
     const { name, value } = event.target;
     setFilters((prevFilters) => ({
       ...prevFilters,
+      // Reset city when state changes
+      ...(name === "state" ? { city: "" } : {}),
       [name as string]: value as string,
     }));
   };
@@ -214,7 +274,7 @@ const PropertyListing = () => {
     setFavoriteProperties((prev) =>
       prev.includes(propertyId)
         ? prev.filter((id) => id !== propertyId)
-        : [...prev, propertyId]
+        : [...prev, propertyId],
     );
   };
 
@@ -258,13 +318,13 @@ const PropertyListing = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentProperties = filteredProperties.slice(
     indexOfFirstItem,
-    indexOfLastItem
+    indexOfLastItem,
   );
   const totalPages = Math.ceil(filteredProperties.length / itemsPerPage);
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
-    value: number
+    value: number,
   ) => {
     setCurrentPage(value);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -350,6 +410,43 @@ const PropertyListing = () => {
               </Select>
             </FormControl>
 
+            <FormControl size="small" sx={{ minWidth: 140 }}>
+              <InputLabel>State</InputLabel>
+              <Select
+                label="State"
+                name="state"
+                value={filters.state}
+                onChange={handleFilterChange}
+              >
+                <MenuItem value="">All States</MenuItem>
+                {allStates.map((s) => (
+                  <MenuItem key={s} value={s}>
+                    {s.replace(/\b\w/g, (l) => l.toUpperCase())}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl size="small" sx={{ minWidth: 140 }}>
+              <InputLabel>City</InputLabel>
+              <Select
+                label="City"
+                name="city"
+                value={filters.city}
+                onChange={handleFilterChange}
+              >
+                <MenuItem value="">All Cities</MenuItem>
+                {(filters.state
+                  ? stateCityMap[filters.state] || []
+                  : allCities
+                ).map((c) => (
+                  <MenuItem key={c} value={c}>
+                    {c.replace(/\b\w/g, (l) => l.toUpperCase())}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
             <FormControl size="small" sx={{ minWidth: 120 }}>
               <InputLabel>Purpose</InputLabel>
               <Select
@@ -404,6 +501,8 @@ const PropertyListing = () => {
                   location: "",
                   listingPurpose: "",
                   propertyType: "",
+                  state: "",
+                  city: "",
                 })
               }
               size="small"
@@ -456,6 +555,8 @@ const PropertyListing = () => {
             variant="contained"
             onClick={() =>
               setFilters({
+                state: "",
+                city: "",
                 size: "",
                 price: "",
                 location: "",
@@ -643,6 +744,22 @@ const PropertyListing = () => {
                           variant="outlined"
                         />
                       )}
+                      {property.amenities && (
+                        <Chip
+                          icon={<LocalPostOffice sx={{ fontSize: 16 }} />}
+                          label={property.amenities}
+                          size="small"
+                          variant="outlined"
+                        />
+                      )}
+                      {property.utilities && (
+                        <Chip
+                          icon={<BuildCircleOutlined sx={{ fontSize: 16 }} />}
+                          label={property.utilities}
+                          size="small"
+                          variant="outlined"
+                        />
+                      )}
                     </Stack>
 
                     {/* Price */}
@@ -655,7 +772,7 @@ const PropertyListing = () => {
                       }}
                     >
                       {formatter.format(property.price)}
-                      {property.listingPurpose === "For Renting" && "/mo"}
+                      {property.listingPurpose === "For Renting" && ""}
                     </Typography>
                   </CardContent>
 

@@ -12,10 +12,10 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
-  if (!session || session.user.role !== "Admin") {
+  if (!session || session?.user?.role !== "Admin") {
     return NextResponse.json(
       { success: false, message: "Unauthorized" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     if (!userId || !propertyId) {
       return NextResponse.json(
         { success: false, error: "User ID and Property ID are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     if (!property) {
       return NextResponse.json(
         { success: false, error: "Property not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -55,7 +55,7 @@ export async function POST(req: Request) {
     if (!user) {
       return NextResponse.json(
         { success: false, error: "User not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -203,7 +203,7 @@ export async function POST(req: Request) {
           transactionId: transaction._id,
         },
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error assigning property:", error);
@@ -213,7 +213,7 @@ export async function POST(req: Request) {
         error: "Failed to assign property",
         details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

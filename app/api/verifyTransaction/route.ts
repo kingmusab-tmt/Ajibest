@@ -15,7 +15,7 @@ export async function POST(req) {
   if (!session) {
     return NextResponse.json(
       { success: false, message: "Unauthorized" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -32,6 +32,24 @@ export async function POST(req) {
     paymentMethod,
     listingPurpose,
   } = body;
+
+  console.log(
+    `[verifyTransaction] Request received:`,
+    JSON.stringify(
+      {
+        amount,
+        propertyPrice,
+        email,
+        reference,
+        propertyId,
+        propertyType,
+        paymentMethod,
+        listingPurpose,
+      },
+      null,
+      2,
+    ),
+  );
 
   try {
     const user = await User.findOne({ email });
@@ -84,12 +102,18 @@ export async function POST(req) {
 
     // Check if this is a new purchase or subsequent payment
     const existingPropertyUnderPayment = user.propertyUnderPayment.find(
-      (p) => p.propertyId.toString() === property._id.toString()
+      (p) => p.propertyId.toString() === property._id.toString(),
     );
 
     const existingPropertyPurOrRented = user.propertyPurOrRented.find(
-      (p) => p.propertyId.toString() === property._id.toString()
+      (p) => p.propertyId.toString() === property._id.toString(),
     );
+
+    console.log(`[verifyTransaction] Checking existing properties:`, {
+      propertyId: property._id,
+      existingUnderPayment: !!existingPropertyUnderPayment,
+      existingPurOrRented: !!existingPropertyPurOrRented,
+    });
 
     // If property already exists in either array, this is a subsequent payment
     if (existingPropertyUnderPayment || existingPropertyPurOrRented) {
@@ -102,6 +126,9 @@ export async function POST(req) {
 
     // NEW PURCHASE - First time buying this property
     if (paymentMethod === "payOnce") {
+      console.log(
+        `[verifyTransaction] Processing payOnce payment for property: ${property._id}`,
+      );
       // Pay Once - Full payment
       const newTotalPaymentMade = user.totalPaymentMade + amount;
       const newTotalPaymentsGross = user.totalPaymentsGross + propertyPrice;
@@ -145,11 +172,28 @@ export async function POST(req) {
       // Update property status
       const propertyUpdate =
         listingPurpose === "For Renting"
-          ? { rented: true, rentedBy: user._id }
-          : { purchased: true, purchasedBy: user._id };
+          ? { rented: true, rentedBy: user._id, status: "rented" }
+          : { purchased: true, purchasedBy: user._id, status: "sold" };
 
-      await Property.findByIdAndUpdate(property._id, propertyUpdate);
+      console.log(
+        `[verifyTransaction] Updating property ${property._id} with:`,
+        propertyUpdate,
+      );
+      const updateResult = await Property.findByIdAndUpdate(
+        property._id,
+        propertyUpdate,
+        { new: true },
+      );
+      console.log(`[verifyTransaction] Property after update:`, updateResult);
+      if (!updateResult) {
+        console.error(
+          `[verifyTransaction] WARNING: Property update returned null/undefined for ID: ${property._id}`,
+        );
+      }
     } else if (paymentMethod === "installment") {
+      console.log(
+        `[verifyTransaction] Processing installment payment for property: ${property._id}`,
+      );
       // Installment Payment - First payment
       const newTotalPaymentMade = user.totalPaymentMade + amount;
       const newTotalPaymentsGross = user.totalPaymentsGross + propertyPrice;
@@ -204,10 +248,41 @@ export async function POST(req) {
       });
 
       // Update property status to indicate it's under payment
-      await Property.findByIdAndUpdate(property._id, {
-        underPayment: true,
-        underPaymentBy: user._id,
-      });
+      const propertyUpdate =
+        listingPurpose === "For Renting"
+          ? {
+              underPayment: true,
+              underPaymentBy: user._id,
+              rented: true,
+              rentedBy: user._id,
+              status: "rented",
+            }
+          : {
+              underPayment: true,
+              underPaymentBy: user._id,
+              purchased: true,
+              purchasedBy: user._id,
+              status: "sold",
+            };
+
+      console.log(
+        `[verifyTransaction] Updating property ${property._id} (installment) with:`,
+        propertyUpdate,
+      );
+      const updateResult = await Property.findByIdAndUpdate(
+        property._id,
+        propertyUpdate,
+        { new: true },
+      );
+      console.log(
+        `[verifyTransaction] Property after installment update:`,
+        updateResult,
+      );
+      if (!updateResult) {
+        console.error(
+          `[verifyTransaction] WARNING: Property update returned null/undefined for ID: ${property._id}`,
+        );
+      }
     }
 
     return Response.json({

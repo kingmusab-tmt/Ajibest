@@ -123,7 +123,7 @@ const filterProperties = (
     propertyType?: string | null;
     priceRange?: string | null;
     purpose?: string | null;
-  }
+  },
 ): FallbackProperty[] => {
   let filtered = [...properties];
 
@@ -131,7 +131,7 @@ const filterProperties = (
     filtered = filtered.filter(
       (prop) =>
         prop.state &&
-        prop.state.toLowerCase().includes(filters.state!.toLowerCase())
+        prop.state.toLowerCase().includes(filters.state!.toLowerCase()),
     );
   }
 
@@ -140,13 +140,13 @@ const filterProperties = (
     filtered = filtered.filter((prop) =>
       prop.propertyType
         .toLowerCase()
-        .includes(decodedPropertyType.toLowerCase())
+        .includes(decodedPropertyType.toLowerCase()),
     );
   }
 
   if (filters.purpose && filters.purpose !== "all") {
     filtered = filtered.filter(
-      (prop) => prop.listingPurpose === filters.purpose
+      (prop) => prop.listingPurpose === filters.purpose,
     );
   }
 
@@ -205,14 +205,30 @@ export async function GET(request: NextRequest) {
         if (maxPrice) filter.price.$lte = maxPrice;
       }
 
+      // Only show available properties (exclude rented/purchased)
+      filter.rented = { $ne: true };
+      filter.purchased = { $ne: true };
+
       // Get total count for pagination
       const total = await Property.countDocuments(filter);
+
+      console.log("[getproperties] Filter:", JSON.stringify(filter, null, 2));
+      console.log("[getproperties] Total matching properties:", total);
 
       // Fetch properties with filters and pagination
       let properties = await Property.find(filter)
         .skip(skip)
         .limit(limit)
         .sort({ createdAt: -1 });
+
+      console.log(`[getproperties] Returned ${properties.length} properties`);
+      if (properties.length > 0) {
+        console.log(
+          "[getproperties] First property rented/purchased:",
+          properties[0].rented,
+          properties[0].purchased,
+        );
+      }
 
       // If no properties found in database, use filtered fallback
       if (!properties || properties.length === 0) {

@@ -77,7 +77,7 @@ const PaymentPage = ({
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const { data: session, status } = useSession();
-  const publicKey = "pk_test_f6a081e9fa564f361f3a9a63de5cd4dc789cfc73";
+  const publicKey = "pk_test_d3edcf488eb73573c3e364b7188deb03dcfa9de4";
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));

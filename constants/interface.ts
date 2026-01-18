@@ -16,6 +16,7 @@ interface IPropertyWithdrawn {
   utilities?: string;
   plotNumber: string;
   state: string;
+  city: string;
   size?: "Quarter Plot" | "Half Plot" | "Full Plot";
   instalmentAllowed: boolean;
   paymentHistory: {
@@ -93,6 +94,7 @@ export interface User {
     utilities?: string;
     plotNumber: string;
     state: string;
+    city: string;
     size?: "Quarter Plot" | "Half Plot" | "Full Plot";
     instalmentAllowed: boolean;
     paymentHistory: {
@@ -125,6 +127,7 @@ export interface User {
     utilities?: string;
     plotNumber: string;
     state: string;
+    city: string;
     size?: "Quarter Plot" | "Half Plot" | "Full Plot";
     rentalDuration?: number;
     instalmentAllowed: boolean;
@@ -147,6 +150,9 @@ export interface Property {
   listingPurpose: "For Renting" | "For Sale";
   bedrooms?: number;
   rentalDuration?: number;
+  state: string;
+  city: string;
+  plotNumber: string;
   bathrooms?: number;
   amenities?: string;
   utilities?: string;

@@ -49,6 +49,8 @@ interface PropertyState {
   propertyType: string;
   price: string;
   listingPurpose: string;
+  state: string;
+  city: string;
   bedrooms: string;
   rentalDuration: string;
   bathrooms: string;
@@ -84,6 +86,8 @@ const NewProperty = () => {
     propertyType: "",
     price: "",
     listingPurpose: "",
+    state: "",
+    city: "",
     bedrooms: "",
     rentalDuration: "",
     bathrooms: "",
@@ -96,7 +100,7 @@ const NewProperty = () => {
     size: "",
   });
   const [changedFields, setChangedFields] = useState<Record<string, boolean>>(
-    {}
+    {},
   );
   const [errors, setErrors] = useState<Record<string, { message: string }>>({});
 
@@ -161,6 +165,8 @@ const NewProperty = () => {
       propertyType: "",
       price: "",
       listingPurpose: "",
+      state: "",
+      city: "",
       bedrooms: "",
       rentalDuration: "",
       bathrooms: "",
@@ -244,12 +250,90 @@ const NewProperty = () => {
     }
   };
 
-  const imageSrc = isUrl(image) ? image : `/uploads/${image}`;
+  const imageSrc = image ? (isUrl(image) ? image : `/uploads/${image}`) : "";
 
   const listPurposes = ["For Renting", "For Sale"];
   const propTypes = ["House", "Farm", "Land", "Commercial", "Office", "Shop"];
   const propSizes = ["Quarter Plot", "Half Plot", "Full Plot"];
   const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const states = [
+    "abia",
+    "adamawa",
+    "akwa ibom",
+    "anambra",
+    "bauchi",
+    "bayelsa",
+    "benue",
+    "borno",
+    "cross river",
+    "delta",
+    "ebonyi",
+    "edo",
+    "ekiti",
+    "enugu",
+    "gombe",
+    "imo",
+    "jigawa",
+    "kaduna",
+    "kano",
+    "katsina",
+    "kebbi",
+    "kogi",
+    "kwara",
+    "lagos",
+    "nasarawa",
+    "niger",
+    "ogun",
+    "ondo",
+    "osun",
+    "oyo",
+    "plateau",
+    "rivers",
+    "sokoto",
+    "taraba",
+    "yobe",
+    "zamfara",
+    "fct",
+  ];
+  const cities = [
+    "umuahia",
+    "yola",
+    "uyo",
+    "awka",
+    "bauchi",
+    "yenagoa",
+    "makurdi",
+    "maiduguri",
+    "calabar",
+    "asaba",
+    "abakaliki",
+    "benin state",
+    "ado-ekiti",
+    "enugu",
+    "gombe",
+    "owerri",
+    "dutse",
+    "kaduna",
+    "kano",
+    "katsina",
+    "birnin kebbi",
+    "lokoja",
+    "ilorin",
+    "lagos",
+    "lafia",
+    "minna",
+    "abeokuta",
+    "akure",
+    "osogbo",
+    "ibadan",
+    "jos",
+    "port harcourt",
+    "sokoto",
+    "jalingo",
+    "damaturu",
+    "gusau",
+    "abuja",
+  ];
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -336,6 +420,56 @@ const NewProperty = () => {
                 helperText={errors["location"]?.message}
                 required
               />
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 6 }}>
+              <FormControl fullWidth error={!!errors["state"]}>
+                <InputLabel>State</InputLabel>
+                <Select
+                  name="state"
+                  value={property.state}
+                  onChange={handleSelectChange}
+                  label="State"
+                >
+                  <MenuItem value="">Select State</MenuItem>
+                  {states.map((s) => (
+                    <MenuItem key={s} value={s}>
+                      {s.toUpperCase() === s
+                        ? s
+                        : s.replace(/\b\w/g, (l) => l.toUpperCase())}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors["state"] && (
+                  <Typography color="error" variant="caption">
+                    {errors["state"].message}
+                  </Typography>
+                )}
+              </FormControl>
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 6 }}>
+              <FormControl fullWidth error={!!errors["city"]}>
+                <InputLabel>City</InputLabel>
+                <Select
+                  name="city"
+                  value={property.city}
+                  onChange={handleSelectChange}
+                  label="City"
+                >
+                  <MenuItem value="">Select City</MenuItem>
+                  {cities.map((c) => (
+                    <MenuItem key={c} value={c}>
+                      {c.replace(/\b\w/g, (l) => l.toUpperCase())}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors["city"] && (
+                  <Typography color="error" variant="caption">
+                    {errors["city"].message}
+                  </Typography>
+                )}
+              </FormControl>
             </Grid>
 
             <Grid size={{ xs: 12, md: 6 }}>

@@ -39,17 +39,27 @@ const EditableImage: React.FC<EditableImageProps> = ({ link, setLink }) => {
     if (files && files.length === 1) {
       const file = files[0];
       setIsUploading(true);
+      console.log(
+        "[EditableImage] Selected file:",
+        file.name,
+        file.type,
+        file.size,
+      );
 
       const data = new FormData();
       data.set("file", file);
 
       try {
-        const uploadPromise = fetch(`/api/newupload?filename=${file.name}`, {
-          method: "POST",
-          body: data,
-        }).then((response) => {
+        const uploadPromise = fetch(
+          `/api/newupload?filename=${encodeURIComponent(file.name)}`,
+          {
+            method: "POST",
+            body: data,
+          },
+        ).then((response) => {
           if (response.ok) {
             return response.json().then((result) => {
+              console.log("[EditableImage] Upload success:", result);
               setLink(result.link);
             });
           }
@@ -62,7 +72,7 @@ const EditableImage: React.FC<EditableImageProps> = ({ link, setLink }) => {
           error: "Upload error",
         });
       } catch (error) {
-        console.error("Upload failed:", error);
+        console.error("[EditableImage] Upload failed:", error);
       } finally {
         setIsUploading(false);
       }

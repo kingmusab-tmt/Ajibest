@@ -37,6 +37,8 @@ import {
   FilterList,
   ViewCarousel,
   GridView,
+  LocalPostOffice,
+  BuildCircleOutlined,
 } from "@mui/icons-material";
 import Link from "next/link";
 import LoadingSpinner from "../components/generalcomponents/loadingSpinner";
@@ -134,7 +136,7 @@ const PropertiesContent = () => {
               limit: 12,
               total: data.data?.length || 0,
               pages: 1,
-            }
+            },
           );
         } else {
           throw new Error(data.message || "Failed to fetch properties");
@@ -144,7 +146,7 @@ const PropertiesContent = () => {
         setError(
           err instanceof Error
             ? err.message
-            : "Failed to load properties. Please try again."
+            : "Failed to load properties. Please try again.",
         );
       } finally {
         setLoading(false);
@@ -183,7 +185,7 @@ const PropertiesContent = () => {
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
-    value: number
+    value: number,
   ) => {
     const params = new URLSearchParams();
 
@@ -623,7 +625,7 @@ const PropertiesContent = () => {
                         >
                           {truncateDescription(
                             property.description,
-                            viewMode === "list" ? 120 : 80
+                            viewMode === "list" ? 120 : 80,
                           )}
                         </Typography>
 
@@ -663,6 +665,26 @@ const PropertiesContent = () => {
                             <Chip
                               icon={<Bathroom sx={{ fontSize: 16 }} />}
                               label={`${property.bathrooms} Bath`}
+                              size="small"
+                              variant="outlined"
+                              sx={{ mb: 1 }}
+                            />
+                          )}
+                          {property.amenities && (
+                            <Chip
+                              icon={<LocalPostOffice sx={{ fontSize: 16 }} />}
+                              label={property.amenities}
+                              size="small"
+                              variant="outlined"
+                              sx={{ mb: 1 }}
+                            />
+                          )}
+                          {property.utilities && (
+                            <Chip
+                              icon={
+                                <BuildCircleOutlined sx={{ fontSize: 16 }} />
+                              }
+                              label={property.utilities}
                               size="small"
                               variant="outlined"
                               sx={{ mb: 1 }}

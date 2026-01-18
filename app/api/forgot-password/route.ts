@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     if (!email) {
       return NextResponse.json(
         { message: "Email is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
       // Still return success to prevent email enumeration
       return NextResponse.json(
         { message: "If the email exists, an OTP has been sent" },
-        { status: 200 }
+        { status: 200 },
       );
     }
 
@@ -90,13 +90,13 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { message: "If the email exists, an OTP has been sent" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Forgot password error:", error);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

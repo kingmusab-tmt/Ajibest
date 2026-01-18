@@ -129,7 +129,7 @@ const MyProperty = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const [userProperties, setUserProperties] = useState<UserProperties | null>(
-    null
+    null,
   );
   const [userData, setUserData] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -137,7 +137,7 @@ const MyProperty = () => {
   const [amountError, setAmountError] = useState<string | null>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(
-    null
+    null,
   );
   const [amount, setAmount] = useState<number | null>(null);
   const [detailOpen, setDetailOpen] = useState<boolean>(false);
@@ -145,7 +145,7 @@ const MyProperty = () => {
   const [tabValue, setTabValue] = useState(0);
   const [withdrawOpen, setWithdrawOpen] = useState<boolean>(false);
   const [withdrawProperty, setWithdrawProperty] = useState<Property | null>(
-    null
+    null,
   );
   const [withdrawalReason, setWithdrawalReason] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -190,14 +190,14 @@ const MyProperty = () => {
         reference,
         propertyId: property.propertyId,
         amount: Number(amount?.toFixed(0)),
-        email: session?.user.email,
+        email: session?.user?.email,
         propertyType: property.propertyType,
         paymentMethod: property.paymentMethod,
         listingPurpose: property.listingPurpose,
       };
       const response = await axios.post(
         "/api/verifyTransaction/subsequent-payment",
-        data
+        data,
       );
       if (response.status === 200) {
         setOpen(false);
@@ -212,7 +212,7 @@ const MyProperty = () => {
         setUserData(userResponse.data.user);
 
         setSuccessMessage(
-          "Payment successful! Your properties have been updated."
+          "Payment successful! Your properties have been updated.",
         );
       } else {
         setError("Transaction Failed. Please try again.");
@@ -233,13 +233,13 @@ const MyProperty = () => {
     try {
       const response = await axios.post("/api/users/withdraw-contract", {
         propertyId: withdrawProperty.propertyId,
-        userEmail: session?.user.email,
+        userEmail: session?.user?.email,
         withdrawalReason: withdrawalReason.trim(),
       });
 
       if (response.status === 200) {
         setSuccessMessage(
-          "Withdrawal request submitted successfully. Waiting for admin approval."
+          "Withdrawal request submitted successfully. Waiting for admin approval.",
         );
         setWithdrawOpen(false);
         setWithdrawalReason("");
@@ -270,9 +270,9 @@ const MyProperty = () => {
   };
 
   const config = (property: Property, amount: number) => ({
-    email: session?.user.email as string,
+    email: session?.user?.email as string,
     amount: amount * 100,
-    publicKey: "pk_test_f6a081e9fa564f361f3a9a63de5cd4dc789cfc73",
+    publicKey: "pk_test_d3edcf488eb73573c3e364b7188deb03dcfa9de4",
   });
 
   const componentProps = (property: Property, amount: number) => ({
@@ -282,7 +282,7 @@ const MyProperty = () => {
         {
           display_name: "Name",
           variable_name: "name",
-          value: session?.user.name,
+          value: session?.user?.name,
         },
       ],
     },
@@ -295,7 +295,7 @@ const MyProperty = () => {
     setAmountError(null);
     if (property.paymentHistory && property.paymentHistory.length > 0) {
       setAmount(
-        property.paymentHistory[property.paymentHistory.length - 1].amount || 0
+        property.paymentHistory[property.paymentHistory.length - 1].amount || 0,
       );
     } else {
       setAmount(0);
@@ -782,7 +782,7 @@ const MyProperty = () => {
                               borderRadius: 4,
                               backgroundColor: alpha(
                                 theme.palette.warning.main,
-                                0.2
+                                0.2,
                               ),
                               "& .MuiLinearProgress-bar": {
                                 backgroundColor: theme.palette.warning.main,
@@ -1036,7 +1036,7 @@ const MyProperty = () => {
                               borderRadius: 4,
                               backgroundColor: alpha(
                                 theme.palette.error.main,
-                                0.2
+                                0.2,
                               ),
                               "& .MuiLinearProgress-bar": {
                                 backgroundColor: theme.palette.error.main,
@@ -1222,7 +1222,7 @@ const MyProperty = () => {
             onClick={() => {
               const property = userProperties?.propertyUnderPayment.find(
                 (property) =>
-                  property.propertyId === selectedProperty?.propertyId
+                  property.propertyId === selectedProperty?.propertyId,
               );
               if (property && amount! < property.initialPayment) {
                 setAmountError("Amount cannot be less than initial payment");
@@ -1334,7 +1334,7 @@ const MyProperty = () => {
                             {formatDate(payment.nextPaymentDate)}
                           </TableCell>
                         </TableRow>
-                      )
+                      ),
                     )}
                   </TableBody>
                 </Table>
@@ -1372,7 +1372,7 @@ const MyProperty = () => {
                         {formatter.format(
                           paymentHistoryProperty.paymentHistory[
                             paymentHistoryProperty.paymentHistory.length - 1
-                          ].totalPaymentMade
+                          ].totalPaymentMade,
                         )}
                       </strong>
                     </Typography>
@@ -1384,7 +1384,7 @@ const MyProperty = () => {
                         {formatter.format(
                           paymentHistoryProperty.paymentHistory[
                             paymentHistoryProperty.paymentHistory.length - 1
-                          ].remainingBalance
+                          ].remainingBalance,
                         )}
                       </strong>
                     </Typography>

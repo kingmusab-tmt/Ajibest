@@ -7,23 +7,22 @@ declare module "next-auth" {
   interface Session {
     user: {
       role?: string | null;
+      provider: string | null;
       image: string | null;
-      isActive: boolean | null;
       id: string | null;
-    } & DefaultSession["user"];
+    } & DefaultSession["seller"];
   }
   interface Session {
     id: string | null;
     role: string | null;
     image: string | null;
-    isActive: boolean | null;
   }
 
   interface User {
     id: string | null;
     role: string | null;
     image: string | null;
-    isActive: boolean | null;
+    provider: string | null;
   }
 }
 declare module "next-auth/jwt" {
@@ -31,6 +30,6 @@ declare module "next-auth/jwt" {
     id: string | null;
     role: string | null;
     image: string | null;
-    isActive: boolean | null;
+    provider: string | null;
   }
 }

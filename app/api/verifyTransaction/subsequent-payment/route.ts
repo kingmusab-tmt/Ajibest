@@ -15,13 +15,20 @@ export async function POST(req) {
   if (!session) {
     return NextResponse.json(
       { success: false, message: "Unauthorized" },
-      { status: 401 }
+      { status: 401 },
     );
   }
   await dbConnect();
 
   const body = await req.json();
   const { amount, email, reference, propertyId } = body;
+
+  console.log(`[subsequent-payment] Request received:`, {
+    amount,
+    email,
+    reference,
+    propertyId,
+  });
 
   try {
     const user = await User.findOne({ email });
@@ -35,7 +42,7 @@ export async function POST(req) {
 
     // Find the property in user's propertyUnderPayment
     const propertyUnderPayment = user.propertyUnderPayment.find(
-      (p) => p.propertyId.toString() === propertyId.toString()
+      (p) => p.propertyId.toString() === propertyId.toString(),
     );
 
     if (!propertyUnderPayment) {
@@ -70,13 +77,20 @@ export async function POST(req) {
     // Calculate new totals for the specific property
     const totalPaymentMadeForProperty =
       propertyUnderPayment.paymentHistory.reduce(
-        (acc, payment) => acc + payment.amount,
-        0
-      ) + amount;
+        (acc, payment) => acc + (Number(payment.amount) || 0),
+        0,
+      ) + Number(amount);
 
     const remainingBalanceForProperty =
-      propertyUnderPayment.propertyPrice - totalPaymentMadeForProperty;
+      Number(propertyUnderPayment.propertyPrice) - totalPaymentMadeForProperty;
     const isPaymentCompleted = remainingBalanceForProperty <= 0;
+
+    console.log(`[subsequent-payment] Payment calculation:`, {
+      totalPaymentMadeForProperty,
+      propertyPrice: propertyUnderPayment.propertyPrice,
+      remainingBalanceForProperty,
+      isPaymentCompleted,
+    });
 
     // Calculate next payment date (30 days from now)
     const nextPaymentDate = new Date();
@@ -88,8 +102,8 @@ export async function POST(req) {
       {
         paymentDate: new Date(),
         nextPaymentDate: isPaymentCompleted ? null : nextPaymentDate,
-        amount,
-        propertyPrice: propertyUnderPayment.propertyPrice,
+        amount: Number(amount),
+        propertyPrice: Number(propertyUnderPayment.propertyPrice),
         totalPaymentMade: totalPaymentMadeForProperty,
         remainingBalance: Math.max(0, remainingBalanceForProperty),
         paymentCompleted: isPaymentCompleted,
@@ -145,14 +159,30 @@ export async function POST(req) {
               rented: true,
               rentedBy: user._id,
               underPayment: false,
+              status: "rented",
             }
           : {
               purchased: true,
               purchasedBy: user._id,
               underPayment: false,
+              status: "sold",
             };
 
-      await Property.findByIdAndUpdate(propertyId, propertyUpdate);
+      console.log(
+        `[subsequent-payment] Updating property ${propertyId} with:`,
+        propertyUpdate,
+      );
+      const updateResult = await Property.findByIdAndUpdate(
+        propertyId,
+        propertyUpdate,
+        { new: true },
+      );
+      console.log(`[subsequent-payment] Property after update:`, updateResult);
+      if (!updateResult) {
+        console.error(
+          `[subsequent-payment] WARNING: Property update returned null/undefined for ID: ${propertyId}`,
+        );
+      }
     } else {
       // Update propertyUnderPayment with new payment history
       await User.findOneAndUpdate(
@@ -167,7 +197,7 @@ export async function POST(req) {
             remainingBalance: newTotalPaymentToBeMade,
             "propertyUnderPayment.$.paymentHistory": updatedPaymentHistory,
           },
-        }
+        },
       );
     }
 
