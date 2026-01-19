@@ -147,7 +147,7 @@ export async function GET(request: NextRequest) {
         // Apply similar filters to fallback data
         if (state && state !== "all") {
           filteredFallback = filteredFallback.filter((prop) =>
-            prop.state?.toLowerCase().includes(state.toLowerCase())
+            prop.state?.toLowerCase().includes(state.toLowerCase()),
           );
         }
 
@@ -156,13 +156,13 @@ export async function GET(request: NextRequest) {
           filteredFallback = filteredFallback.filter((prop) =>
             prop.propertyType
               ?.toLowerCase()
-              .includes(decodedPropertyType.toLowerCase())
+              .includes(decodedPropertyType.toLowerCase()),
           );
         }
 
         if (purpose && purpose !== "all") {
           filteredFallback = filteredFallback.filter(
-            (prop) => prop.listingPurpose === purpose
+            (prop) => prop.listingPurpose === purpose,
           );
         }
 
@@ -209,8 +209,6 @@ export async function GET(request: NextRequest) {
         isFallback: false,
       });
     } catch (dbError) {
-      console.error("Database error:", dbError);
-
       // Apply filters to fallback data on database error
       let filteredFallback = [...fallbackProperties];
       const limit = 12;
@@ -218,7 +216,7 @@ export async function GET(request: NextRequest) {
 
       if (state && state !== "all") {
         filteredFallback = filteredFallback.filter((prop) =>
-          prop.state?.toLowerCase().includes(state.toLowerCase())
+          prop.state?.toLowerCase().includes(state.toLowerCase()),
         );
       }
 
@@ -227,13 +225,13 @@ export async function GET(request: NextRequest) {
         filteredFallback = filteredFallback.filter((prop) =>
           prop.propertyType
             ?.toLowerCase()
-            .includes(decodedPropertyType.toLowerCase())
+            .includes(decodedPropertyType.toLowerCase()),
         );
       }
 
       if (purpose && purpose !== "all") {
         filteredFallback = filteredFallback.filter(
-          (prop) => prop.listingPurpose === purpose
+          (prop) => prop.listingPurpose === purpose,
         );
       }
 
@@ -267,8 +265,6 @@ export async function GET(request: NextRequest) {
       });
     }
   } catch (error) {
-    console.error("Server error:", error);
-
     // Return filtered fallback properties on server error
     const { searchParams } = new URL(request.url);
     const state = searchParams.get("state");
@@ -283,7 +279,7 @@ export async function GET(request: NextRequest) {
 
     if (state && state !== "all") {
       filteredFallback = filteredFallback.filter((prop) =>
-        prop.state?.toLowerCase().includes(state.toLowerCase())
+        prop.state?.toLowerCase().includes(state.toLowerCase()),
       );
     }
 
@@ -292,13 +288,13 @@ export async function GET(request: NextRequest) {
       filteredFallback = filteredFallback.filter((prop) =>
         prop.propertyType
           ?.toLowerCase()
-          .includes(decodedPropertyType.toLowerCase())
+          .includes(decodedPropertyType.toLowerCase()),
       );
     }
 
     if (purpose && purpose !== "all") {
       filteredFallback = filteredFallback.filter(
-        (prop) => prop.listingPurpose === purpose
+        (prop) => prop.listingPurpose === purpose,
       );
     }
 

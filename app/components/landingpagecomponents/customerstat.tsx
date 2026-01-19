@@ -30,7 +30,7 @@ const iconMap: { [key: string]: React.ComponentType<any> } = {
 const renderIcon = (
   iconName: string,
   color: string = "primary",
-  size: number = 24
+  size: number = 24,
 ) => {
   const IconComponent = iconMap[iconName] || HomeIcon;
   return (
@@ -70,7 +70,7 @@ const CustomerStats: React.FC<CustomerStatsProps> = ({ initialData }) => {
           throw new Error(response.error || "Failed to load stats");
         }
       } catch (err) {
-        console.error("Error loading stats:", err);
+        // Error loading stats
       } finally {
         setLoading(false);
       }

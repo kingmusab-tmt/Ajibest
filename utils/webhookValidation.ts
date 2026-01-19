@@ -97,7 +97,7 @@ export function verifyPaystackSignature(
     );
 
     if (!isValid) {
-      console.warn("❌ [WEBHOOK] Signature verification failed");
+      console.warn("  [WEBHOOK] Signature verification failed");
       console.debug(
         `Expected: ${computedHash.substring(0, 10)}...`,
         `Got: ${signature.substring(0, 10)}...`,
@@ -113,11 +113,11 @@ export function verifyPaystackSignature(
       )
     ) {
       console.warn(
-        "❌ [WEBHOOK] Signature length mismatch - possible tampering",
+        "  [WEBHOOK] Signature length mismatch - possible tampering",
       );
       return false;
     }
-    console.error("❌ [WEBHOOK] Signature verification error:", error);
+    console.error("  [WEBHOOK] Signature verification error:", error);
     return false;
   }
 }
@@ -265,7 +265,7 @@ export function processChargeSuccessEvent(data: any): ChargeSuccessData | null {
       authorization: data.authorization,
     };
   } catch (error) {
-    console.error("❌ [WEBHOOK] Error processing charge.success event:", error);
+    console.error("  [WEBHOOK] Error processing charge.success event:", error);
     console.error("Data received:", JSON.stringify(data, null, 2));
     return null;
   }
@@ -289,7 +289,7 @@ export function processChargeFailedEvent(data: any): any {
       status: "failed",
     };
   } catch (error) {
-    console.error("❌ [WEBHOOK] Error processing charge.failed event:", error);
+    console.error("  [WEBHOOK] Error processing charge.failed event:", error);
     return null;
   }
 }
@@ -332,7 +332,7 @@ export async function logWebhookEvent(log: WebhookLog): Promise<void> {
     //   timestamp: new Date(log.timestamp),
     // });
   } catch (error) {
-    console.error("❌ [WEBHOOK] Error logging webhook event:", error);
+    console.error("  [WEBHOOK] Error logging webhook event:", error);
   }
 }
 
@@ -410,7 +410,7 @@ export async function retryWebhookHandler<T>(
     }
   }
 
-  console.error("❌ [WEBHOOK] Handler failed after all retries:", lastError);
+  console.error("  [WEBHOOK] Handler failed after all retries:", lastError);
   return null;
 }
 

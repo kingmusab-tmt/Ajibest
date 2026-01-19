@@ -62,16 +62,15 @@ export async function GET(request: NextRequest) {
         upcomingRefunds,
         totalReminders: upcomingRefunds.reduce(
           (sum, refund) => sum + refund.upcomingPayments.length,
-          0
+          0,
         ),
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
-    console.error("Get refund reminders error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -81,7 +80,7 @@ async function sendRefundReminder(refund: any, payment: any) {
   try {
     const daysUntilDue = Math.ceil(
       (new Date(payment.dueDate).getTime() - new Date().getTime()) /
-        (1000 * 60 * 60 * 24)
+        (1000 * 60 * 60 * 24),
     );
 
     const message = `REMINDER: Refund payment of $${payment.amount} for property "${refund.propertyTitle}" is due in ${daysUntilDue} days for user ${refund.userName} (${refund.userEmail}).`;
@@ -94,10 +93,8 @@ async function sendRefundReminder(refund: any, payment: any) {
 
     // Send push notification
     await sendPushNotification(refund, payment, daysUntilDue, message);
-
-    // console.log(`Refund reminder sent: ${message}`);
   } catch (error) {
-    console.error("Error sending refund reminder:", error);
+    // Error sending reminder
   }
 }
 
@@ -106,28 +103,25 @@ async function sendEmailNotification(
   refund: any,
   payment: any,
   daysUntilDue: number,
-  message: string
+  message: string,
 ) {
   // Implement your email service integration
-  // console.log("Email:", message);
 }
 
 async function sendSMSNotification(
   refund: any,
   payment: any,
   daysUntilDue: number,
-  message: string
+  message: string,
 ) {
   // Implement your SMS service integration
-  // console.log("SMS:", message);
 }
 
 async function sendPushNotification(
   refund: any,
   payment: any,
   daysUntilDue: number,
-  message: string
+  message: string,
 ) {
   // Implement your push notification service
-  // console.log("Push:", message);
 }

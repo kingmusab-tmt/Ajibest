@@ -26,19 +26,19 @@ const NextOfKinDetail: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { data: session, status } = useSession();
+  const defaultNextOfKin = {
+    name: "",
+    phoneNumber: "",
+    address: "",
+    email: "",
+    userAccountNumber: "",
+    userBankName: "",
+    image: "",
+  };
+
   const [image, setImage] = useState("");
   const [imageChanged, setImageChanged] = useState(false);
-  const [profile, setProfile] = useState({
-    nextOfKin: {
-      name: "",
-      phoneNumber: "",
-      address: "",
-      email: "",
-      userAccountNumber: "",
-      userBankName: "",
-      image: "",
-    },
-  });
+  const [profile, setProfile] = useState({ nextOfKin: defaultNextOfKin });
   const [changedFields, setChangedFields] = useState<{
     [key: string]: boolean;
   }>({});
@@ -47,6 +47,8 @@ const NextOfKinDetail: React.FC = () => {
     message: "",
     severity: "success" as "success" | "error",
   });
+
+  const hasChanges = Object.values(changedFields).some(Boolean) || imageChanged;
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -58,8 +60,9 @@ const NextOfKinDetail: React.FC = () => {
         .then((response) => response.json())
         .then((data) => {
           if (data.data) {
-            setProfile({ nextOfKin: data.data });
-            setImage(data.data.image);
+            const mergedNextOfKin = { ...defaultNextOfKin, ...data.data };
+            setProfile({ nextOfKin: mergedNextOfKin });
+            setImage(mergedNextOfKin.image);
           }
         });
     }
@@ -67,7 +70,7 @@ const NextOfKinDetail: React.FC = () => {
   const handleChange = (
     e:
       | React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>
-      | SelectChangeEvent<string>
+      | SelectChangeEvent<string>,
   ) => {
     // Normalize event target shape for both input and MUI Select events
     const target = e.target as unknown as { name?: string; value: unknown };
@@ -89,16 +92,25 @@ const NextOfKinDetail: React.FC = () => {
   };
 
   const handleSave = async () => {
-    const updatedProfile: { [key: string]: any } = {};
+    if (!hasChanges) {
+      setSnackbar({
+        open: true,
+        message: "No changes to save",
+        severity: "error",
+      });
+      return;
+    }
+
+    const updatedNextOfKin: Partial<typeof defaultNextOfKin> = {};
     for (const key in profile.nextOfKin) {
       if (changedFields[key]) {
-        updatedProfile[`nextOfKin.${key}`] =
+        updatedNextOfKin[key as keyof typeof defaultNextOfKin] =
           profile.nextOfKin[key as keyof typeof profile.nextOfKin];
       }
     }
 
     if (imageChanged) {
-      updatedProfile["nextOfKin.image"] = image;
+      updatedNextOfKin.image = image;
     }
 
     try {
@@ -107,7 +119,8 @@ const NextOfKinDetail: React.FC = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedProfile),
+        // API expects nested nextOfKin object; only send changed fields
+        body: JSON.stringify({ nextOfKin: updatedNextOfKin }),
       });
 
       const data = await response.json();
@@ -349,6 +362,7 @@ const NextOfKinDetail: React.FC = () => {
                 variant="contained"
                 size="large"
                 onClick={handleSave}
+                disabled={!hasChanges}
                 sx={{
                   px: 4,
                   py: 1.5,

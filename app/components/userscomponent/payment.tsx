@@ -55,6 +55,8 @@ interface PaymentPageProps {
   listingPurpose: string;
   instalmentAllowed: boolean;
   onClose: () => void;
+  onPaymentSuccess?: () => void;
+  visitId?: string;
 }
 
 const PaymentPage = ({
@@ -64,6 +66,8 @@ const PaymentPage = ({
   listingPurpose,
   instalmentAllowed,
   onClose,
+  onPaymentSuccess,
+  visitId,
 }: PaymentPageProps) => {
   const [months, setMonths] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("");
@@ -163,7 +167,23 @@ const PaymentPage = ({
 
       const response = await axios.post("/api/verifyTransaction", data);
       if (response.status === 200) {
+        // If visitId is provided, update the visit status to completed
+        if (visitId) {
+          try {
+            await axios.patch(`/api/property/visitSchedule/${visitId}`, {
+              status: "completed",
+            });
+          } catch (err) {
+            console.error("Error updating visit status:", err);
+            // Continue with success even if visit status update fails
+          }
+        }
+
         setSuccess(true);
+        // Call onPaymentSuccess callback if provided
+        if (onPaymentSuccess) {
+          onPaymentSuccess();
+        }
         setTimeout(() => {
           onClose();
           router.push("/userDashboard");

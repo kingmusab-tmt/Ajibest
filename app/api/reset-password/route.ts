@@ -12,7 +12,7 @@ export async function PUT(request: NextRequest) {
     if ((!token && !otp) || !newPassword) {
       return NextResponse.json(
         { message: "Token/OTP and new password are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -36,7 +36,7 @@ export async function PUT(request: NextRequest) {
     if (!user) {
       return NextResponse.json(
         { message: "Invalid or expired token/OTP" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -49,7 +49,7 @@ export async function PUT(request: NextRequest) {
           message:
             "Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -69,13 +69,12 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json(
       { success: true, message: "Password reset successfully" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
-    console.error("Reset password error:", error);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

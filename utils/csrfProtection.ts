@@ -136,7 +136,7 @@ export async function generateCSRFToken(
       expiresIn: 3600, // 1 hour in seconds
     });
   } catch (error) {
-    console.error("❌ [CSRF] Token generation error:", error);
+    console.error("  [CSRF] Token generation error:", error);
     return NextResponse.json(
       { error: "Failed to generate CSRF token" },
       { status: 500 },
@@ -175,7 +175,7 @@ export async function validateCSRFToken(req: NextRequest): Promise<boolean> {
 
     return isValid;
   } catch (error) {
-    console.error("❌ [CSRF] Token validation error:", error);
+    console.error("  [CSRF] Token validation error:", error);
     return false;
   }
 }
@@ -328,7 +328,7 @@ export async function getCSRFTokenForClient(
 
     return null;
   } catch (error) {
-    console.error("❌ [CSRF] Error getting CSRF token:", error);
+    console.error("  [CSRF] Error getting CSRF token:", error);
     return null;
   }
 }

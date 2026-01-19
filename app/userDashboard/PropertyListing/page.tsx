@@ -51,9 +51,11 @@ import {
   Shop,
   LocalPostOffice,
   BuildCircleOutlined,
+  Schedule,
 } from "@mui/icons-material";
 import PaymentPage from "@/app/components/userscomponent/payment";
 import LoadingSpinner from "@/app/components/generalcomponents/loadingSpinner";
+import ScheduleVisitDialog from "@/app/components/generalcomponents/ScheduleVisitDialog";
 
 const priceRanges = [
   { label: "All", min: 0, max: Infinity },
@@ -117,6 +119,10 @@ const PropertyListing = () => {
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(
     null,
   );
+  const [scheduleVisitOpen, setScheduleVisitOpen] = useState(false);
+  const [selectedForVisit, setSelectedForVisit] = useState<Property | null>(
+    null,
+  );
   const [filters, setFilters] = useState({
     size: "",
     price: "",
@@ -149,11 +155,9 @@ const PropertyListing = () => {
         if (response.data?.data && Array.isArray(response.data.data)) {
           setProperties(response.data.data);
           setFilteredProperties(response.data.data);
-        } else {
-          console.error("API response is not as expected:", response.data);
         }
       } catch (error) {
-        console.error("Failed to fetch properties:", error);
+        // Failed to fetch properties
       } finally {
         setLoading(false);
       }
@@ -787,22 +791,36 @@ const PropertyListing = () => {
                         Not Available
                       </Button>
                     ) : (
-                      <Button
-                        variant="contained"
-                        fullWidth
-                        onClick={
-                          property.listingPurpose === "For Renting"
-                            ? () => handleRentNow(property)
-                            : () => handleBuyNow(property)
-                        }
-                        startIcon={<Payment />}
-                        size={isMobile ? "small" : "medium"}
-                        sx={{ borderRadius: 2 }}
-                      >
-                        {property.listingPurpose === "For Renting"
-                          ? "Rent Now"
-                          : "Buy Now"}
-                      </Button>
+                      <Stack direction="row" spacing={1} sx={{ width: "100%" }}>
+                        <Button
+                          variant="contained"
+                          fullWidth
+                          onClick={
+                            property.listingPurpose === "For Renting"
+                              ? () => handleRentNow(property)
+                              : () => handleBuyNow(property)
+                          }
+                          startIcon={<Payment />}
+                          size={isMobile ? "small" : "medium"}
+                          sx={{ borderRadius: 2 }}
+                        >
+                          {property.listingPurpose === "For Renting"
+                            ? "Rent Now"
+                            : "Buy Now"}
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          onClick={() => {
+                            setSelectedForVisit(property);
+                            setScheduleVisitOpen(true);
+                          }}
+                          startIcon={<Schedule />}
+                          size={isMobile ? "small" : "medium"}
+                          sx={{ borderRadius: 1 }}
+                        >
+                          {isMobile ? "Visit" : "Schedule Visit"}
+                        </Button>
+                      </Stack>
                     )}
                   </CardActions>
                 </Card>
@@ -866,6 +884,23 @@ const PropertyListing = () => {
           )}
         </Box>
       </Modal>
+
+      {/* Schedule Visit Dialog */}
+      {selectedForVisit && (
+        <ScheduleVisitDialog
+          open={scheduleVisitOpen}
+          onClose={() => {
+            setScheduleVisitOpen(false);
+            setSelectedForVisit(null);
+          }}
+          propertyId={selectedForVisit._id}
+          propertyTitle={selectedForVisit.title}
+          onVisitScheduled={() => {
+            setScheduleVisitOpen(false);
+            setSelectedForVisit(null);
+          }}
+        />
+      )}
 
       {/* Floating Action Button for Mobile Filters */}
       {isMobile && (

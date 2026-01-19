@@ -83,7 +83,7 @@ export async function GET() {
           isFallback: true,
           message: "Using fallback content",
         },
-        { status: 200 }
+        { status: 200 },
       );
     }
 
@@ -93,11 +93,9 @@ export async function GET() {
         data: statsContent,
         isFallback: false,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
-    console.error("Error fetching stats content:", error);
-
     // Return fallback content on error
     return NextResponse.json(
       {
@@ -108,7 +106,7 @@ export async function GET() {
         message: "Using fallback content due to error",
         details: error instanceof Error ? error.message : String(error),
       },
-      { status: 200 }
+      { status: 200 },
     ); // Still return 200 but with fallback flag
   }
 }
@@ -140,17 +138,16 @@ export async function PUT(req: NextRequest) {
         data: statsContent,
         isFallback: false,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
-    console.error("Error updating stats content:", error);
     return NextResponse.json(
       {
         success: false,
         error: "Failed to Update Stats Content",
         details: error instanceof Error ? error.message : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -195,17 +192,16 @@ export async function POST(req: NextRequest) {
         data: statsContent,
         isFallback: false,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
-    console.error("Error adding item:", error);
     return NextResponse.json(
       {
         success: false,
         error: "Failed to Add Item",
         details: error instanceof Error ? error.message : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -222,17 +218,17 @@ export async function DELETE(req: NextRequest) {
     if (!statsContent) {
       return NextResponse.json(
         { success: false, error: "No stats content found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     if (type === "testimonial") {
       statsContent.testimonials = statsContent.testimonials.filter(
-        (t: any) => t._id.toString() !== id
+        (t: any) => t._id.toString() !== id,
       );
     } else if (type === "stat") {
       statsContent.stats = statsContent.stats.filter(
-        (s: any) => s._id.toString() !== id
+        (s: any) => s._id.toString() !== id,
       );
     }
 
@@ -245,17 +241,16 @@ export async function DELETE(req: NextRequest) {
         data: statsContent,
         isFallback: false,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
-    console.error("Error deleting item:", error);
     return NextResponse.json(
       {
         success: false,
         error: "Failed to Delete Item",
         details: error instanceof Error ? error.message : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

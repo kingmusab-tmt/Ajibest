@@ -24,17 +24,20 @@ import {
   Link as LinkIcon,
   Payment as PaymentIcon,
   AdminPanelSettings as AdminIcon,
+  BusinessCenter as OwnedIcon,
 } from "@mui/icons-material";
 import NewProperty from "./createNewProperty";
 import Properties from "./propertylisting";
 import PropertyAssignmentForm from "./PropertyAssignmentForm";
 import AdminWithdrawalsPage from "./withdrawals";
+import OwnedPropertiesManagement from "./ownedProperties";
 
 type Section =
   | "Create New Property"
   | "Update Property"
   | "Assign Property"
-  | "Withdrawal Requests";
+  | "Withdrawal Requests"
+  | "Owned Properties";
 
 const ManageProperty: React.FC = () => {
   const [currentSection, setCurrentSection] =
@@ -53,6 +56,8 @@ const ManageProperty: React.FC = () => {
         return <PropertyAssignmentForm />;
       case "Withdrawal Requests":
         return <AdminWithdrawalsPage />;
+      case "Owned Properties":
+        return <OwnedPropertiesManagement />;
       default:
         return null;
     }
@@ -63,6 +68,7 @@ const ManageProperty: React.FC = () => {
     "Update Property",
     "Assign Property",
     "Withdrawal Requests",
+    "Owned Properties",
   ];
 
   const getSectionIcon = (section: Section) => {
@@ -75,6 +81,8 @@ const ManageProperty: React.FC = () => {
         return <LinkIcon />;
       case "Withdrawal Requests":
         return <PaymentIcon />;
+      case "Owned Properties":
+        return <OwnedIcon />;
       default:
         return <AddIcon />;
     }
@@ -93,6 +101,8 @@ const ManageProperty: React.FC = () => {
         return "Assign";
       case "Withdrawal Requests":
         return "Withdrawals";
+      case "Owned Properties":
+        return "Owned";
       default:
         return section;
     }

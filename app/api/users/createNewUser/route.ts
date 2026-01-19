@@ -27,7 +27,7 @@ const userSchema = yup.object().shape({
     .min(8, "Password must be at least 8 characters long")
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/,
-      "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+      "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
     ),
   bvnOrNin: yup
     .number()
@@ -38,7 +38,7 @@ const userSchema = yup.object().shape({
     .test(
       "len",
       "BVN or NIN must be exactly 11 digits",
-      (val) => val?.toString().length === 11
+      (val) => val?.toString().length === 11,
     ),
   country: yup.string().required("Country is required").trim(),
   state: yup.string().required("State is required").trim(),
@@ -64,13 +64,13 @@ export async function POST(req: NextRequest) {
         }));
         return NextResponse.json(
           { message: "Validation failed", errors },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
       return NextResponse.json(
         { message: "Unexpected validation error occurred" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
     if (existingUser) {
       return NextResponse.json(
         { message: "User already exists with this email or username." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -136,13 +136,12 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       { message: "User registered successfully" },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
-    console.error("Registration Error:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

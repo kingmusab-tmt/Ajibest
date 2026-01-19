@@ -82,9 +82,7 @@ export async function POST(request: NextRequest) {
           </div>
         `,
       });
-      // console.log("OTP email sent to:", email);
     } catch (emailError) {
-      console.error("Failed to send email:", emailError);
       // Still return success to prevent email enumeration
     }
 
@@ -93,7 +91,6 @@ export async function POST(request: NextRequest) {
       { status: 200 },
     );
   } catch (error) {
-    console.error("Forgot password error:", error);
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 },

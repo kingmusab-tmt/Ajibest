@@ -90,7 +90,7 @@ const StepOne: React.FC<StepProps> = ({
           `/api/users/checkexituser?${field}=${encodeURIComponent(value)}`,
           {
             headers: { "Cache-Control": "no-cache, no-store" },
-          }
+          },
         );
 
         if (response.ok) {
@@ -140,7 +140,7 @@ const StepOne: React.FC<StepProps> = ({
         /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|hotmail\.com|outlook\.com)$/;
       if (!emailRegex.test(formData.email)) {
         setErrorWithTimeout(
-          "Please use a valid Gmail, Yahoo, Hotmail, or Outlook address"
+          "Please use a valid Gmail, Yahoo, Hotmail, or Outlook address",
         );
         valid = false;
       }
@@ -311,7 +311,7 @@ const StepTwo: React.FC<StepProps> = ({
           `/api/users/checkexituser?bvnOrNin=${encodeURIComponent(value)}`,
           {
             headers: { "Cache-Control": "no-cache, no-store" },
-          }
+          },
         );
 
         if (response.ok) {
@@ -321,7 +321,7 @@ const StepTwo: React.FC<StepProps> = ({
           }
         }
       } catch (error) {
-        console.error("Error checking BVN/NIN:", error);
+        // Error checking BVN/NIN
       }
     };
 
@@ -431,7 +431,7 @@ const StepThree: React.FC<
           `/api/users/checkexituser?phoneNumber=${encodeURIComponent(value)}`,
           {
             headers: { "Cache-Control": "no-cache, no-store" },
-          }
+          },
         );
 
         if (response.ok) {
@@ -441,7 +441,7 @@ const StepThree: React.FC<
           }
         }
       } catch (error) {
-        console.error("Error checking phone number:", error);
+        // Error checking phone number
       }
     };
 
@@ -484,7 +484,7 @@ const StepThree: React.FC<
       const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
       if (!passwordRegex.test(formData.password)) {
         setErrorWithTimeout(
-          "Password must be at least 8 characters with uppercase, lowercase, number, and special character"
+          "Password must be at least 8 characters with uppercase, lowercase, number, and special character",
         );
         valid = false;
       }
@@ -521,14 +521,14 @@ const StepThree: React.FC<
         if (response.ok) {
           handleSuccess(
             "Registration Successful",
-            "Your registration was successful! Please check your email for confirmation."
+            "Your registration was successful! Please check your email for confirmation.",
           );
           setTimeout(() => router.push("/login"), 2000);
         } else {
           const errorData = await response.json();
           handleError(
             "Registration Failed",
-            errorData.message || "Submission failed"
+            errorData.message || "Submission failed",
           );
         }
       } catch (error) {

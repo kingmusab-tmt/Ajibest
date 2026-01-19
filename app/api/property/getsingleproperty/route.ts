@@ -12,13 +12,12 @@ export async function GET(req) {
   if (!session) {
     return NextResponse.json(
       { success: false, message: "Unauthorized" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
   const id = req.nextUrl.searchParams.get("id");
   const title = req.nextUrl.searchParams.get("title");
-  // console.log(title);
 
   let filterProperty = {};
   if (id) {
@@ -26,17 +25,14 @@ export async function GET(req) {
   } else if (title) {
     filterProperty = { title };
   }
-  // console.log(id);
 
   await dbConnect();
   try {
     const property = await Properties.findOne(filterProperty).lean();
-    // console.log(filterProperty);
-    // console.log(property);
     if (!property) {
       return NextResponse.json(
         { success: false, message: "Property not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
     return NextResponse.json({ success: true, data: property });

@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
   if (!session) {
     return NextResponse.json(
       { success: false, message: "Unauthorized" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
   if (!email) {
     return NextResponse.json(
       { success: false, message: "User Email not Found" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
     if (!user) {
       return NextResponse.json(
         { success: false, message: "User not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
       "NEXT_OF_KIN_DATA",
       user._id?.toString(),
       email,
-      req
+      req,
     );
 
     // Return only the nextOfKin data
@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
         success: false,
         error: error instanceof Error ? error.message : "Internal server error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

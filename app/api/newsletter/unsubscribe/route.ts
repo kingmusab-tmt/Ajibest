@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     if (!email) {
       return NextResponse.json(
         { success: false, message: "Email is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -21,14 +21,14 @@ export async function POST(req: NextRequest) {
     if (!subscription) {
       return NextResponse.json(
         { success: false, message: "Email not found in our newsletter list" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     if (!subscription.isSubscribed) {
       return NextResponse.json(
         { success: false, message: "This email is already unsubscribed" },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -46,13 +46,12 @@ export async function POST(req: NextRequest) {
           unsubscribedAt: subscription.unsubscribedAt,
         },
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error: unknown) {
-    console.error("Newsletter unsubscribe error:", error);
     return NextResponse.json(
       { success: false, message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

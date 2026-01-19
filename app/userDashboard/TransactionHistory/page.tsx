@@ -34,6 +34,10 @@ import {
   Pagination,
   Divider,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import {
   Receipt,
@@ -81,6 +85,9 @@ const TransactionHistory: React.FC = () => {
   const [transactionStatus, setTransactionStatus] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage] = useState<number>(10);
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null);
+  const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -107,13 +114,13 @@ const TransactionHistory: React.FC = () => {
             try {
               const propertyResponse = await axios.get(
                 `/api/property/getsingleproperty?id=${transaction.propertyId}`,
-                { headers: { "Cache-Control": "no-cache, no-store" } }
+                { headers: { "Cache-Control": "no-cache, no-store" } },
               );
 
               const userResponse =
                 session?.user.role === "Admin"
                   ? await axios.get(
-                      `/api/users/getSingleUser?id=${transaction.userId}`
+                      `/api/users/getSingleUser?id=${transaction.userId}`,
                     )
                   : { data: { name: session?.user.name || "" } };
 
@@ -130,7 +137,7 @@ const TransactionHistory: React.FC = () => {
                 userName: "Unknown User",
               };
             }
-          })
+          }),
         );
 
         setTransactions(transactionsData);
@@ -159,6 +166,16 @@ const TransactionHistory: React.FC = () => {
       sortField === field && sortOrder === "desc" ? "asc" : "desc";
     setSortField(field);
     setSortOrder(newSortOrder);
+  };
+
+  const handleViewDetails = (transaction: Transaction) => {
+    setSelectedTransaction(transaction);
+    setDetailsDialogOpen(true);
+  };
+
+  const handleCloseDetails = () => {
+    setDetailsDialogOpen(false);
+    setSelectedTransaction(null);
   };
 
   const getStatusColor = (status: string) => {
@@ -243,13 +260,13 @@ const TransactionHistory: React.FC = () => {
           try {
             const propertyResponse = await axios.get(
               `/api/property/getsingleproperty?id=${transaction.propertyId}`,
-              { headers: { "Cache-Control": "no-cache, no-store" } }
+              { headers: { "Cache-Control": "no-cache, no-store" } },
             );
 
             const userResponse =
               session?.user.role === "Admin"
                 ? await axios.get(
-                    `/api/users/getSingleUser?id=${transaction.userId}`
+                    `/api/users/getSingleUser?id=${transaction.userId}`,
                   )
                 : { data: { name: session?.user.name || "" } };
 
@@ -265,7 +282,7 @@ const TransactionHistory: React.FC = () => {
               userName: "Unknown User",
             };
           }
-        })
+        }),
       );
 
       setTransactions(transactionsData);
@@ -281,13 +298,13 @@ const TransactionHistory: React.FC = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentTransactions = transactions.slice(
     indexOfFirstItem,
-    indexOfLastItem
+    indexOfLastItem,
   );
   const totalPages = Math.ceil(transactions.length / itemsPerPage);
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
-    value: number
+    value: number,
   ) => {
     setCurrentPage(value);
   };
@@ -575,6 +592,7 @@ const TransactionHistory: React.FC = () => {
                     size="small"
                     startIcon={<Visibility />}
                     fullWidth
+                    onClick={() => handleViewDetails(transaction)}
                   >
                     View Details
                   </Button>
@@ -738,7 +756,10 @@ const TransactionHistory: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <Tooltip title="View Details">
-                      <IconButton size="small">
+                      <IconButton
+                        size="small"
+                        onClick={() => handleViewDetails(transaction)}
+                      >
                         <Visibility />
                       </IconButton>
                     </Tooltip>
@@ -768,6 +789,151 @@ const TransactionHistory: React.FC = () => {
           />
         </Box>
       )}
+
+      {/* Transaction Details Dialog */}
+      <Dialog
+        open={detailsDialogOpen}
+        onClose={handleCloseDetails}
+        maxWidth="md"
+        fullWidth
+        fullScreen={isSmallMobile}
+      >
+        <DialogTitle>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <Receipt color="primary" />
+            <Typography variant="h6">Transaction Details</Typography>
+          </Box>
+        </DialogTitle>
+        <DialogContent dividers>
+          {selectedTransaction && (
+            <Grid container spacing={3}>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="caption" color="text.secondary">
+                  Transaction ID
+                </Typography>
+                <Typography variant="body1" fontWeight={600}>
+                  {selectedTransaction.transactionId}
+                </Typography>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="caption" color="text.secondary">
+                  Reference ID
+                </Typography>
+                <Typography variant="body1" fontWeight={600}>
+                  {selectedTransaction.referenceId || "N/A"}
+                </Typography>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="caption" color="text.secondary">
+                  Property
+                </Typography>
+                <Typography variant="body1" fontWeight={600}>
+                  {selectedTransaction.title}
+                </Typography>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="caption" color="text.secondary">
+                  Property Type
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    mt: 0.5,
+                  }}
+                >
+                  {getPropertyIcon(selectedTransaction.propertyType)}
+                  <Typography variant="body1">
+                    {selectedTransaction.propertyType}
+                  </Typography>
+                </Box>
+              </Grid>
+              {session?.user.role === "Admin" && (
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <Typography variant="caption" color="text.secondary">
+                    User
+                  </Typography>
+                  <Typography variant="body1" fontWeight={600}>
+                    {selectedTransaction.userName}
+                  </Typography>
+                </Grid>
+              )}
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="caption" color="text.secondary">
+                  Email
+                </Typography>
+                <Typography variant="body1">
+                  {selectedTransaction.email}
+                </Typography>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="caption" color="text.secondary">
+                  Listing Purpose
+                </Typography>
+                <Typography variant="body1">
+                  {selectedTransaction.listingPurpose}
+                </Typography>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="caption" color="text.secondary">
+                  Payment Method
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ textTransform: "capitalize" }}
+                >
+                  {selectedTransaction.paymentMethod === "payOnce"
+                    ? "Pay Once"
+                    : "Installment"}
+                </Typography>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="caption" color="text.secondary">
+                  Property Price
+                </Typography>
+                <Typography variant="body1" fontWeight={600}>
+                  ₦{selectedTransaction.propertyPrice.toLocaleString()}
+                </Typography>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="caption" color="text.secondary">
+                  Amount Paid
+                </Typography>
+                <Typography variant="body1" fontWeight={600} color="primary">
+                  ₦{selectedTransaction.amount.toLocaleString()}
+                </Typography>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="caption" color="text.secondary">
+                  Status
+                </Typography>
+                <Box sx={{ mt: 0.5 }}>
+                  <Chip
+                    label={selectedTransaction.status.toUpperCase()}
+                    color={getStatusColor(selectedTransaction.status) as any}
+                    icon={getStatusIcon(selectedTransaction.status)}
+                    size="small"
+                  />
+                </Box>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Typography variant="caption" color="text.secondary">
+                  Date & Time
+                </Typography>
+                <Typography variant="body1">
+                  {new Date(selectedTransaction.createdAt).toLocaleString()}
+                </Typography>
+              </Grid>
+            </Grid>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDetails} variant="contained">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

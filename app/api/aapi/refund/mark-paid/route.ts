@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     if (!refundRequestId || typeof scheduleIndex === "undefined") {
       return NextResponse.json(
         { error: "Missing required fields: refundRequestId or scheduleIndex" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     if (!refundRequest) {
       return NextResponse.json(
         { error: "Refund request not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     ) {
       return NextResponse.json(
         { error: "Invalid refund schedule index" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -64,13 +64,12 @@ export async function POST(request: NextRequest) {
         message: "Refund marked as paid successfully",
         refundRequest,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
-    console.error("Mark refund as paid error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

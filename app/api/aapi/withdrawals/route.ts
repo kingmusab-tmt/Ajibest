@@ -28,15 +28,14 @@ export async function GET() {
           userName: user.name,
           userEmail: user.email,
           ...property.toObject(),
-        }))
+        })),
     );
 
     return NextResponse.json({ withdrawalRequests }, { status: 200 });
   } catch (error) {
-    console.error("Get withdrawals error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

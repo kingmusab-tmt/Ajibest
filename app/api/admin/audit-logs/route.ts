@@ -39,26 +39,20 @@ function getLogsDirectory(): string {
  */
 function readLogFiles(startDate?: string, endDate?: string): AuditLogEntry[] {
   const logsDir = getLogsDirectory();
-  console.log("📂 [AUDIT API] Reading audit logs from:", logsDir);
 
   if (!fs.existsSync(logsDir)) {
-    console.log(
-      "⚠️ [AUDIT API] Logs directory does not exist, returning empty array"
-    );
     return [];
   }
 
   const files = fs.readdirSync(logsDir);
   const logFiles = files.filter(
-    (f) => f.startsWith("audit-") && f.endsWith(".log")
+    (f) => f.startsWith("audit-") && f.endsWith(".log"),
   );
-  console.log("📄 [AUDIT API] Found log files:", logFiles);
 
   let allLogs: AuditLogEntry[] = [];
   let totalEntries = 0;
 
   for (const file of logFiles) {
-    console.log("📖 [AUDIT API] Processing file:", file);
     const filePath = path.join(logsDir, file);
     const content = fs.readFileSync(filePath, "utf8");
     const lines = content
@@ -81,15 +75,9 @@ function readLogFiles(startDate?: string, endDate?: string): AuditLogEntry[] {
         totalEntries++;
       } catch (e) {
         // Skip malformed log lines
-        console.error("❌ [AUDIT API] Error parsing log line:", e);
       }
     }
   }
-
-  console.log(
-    "✅ [AUDIT API] Read completed - Total entries loaded:",
-    totalEntries
-  );
 
   return allLogs;
 }
@@ -104,7 +92,7 @@ function filterLogs(
     status?: string;
     action?: string;
     userEmail?: string;
-  }
+  },
 ): AuditLogEntry[] {
   let filtered = logs;
 
@@ -122,7 +110,7 @@ function filterLogs(
 
   if (filters.userEmail) {
     filtered = filtered.filter((log) =>
-      log.userEmail?.toLowerCase().includes(filters.userEmail!.toLowerCase())
+      log.userEmail?.toLowerCase().includes(filters.userEmail!.toLowerCase()),
     );
   }
 
@@ -135,19 +123,15 @@ function filterLogs(
  */
 export async function GET(req: NextRequest) {
   try {
-    console.log("🔍 [AUDIT API GET] Fetching audit logs...");
     const session = await getServerSession(authOptions);
 
     // Check if user is authenticated and is an admin
     if (!session || session.user.role !== "Admin") {
-      console.log("❌ [AUDIT API GET] Unauthorized access attempt");
       return NextResponse.json(
         { success: false, message: "Unauthorized" },
-        { status: 401 }
+        { status: 401 },
       );
     }
-
-    console.log("✅ [AUDIT API GET] Admin authenticated:", session.user.email);
 
     // Get query parameters
     const searchParams = req.nextUrl.searchParams;
@@ -158,23 +142,11 @@ export async function GET(req: NextRequest) {
     const action = searchParams.get("action");
     const userEmail = searchParams.get("userEmail");
 
-    console.log("🔧 [AUDIT API GET] Query parameters:", {
-      page,
-      limit,
-      category,
-      status,
-      action,
-      userEmail,
-    });
     const startDate = searchParams.get("startDate");
     const endDate = searchParams.get("endDate");
 
     // Read all logs from files
     let allLogs = readLogFiles(startDate || undefined, endDate || undefined);
-    console.log(
-      "📊 [AUDIT API GET] Total logs loaded from files:",
-      allLogs.length
-    );
 
     // Apply filters
     const filteredLogs = filterLogs(allLogs, {
@@ -183,34 +155,19 @@ export async function GET(req: NextRequest) {
       action: action || undefined,
       userEmail: userEmail || undefined,
     });
-    console.log(
-      "🔽 [AUDIT API GET] Logs after filtering:",
-      filteredLogs.length
-    );
 
     // Sort by timestamp (newest first)
     filteredLogs.sort(
       (a, b) =>
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
     );
 
     // Calculate pagination
     const totalCount = filteredLogs.length;
     const skip = (page - 1) * limit;
     const logs = filteredLogs.slice(skip, skip + limit);
-    console.log("📄 [AUDIT API GET] Returning logs for page:", {
-      page,
-      limit,
-      skip,
-      returning: logs.length,
-    });
 
     const totalPages = Math.ceil(totalCount / limit);
-    console.log("✅ [AUDIT API GET] Response prepared:", {
-      totalCount,
-      totalPages,
-      currentPage: page,
-    });
 
     return NextResponse.json({
       success: true,
@@ -227,10 +184,9 @@ export async function GET(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("❌ [AUDIT API GET] Error fetching audit logs:", error);
     return NextResponse.json(
       { success: false, message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -247,7 +203,7 @@ export async function DELETE(req: NextRequest) {
     if (!session || session.user.role !== "Admin") {
       return NextResponse.json(
         { success: false, message: "Unauthorized" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -270,7 +226,7 @@ export async function DELETE(req: NextRequest) {
 
     const files = fs.readdirSync(logsDir);
     const logFiles = files.filter(
-      (f) => f.startsWith("audit-") && f.endsWith(".log")
+      (f) => f.startsWith("audit-") && f.endsWith(".log"),
     );
 
     let deletedCount = 0;
@@ -294,10 +250,9 @@ export async function DELETE(req: NextRequest) {
       deletedCount,
     });
   } catch (error) {
-    console.error("Error deleting audit logs:", error);
     return NextResponse.json(
       { success: false, message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -27,9 +27,7 @@ const PersonalInformation = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const [image, setImage] = useState(session?.user?.image || "");
-  const [imageChanged, setImageChanged] = useState(false);
-  const [profile, setProfile] = useState({
+  const defaultProfile = {
     name: "",
     username: "",
     phoneNumber: "",
@@ -40,7 +38,11 @@ const PersonalInformation = () => {
     lga: "",
     address: "",
     image: "",
-  });
+  };
+
+  const [image, setImage] = useState(session?.user?.image || "");
+  const [imageChanged, setImageChanged] = useState(false);
+  const [profile, setProfile] = useState(defaultProfile);
   const [changedFields, setChangedFields] = useState({});
   const [loading, setLoading] = useState(false);
   const [snackbar, setSnackbar] = useState({
@@ -59,8 +61,10 @@ const PersonalInformation = () => {
       })
         .then((response) => response.json())
         .then((data) => {
-          setProfile(data.data);
-          setImage(data.data.image);
+          // Merge API data into defaults to keep fields controlled
+          const mergedProfile = { ...defaultProfile, ...data.data };
+          setProfile(mergedProfile);
+          setImage(mergedProfile.image);
         })
         .catch((error) => {
           console.error("Error fetching user data:", error);

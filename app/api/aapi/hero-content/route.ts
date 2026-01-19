@@ -34,7 +34,6 @@ export async function GET() {
 
     return NextResponse.json(heroContent, { status: 200 });
   } catch (error) {
-    console.error("Error fetching hero content:", error);
     return NextResponse.json(
       {
         success: false,
@@ -44,7 +43,7 @@ export async function GET() {
             ? (error as any).message
             : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -69,10 +68,9 @@ export async function PUT(req) {
 
     return NextResponse.json(
       { success: true, data: heroContent },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
-    console.error("Error updating hero content:", error);
     return NextResponse.json(
       {
         success: false,
@@ -82,7 +80,7 @@ export async function PUT(req) {
             ? (error as any).message
             : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -26,7 +26,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import PersonIcon from "@mui/icons-material/Person";
 
 interface User {
-  _id: number;
+  _id: string;
   name: string;
   role: "User" | "Agent" | "Admin";
 }
@@ -61,16 +61,17 @@ const UserRoleComponent: React.FC = () => {
     }
   };
 
-  const handleRoleChange = async (id: number, newRole: User["role"]) => {
+  const handleRoleChange = async (id: string, newRole: User["role"]) => {
     setLoading(true);
     try {
-      await axios.patch(`/api/aapi/users/updateuser?id=${id}`, {
+      await axios.patch(`/api/aapi/users/updateuser`, {
+        _id: id,
         role: newRole,
       });
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
-          user._id === id ? { ...user, role: newRole } : user
-        )
+          user._id === id ? { ...user, role: newRole } : user,
+        ),
       );
     } catch (error) {
       console.error(`Failed to update role for user ID ${id}: `, error);
@@ -86,13 +87,13 @@ const UserRoleComponent: React.FC = () => {
   };
 
   const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    user.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const startIndex = currentPage * usersPerPage;
   const currentUsers = filteredUsers.slice(
     startIndex,
-    startIndex + usersPerPage
+    startIndex + usersPerPage,
   );
 
   const getRoleColor = (role: User["role"]) => {

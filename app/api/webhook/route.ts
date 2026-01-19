@@ -20,12 +20,12 @@ export const dynamic = "force-dynamic";
  * Receives and processes Paystack payment events with signature verification.
  *
  * Security Features:
- * ✅ HMAC-SHA512 signature verification
- * ✅ Constant-time comparison (prevents timing attacks)
- * ✅ Payload validation
- * ✅ Event type validation
- * ✅ Request logging
- * ✅ Error handling with audit trail
+ *   HMAC-SHA512 signature verification
+ *   Constant-time comparison (prevents timing attacks)
+ *   Payload validation
+ *   Event type validation
+ *   Request logging
+ *   Error handling with audit trail
  *
  * Supported Events:
  * - charge.success: Payment successful
@@ -41,14 +41,12 @@ export async function POST(req: NextRequest) {
     const signature = req.headers.get("x-paystack-signature");
 
     if (!signature) {
-      console.warn("❌ [WEBHOOK] Missing x-paystack-signature header");
       return NextResponse.json(WebhookResponse.invalidSignature().body, {
         status: WebhookResponse.invalidSignature().status,
       });
     }
 
     if (!PAYSTACK_SECRET_KEY) {
-      console.error("❌ [WEBHOOK] PAYSTACK_SECRET_KEY not configured");
       return NextResponse.json(
         WebhookResponse.failure("Server configuration error", 500).body,
         { status: 500 },
@@ -66,10 +64,6 @@ export async function POST(req: NextRequest) {
     );
 
     if (!validation.isValid) {
-      console.error(
-        "❌ [WEBHOOK] Webhook validation failed:",
-        validation.error,
-      );
       const metadata = extractWebhookMetadata(req.headers);
       logWebhookFailure(validation.error || "Unknown error", metadata);
 
@@ -98,20 +92,14 @@ export async function POST(req: NextRequest) {
         break;
 
       default:
-        console.log(`ℹ️ [WEBHOOK] Unhandled event type: ${validation.event}`);
+        break;
     }
 
     // 6. Return success response
-    console.log(
-      `✅ [WEBHOOK] ${validation.event} processed successfully (${validation.data?.reference})`,
-    );
-
     return NextResponse.json(WebhookResponse.success().body, {
       status: WebhookResponse.success().status,
     });
   } catch (error) {
-    console.error("❌ [WEBHOOK] Unexpected error:", error);
-
     return NextResponse.json(
       WebhookResponse.failure("Internal server error", 500).body,
       { status: 500 },
@@ -130,9 +118,7 @@ async function handleChargeSuccess(
     const chargeData = processChargeSuccessEvent(data);
 
     if (!chargeData) {
-      console.error("❌ [WEBHOOK] Failed to process charge data");
-      console.error("Raw event data:", JSON.stringify(data, null, 2));
-      // Don't throw - log and return gracefully to avoid 500 errors
+      // Don't throw - return gracefully to avoid 500 errors
       return;
     }
 
@@ -151,9 +137,6 @@ async function handleChargeSuccess(
       }
 
       if (attempt < maxRetries) {
-        console.log(
-          `⏳ [WEBHOOK] Transaction not found (attempt ${attempt}/${maxRetries}), retrying in ${retryDelay}ms...`,
-        );
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
       }
     }
@@ -163,26 +146,13 @@ async function handleChargeSuccess(
       transaction.status = "successful";
       transaction.amount = chargeData.amount / 100; // Paystack returns amount in kobo
       await transaction.save();
-
-      console.log(`✅ [WEBHOOK] Transaction updated: ${chargeData.reference}`);
     } else {
       // Transaction still not found after retries - likely payment not initiated through our system
-      console.warn(
-        `⚠️ [WEBHOOK] Transaction not found after ${maxRetries} attempts for reference: ${chargeData.reference}`,
-      );
-      console.warn(
-        `Payment of ₦${chargeData.amount / 100} from ${chargeData.email} - not tracked in system`,
-      );
-      console.info(
-        `💡 This could be: 1) Direct Paystack payment, 2) Race condition (webhook too fast), or 3) Database sync issue`,
-      );
       // Return gracefully - webhook still succeeded
       return;
     }
   } catch (error) {
-    console.error("❌ [WEBHOOK] Error handling charge.success:", error);
-    // Don't re-throw - log and continue to avoid 500 errors to Paystack
-    console.error("Event data:", JSON.stringify(data, null, 2));
+    // Don't re-throw - continue to avoid 500 errors to Paystack
   }
 }
 
@@ -210,13 +180,8 @@ async function handleChargeFailed(
       (transaction as any).description =
         `Payment failed: ${failureData.reason}`;
       await transaction.save();
-
-      console.warn(
-        `⚠️ [WEBHOOK] Transaction marked as failed: ${failureData.reference} - ${failureData.reason}`,
-      );
     }
   } catch (error) {
-    console.error("❌ [WEBHOOK] Error handling charge.failed:", error);
     throw error;
   }
 }
@@ -237,11 +202,8 @@ async function handleChargeAbandoned(
       (transaction as any).status = "canceled"; // Use valid schema value
       (transaction as any).description = "Payment abandoned";
       await transaction.save();
-
-      console.log(`ℹ️ [WEBHOOK] Transaction abandoned: ${reference}`);
     }
   } catch (error) {
-    console.error("❌ [WEBHOOK] Error handling charge.abandoned:", error);
     throw error;
   }
 }
@@ -253,10 +215,5 @@ function logWebhookFailure(
   error: string,
   metadata: { ipAddress: string; userAgent: string },
 ) {
-  console.error(
-    `❌ [WEBHOOK] Failure - ${error}`,
-    `IP: ${metadata.ipAddress},`,
-    `Agent: ${metadata.userAgent}`,
-  );
   // In production, store failed webhook attempts for investigation
 }

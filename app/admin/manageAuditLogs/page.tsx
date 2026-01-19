@@ -101,7 +101,7 @@ const AuditLogsPage = () => {
 
       console.log(
         "🔗 [AUDIT UI] Requesting URL:",
-        `/api/admin/audit-logs?${params}`
+        `/api/admin/audit-logs?${params}`,
       );
       const response = await fetch(`/api/admin/audit-logs?${params}`);
       const data = await response.json();
@@ -116,17 +116,17 @@ const AuditLogsPage = () => {
         setLogs(data.data.logs);
         setPagination(data.data.pagination);
         console.log(
-          "✅ [AUDIT UI] Logs loaded successfully:",
+          "  [AUDIT UI] Logs loaded successfully:",
           data.data.logs.length,
-          "logs"
+          "logs",
         );
       } else {
         setError(data.message || "Failed to fetch logs");
-        console.error("❌ [AUDIT UI] API error:", data.message);
+        console.error("  [AUDIT UI] API error:", data.message);
       }
     } catch (err) {
       setError("Error fetching audit logs");
-      console.error("❌ [AUDIT UI] Fetch error:", err);
+      console.error("  [AUDIT UI] Fetch error:", err);
     } finally {
       setLoading(false);
     }
@@ -142,7 +142,7 @@ const AuditLogsPage = () => {
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -166,7 +166,7 @@ const AuditLogsPage = () => {
   const handleDeleteOldLogs = async () => {
     if (
       !confirm(
-        "Are you sure you want to delete logs older than 90 days? This cannot be undone."
+        "Are you sure you want to delete logs older than 90 days? This cannot be undone.",
       )
     ) {
       return;
@@ -489,7 +489,7 @@ const AuditLogsPage = () => {
                                 details: log.details,
                               },
                               null,
-                              2
+                              2,
                             )}
                           </pre>
                         }

@@ -52,6 +52,17 @@ import {
   History,
 } from "@mui/icons-material";
 import LoadingSpinner from "@/app/components/generalcomponents/loadingSpinner";
+import UnderVisitTab from "@/app/components/generalcomponents/UnderVisitTab";
+
+// Auto-release expired visits when user accesses dashboard
+const triggerAutoRelease = async () => {
+  try {
+    await axios.post("/api/cron/autoReleaseVisits", {});
+  } catch (error) {
+    // Silently fail - this is a background operation
+    console.log("Auto-release check completed");
+  }
+};
 
 interface paymentHistory {
   paymentDate: Date;
@@ -172,6 +183,8 @@ const MyProperty = () => {
     };
 
     fetchUserProperties();
+    // Trigger auto-release check when user accesses dashboard
+    triggerAutoRelease();
   }, []);
 
   useEffect(() => {
@@ -469,6 +482,10 @@ const MyProperty = () => {
           <Tab
             icon={<Schedule sx={{ fontSize: { xs: 20, md: 24 } }} />}
             label={`In Progress (${paymentProperties.length})`}
+          />
+          <Tab
+            icon={<Schedule sx={{ fontSize: { xs: 20, md: 24 } }} />}
+            label="Under Visit"
           />
           <Tab
             icon={<Cancel sx={{ fontSize: { xs: 20, md: 24 } }} />}
@@ -895,8 +912,13 @@ const MyProperty = () => {
           )}
         </TabPanel>
 
-        {/* Withdrawn Properties Tab */}
+        {/* Under Visit Properties Tab */}
         <TabPanel value={tabValue} index={2}>
+          <UnderVisitTab />
+        </TabPanel>
+
+        {/* Withdrawn Properties Tab */}
+        <TabPanel value={tabValue} index={3}>
           {withdrawnProperties.length === 0 ? (
             <Paper
               elevation={0}

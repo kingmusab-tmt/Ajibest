@@ -126,7 +126,7 @@ function TabPanel(props: TabPanelProps) {
 const UserInfo: React.FC = () => {
   const { data: session, status } = useSession();
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(
-    null
+    null,
   );
   const [loading, setLoading] = useState(true);
   const [tabValue, setTabValue] = useState(0);
@@ -150,7 +150,7 @@ const UserInfo: React.FC = () => {
             }
           }
         } catch (error) {
-          console.error("Error fetching analytics data:", error);
+          // Error fetching analytics data
         } finally {
           setLoading(false);
         }
@@ -190,7 +190,7 @@ const UserInfo: React.FC = () => {
       color: theme.palette.primary.main,
       gradient: `linear-gradient(135deg, ${alpha(
         theme.palette.primary.main,
-        0.1
+        0.1,
       )} 0%, ${alpha(theme.palette.primary.main, 0.2)} 100%)`,
     },
     {
@@ -201,7 +201,7 @@ const UserInfo: React.FC = () => {
       color: theme.palette.info.main,
       gradient: `linear-gradient(135deg, ${alpha(
         theme.palette.info.main,
-        0.1
+        0.1,
       )} 0%, ${alpha(theme.palette.info.main, 0.2)} 100%)`,
     },
     {
@@ -212,7 +212,7 @@ const UserInfo: React.FC = () => {
       color: theme.palette.success.main,
       gradient: `linear-gradient(135deg, ${alpha(
         theme.palette.success.main,
-        0.1
+        0.1,
       )} 0%, ${alpha(theme.palette.success.main, 0.2)} 100%)`,
     },
     {
@@ -223,7 +223,7 @@ const UserInfo: React.FC = () => {
       color: theme.palette.warning.main,
       gradient: `linear-gradient(135deg, ${alpha(
         theme.palette.warning.main,
-        0.1
+        0.1,
       )} 0%, ${alpha(theme.palette.warning.main, 0.2)} 100%)`,
     },
     {
@@ -235,7 +235,7 @@ const UserInfo: React.FC = () => {
       color: theme.palette.primary.main,
       gradient: `linear-gradient(135deg, ${alpha(
         theme.palette.primary.main,
-        0.1
+        0.1,
       )} 0%, ${alpha(theme.palette.primary.main, 0.2)} 100%)`,
     },
     {
@@ -247,7 +247,7 @@ const UserInfo: React.FC = () => {
       color: theme.palette.info.main,
       gradient: `linear-gradient(135deg, ${alpha(
         theme.palette.info.main,
-        0.1
+        0.1,
       )} 0%, ${alpha(theme.palette.info.main, 0.2)} 100%)`,
     },
   ];
@@ -422,7 +422,7 @@ const UserInfo: React.FC = () => {
                 </Typography>
                 <Typography variant="h6" fontWeight="bold" color="primary.main">
                   {formatter.format(
-                    analyticsData.accountSummary.nextPaymentAmountDue
+                    analyticsData.accountSummary.nextPaymentAmountDue,
                   )}
                 </Typography>
               </Box>
@@ -434,7 +434,7 @@ const UserInfo: React.FC = () => {
                 </Typography>
                 <Typography variant="h6" fontWeight="bold" color="success.main">
                   {formatter.format(
-                    analyticsData.propertyStatistics.totalPaymentMade
+                    analyticsData.propertyStatistics.totalPaymentMade,
                   )}
                 </Typography>
               </Box>
@@ -446,7 +446,7 @@ const UserInfo: React.FC = () => {
                 </Typography>
                 <Typography variant="h6" fontWeight="bold" color="warning.main">
                   {formatter.format(
-                    analyticsData.propertyStatistics.totalPaymentToBeMade
+                    analyticsData.propertyStatistics.totalPaymentToBeMade,
                   )}
                 </Typography>
               </Box>
@@ -552,7 +552,7 @@ const UserInfo: React.FC = () => {
                       <ListItemText
                         primary="Last Login"
                         secondary={formatDate(
-                          analyticsData.personalInformation.lastLogin
+                          analyticsData.personalInformation.lastLogin,
                         )}
                         primaryTypographyProps={{ variant: "body2" }}
                         secondaryTypographyProps={{ variant: "body1" }}
@@ -611,7 +611,7 @@ const UserInfo: React.FC = () => {
                       <Typography variant="body2">Registration Date</Typography>
                       <Typography variant="body2" textAlign="right">
                         {formatDate(
-                          analyticsData.accountSummary.registrationDate
+                          analyticsData.accountSummary.registrationDate,
                         )}
                       </Typography>
                     </Box>
@@ -621,7 +621,7 @@ const UserInfo: React.FC = () => {
                       <Typography variant="body2">Next Payment Date</Typography>
                       <Typography variant="body2" textAlign="right">
                         {formatDate(
-                          analyticsData.accountSummary.nextPaymentDate
+                          analyticsData.accountSummary.nextPaymentDate,
                         )}
                       </Typography>
                     </Box>
@@ -637,7 +637,7 @@ const UserInfo: React.FC = () => {
                         color="primary.main"
                       >
                         {formatter.format(
-                          analyticsData.accountSummary.nextPaymentAmountDue
+                          analyticsData.accountSummary.nextPaymentAmountDue,
                         )}
                       </Typography>
                     </Box>
@@ -690,7 +690,7 @@ const UserInfo: React.FC = () => {
                               borderRadius: 1,
                               background: alpha(
                                 theme.palette.warning.light,
-                                0.05
+                                0.05,
                               ),
                             }}
                           >
@@ -767,7 +767,7 @@ const UserInfo: React.FC = () => {
                               Continue Payment
                             </Button> */}
                           </Paper>
-                        )
+                        ),
                       )}
                     </Stack>
                   ) : (
@@ -838,7 +838,7 @@ const UserInfo: React.FC = () => {
                               borderRadius: 1,
                               background: alpha(
                                 theme.palette.success.light,
-                                0.05
+                                0.05,
                               ),
                             }}
                           >
@@ -897,7 +897,7 @@ const UserInfo: React.FC = () => {
                               View Property
                             </Button> */}
                           </Paper>
-                        )
+                        ),
                       )}
 
                       {/* Rented Properties */}

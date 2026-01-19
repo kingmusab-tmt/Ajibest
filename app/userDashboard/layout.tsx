@@ -71,7 +71,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [profileAnchorEl, setProfileAnchorEl] = useState<null | HTMLElement>(
-    null
+    null,
   );
   const [notificationsAnchorEl, setNotificationsAnchorEl] =
     useState<null | HTMLElement>(null);
@@ -172,11 +172,11 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         const filteredNotifications = fetchedNotifications?.data?.filter(
           (notification: any) =>
             notification.recipient === "all" ||
-            notification.recipient === session?.user?.email
+            notification.recipient === session?.user?.email,
         );
         setNotifications(filteredNotifications);
       } catch (error) {
-        console.error("Failed to fetch notifications:", error);
+        // Failed to fetch notifications
       }
     };
     if (status === "authenticated") {
@@ -497,8 +497,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               width: isMobile
                 ? "100%"
                 : isSidebarOpen
-                ? "calc(100% - 240px)"
-                : "calc(100% - 80px)",
+                  ? "calc(100% - 240px)"
+                  : "calc(100% - 80px)",
               marginLeft: isMobile ? 0 : isSidebarOpen ? 240 : 80,
               transition: theme.transitions.create(["margin", "width"], {
                 duration: theme.transitions.duration.standard,
@@ -594,7 +594,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                       height: 42,
                       border: `2px solid ${alpha(
                         theme.palette.common.white,
-                        0.8
+                        0.8,
                       )}`,
                       boxShadow: 2,
                     }}
@@ -661,7 +661,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                             "&:hover": {
                               backgroundColor: alpha(
                                 theme.palette.primary.main,
-                                0.1
+                                0.1,
                               ),
                             },
                           }}

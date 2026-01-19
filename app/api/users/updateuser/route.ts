@@ -12,6 +12,7 @@ const ALLOWED_FIELDS = {
     "phoneNumber",
     "userAccountNumber",
     "userBankName",
+    "image",
   ],
   userAccount: ["userAccountName", "userAccountNumber", "userBankName"],
   userProfile: [
@@ -60,7 +61,7 @@ function validateUpdateData(updateData) {
 
   // Check if any disallowed fields are being updated
   const invalidFields = Object.keys(updateData).filter(
-    (key) => !allowedKeys.includes(key)
+    (key) => !allowedKeys.includes(key),
   );
 
   if (invalidFields.length > 0) {
@@ -92,6 +93,19 @@ function validateUpdateData(updateData) {
   return filteredData;
 }
 
+function flattenNextOfKin(updateData: Record<string, any>) {
+  if (!updateData.nextOfKin) return updateData;
+
+  const { nextOfKin, ...rest } = updateData;
+  const flattened: Record<string, any> = { ...rest };
+
+  Object.entries(nextOfKin).forEach(([key, value]) => {
+    flattened[`nextOfKin.${key}`] = value;
+  });
+
+  return flattened;
+}
+
 export const dynamic = "force-dynamic";
 
 export async function PUT(req) {
@@ -120,9 +134,11 @@ export async function PUT(req) {
 
     // Validate and filter the update data
     const filteredUpdateData = validateUpdateData(userInfo);
+    // For partial nextOfKin updates, use dotted paths so we don't overwrite the entire subdocument
+    const updatePayload = flattenNextOfKin(filteredUpdateData);
 
     // Check if there's any valid data to update
-    if (Object.keys(filteredUpdateData).length === 0) {
+    if (Object.keys(updatePayload).length === 0) {
       return Response.json({
         message: "No valid fields to update",
         status: 400,
@@ -130,7 +146,7 @@ export async function PUT(req) {
       });
     }
 
-    await User.updateOne(filter, { $set: filteredUpdateData });
+    await User.updateOne(filter, { $set: updatePayload });
 
     return Response.json({
       message: "Update successful",
@@ -191,9 +207,10 @@ export async function PATCH(req) {
 
     // Validate and filter the update data
     const filteredUpdateData = validateUpdateData(updateData);
+    const updatePayload = flattenNextOfKin(filteredUpdateData);
 
     // Check if there's any valid data to update
-    if (Object.keys(filteredUpdateData).length === 0) {
+    if (Object.keys(updatePayload).length === 0) {
       return Response.json({
         message: "No valid fields to update",
         status: 400,
@@ -201,7 +218,7 @@ export async function PATCH(req) {
       });
     }
 
-    await User.updateOne(filter, { $set: filteredUpdateData });
+    await User.updateOne(filter, { $set: updatePayload });
 
     return Response.json({
       message: "Update successful",

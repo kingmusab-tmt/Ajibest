@@ -64,6 +64,11 @@ const UserDashboardSidebar: React.FC<UserDashboardSidebarProps> = ({
       label: "Manage Property",
       component: "ManageProperty",
     },
+    {
+      icon: <HistoryIcon />,
+      label: "Property Requests",
+      component: "PropertyRequestsPage",
+    },
     { icon: <PersonIcon />, label: "Manage User", component: "ManageUsers" },
     {
       icon: <HistoryIcon />,

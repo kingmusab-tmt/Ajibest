@@ -171,19 +171,19 @@ export async function GET(req: NextRequest) {
         }
         if (propertyType && propertyType !== "all") {
           properties = properties.filter(
-            (p) => p.propertyType === propertyType
+            (p) => p.propertyType === propertyType,
           );
         }
         if (purpose && purpose !== "all") {
           const purposeFilter = purpose === "sale" ? "For Sale" : "For Renting";
           properties = properties.filter(
-            (p) => p.listingPurpose === purposeFilter
+            (p) => p.listingPurpose === purposeFilter,
           );
         }
         if (priceRange) {
           const [minPrice, maxPrice] = priceRange.split("-").map(Number);
           properties = properties.filter(
-            (p) => p.price >= minPrice && p.price <= maxPrice
+            (p) => p.price >= minPrice && p.price <= maxPrice,
           );
         }
 
@@ -193,7 +193,6 @@ export async function GET(req: NextRequest) {
         properties = properties.slice(skip, skip + limit);
       }
     } catch (dbError) {
-      console.error("Database error:", dbError);
       // Return fallback properties on database error
       isFallback = true;
       properties = fallbackProperties;
@@ -215,7 +214,6 @@ export async function GET(req: NextRequest) {
         : "Properties retrieved successfully",
     });
   } catch (error) {
-    console.error("Server error:", error);
     // Return fallback properties on server error
     return NextResponse.json({
       success: true,
@@ -246,10 +244,9 @@ export async function POST(req: NextRequest) {
         data: property,
         message: "Property created successfully",
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
-    console.error("Error creating property:", error);
     return NextResponse.json(
       {
         success: false,
@@ -259,7 +256,7 @@ export async function POST(req: NextRequest) {
             ? (error as any).message
             : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

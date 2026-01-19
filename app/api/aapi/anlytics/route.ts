@@ -227,48 +227,48 @@ export async function GET() {
       totalUsers: getValue(totalUsers, mockOverviewData.stats.totalUsers),
       totalProperties: getValue(
         totalProperties,
-        mockOverviewData.stats.totalProperties
+        mockOverviewData.stats.totalProperties,
       ),
       totalTransactions: getValue(
         totalTransactions,
-        mockOverviewData.stats.totalTransactions
+        mockOverviewData.stats.totalTransactions,
       ),
       totalRevenue: getAggregateValue(
         totalRevenue,
-        mockOverviewData.stats.totalRevenue
+        mockOverviewData.stats.totalRevenue,
       ),
       activeListings: getValue(
         activeListings,
-        mockOverviewData.stats.activeListings
+        mockOverviewData.stats.activeListings,
       ),
       pendingTransactions: getValue(
         pendingTransactions,
-        mockOverviewData.stats.pendingTransactions
+        mockOverviewData.stats.pendingTransactions,
       ),
       soldProperties: getValue(
         soldProperties,
-        mockOverviewData.stats.soldProperties
+        mockOverviewData.stats.soldProperties,
       ),
       rentedProperties: getValue(
         rentedProperties,
-        mockOverviewData.stats.rentedProperties
+        mockOverviewData.stats.rentedProperties,
       ),
       // New metrics
       totalPaymentsMade: getAggregateValue(
         totalPaymentsMade,
-        mockOverviewData.stats.totalPaymentsMade
+        mockOverviewData.stats.totalPaymentsMade,
       ),
       totalPaymentsToBeMade: getAggregateValue(
         totalPaymentsToBeMade,
-        mockOverviewData.stats.totalPaymentsToBeMade
+        mockOverviewData.stats.totalPaymentsToBeMade,
       ),
       purchasedUnderPayment: getAggregateValue(
         purchasedUnderPayment,
-        mockOverviewData.stats.purchasedUnderPayment
+        mockOverviewData.stats.purchasedUnderPayment,
       ),
       rentedUnderPayment: getAggregateValue(
         rentedUnderPayment,
-        mockOverviewData.stats.rentedUnderPayment
+        mockOverviewData.stats.rentedUnderPayment,
       ),
     };
 
@@ -291,10 +291,9 @@ export async function GET() {
             listingPurpose: transaction.listingPurpose || "For Sale",
             date:
               transaction.createdAt?.toISOString() || new Date().toISOString(),
-          })
+          }),
         );
       } catch (error) {
-        console.error("Error processing recent transactions:", error);
         processedRecentTransactions = mockOverviewData.recentTransactions;
       }
     }
@@ -309,12 +308,11 @@ export async function GET() {
             count: item.count,
             color:
               mockOverviewData.propertyDistribution.find(
-                (p) => p.type === item._id
+                (p) => p.type === item._id,
               )?.color || "#1976d2",
-          })
+          }),
         );
       } catch (error) {
-        console.error("Error processing property distribution:", error);
         processedPropertyDistribution = mockOverviewData.propertyDistribution;
       }
     }
@@ -338,8 +336,6 @@ export async function GET() {
 
     return NextResponse.json(responseData, { status: 200 });
   } catch (error) {
-    console.error("Error fetching admin overview:", error);
-
     // Return mock data as fallback with error information
     return NextResponse.json(
       {
@@ -349,7 +345,7 @@ export async function GET() {
         error: "Failed to fetch real data, using mock data",
         details: error instanceof Error ? error.message : "Unknown error",
       },
-      { status: 200 }
+      { status: 200 },
     );
   }
 }

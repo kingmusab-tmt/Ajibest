@@ -52,7 +52,6 @@ export async function GET() {
 
     return NextResponse.json(faqs, { status: 200 });
   } catch (error) {
-    console.error("Error fetching FAQs:", error);
     return NextResponse.json(
       {
         success: false,
@@ -62,7 +61,7 @@ export async function GET() {
             ? (error as any).message
             : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -76,7 +75,6 @@ export async function POST(req: Request) {
     const faq = await FAQ.create(data);
     return NextResponse.json({ success: true, data: faq }, { status: 201 });
   } catch (error) {
-    console.error("Error creating FAQ:", error);
     return NextResponse.json(
       {
         success: false,
@@ -86,7 +84,7 @@ export async function POST(req: Request) {
             ? (error as any).message
             : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -99,17 +97,16 @@ export async function PUT(req: Request) {
   try {
     // Update all FAQs in the request
     const updatePromises = data.map((faq: any) =>
-      FAQ.findByIdAndUpdate(faq._id, faq, { new: true })
+      FAQ.findByIdAndUpdate(faq._id, faq, { new: true }),
     );
 
     const updatedFaqs = await Promise.all(updatePromises);
 
     return NextResponse.json(
       { success: true, data: updatedFaqs },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
-    console.error("Error updating FAQs:", error);
     return NextResponse.json(
       {
         success: false,
@@ -119,7 +116,7 @@ export async function PUT(req: Request) {
             ? (error as any).message
             : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -136,16 +133,15 @@ export async function DELETE(req: Request) {
     if (!deletedFaq) {
       return NextResponse.json(
         { success: false, error: "FAQ not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     return NextResponse.json(
       { success: true, data: deletedFaq },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
-    console.error("Error deleting FAQ:", error);
     return NextResponse.json(
       {
         success: false,
@@ -155,7 +151,7 @@ export async function DELETE(req: Request) {
             ? (error as any).message
             : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

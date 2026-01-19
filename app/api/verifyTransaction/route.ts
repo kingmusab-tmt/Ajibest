@@ -33,24 +33,6 @@ export async function POST(req) {
     listingPurpose,
   } = body;
 
-  console.log(
-    `[verifyTransaction] Request received:`,
-    JSON.stringify(
-      {
-        amount,
-        propertyPrice,
-        email,
-        reference,
-        propertyId,
-        propertyType,
-        paymentMethod,
-        listingPurpose,
-      },
-      null,
-      2,
-    ),
-  );
-
   try {
     const user = await User.findOne({ email });
     if (!user) {
@@ -60,8 +42,6 @@ export async function POST(req) {
         success: false,
       });
     }
-
-    // console.log("propertyId:", propertyId);
 
     // Find property
     let property;
@@ -109,12 +89,6 @@ export async function POST(req) {
       (p) => p.propertyId.toString() === property._id.toString(),
     );
 
-    console.log(`[verifyTransaction] Checking existing properties:`, {
-      propertyId: property._id,
-      existingUnderPayment: !!existingPropertyUnderPayment,
-      existingPurOrRented: !!existingPropertyPurOrRented,
-    });
-
     // If property already exists in either array, this is a subsequent payment
     if (existingPropertyUnderPayment || existingPropertyPurOrRented) {
       return Response.json({
@@ -126,9 +100,6 @@ export async function POST(req) {
 
     // NEW PURCHASE - First time buying this property
     if (paymentMethod === "payOnce") {
-      console.log(
-        `[verifyTransaction] Processing payOnce payment for property: ${property._id}`,
-      );
       // Pay Once - Full payment
       const newTotalPaymentMade = user.totalPaymentMade + amount;
       const newTotalPaymentsGross = user.totalPaymentsGross + propertyPrice;
@@ -175,25 +146,12 @@ export async function POST(req) {
           ? { rented: true, rentedBy: user._id, status: "rented" }
           : { purchased: true, purchasedBy: user._id, status: "sold" };
 
-      console.log(
-        `[verifyTransaction] Updating property ${property._id} with:`,
-        propertyUpdate,
-      );
       const updateResult = await Property.findByIdAndUpdate(
         property._id,
         propertyUpdate,
         { new: true },
       );
-      console.log(`[verifyTransaction] Property after update:`, updateResult);
-      if (!updateResult) {
-        console.error(
-          `[verifyTransaction] WARNING: Property update returned null/undefined for ID: ${property._id}`,
-        );
-      }
     } else if (paymentMethod === "installment") {
-      console.log(
-        `[verifyTransaction] Processing installment payment for property: ${property._id}`,
-      );
       // Installment Payment - First payment
       const newTotalPaymentMade = user.totalPaymentMade + amount;
       const newTotalPaymentsGross = user.totalPaymentsGross + propertyPrice;
@@ -265,24 +223,11 @@ export async function POST(req) {
               status: "sold",
             };
 
-      console.log(
-        `[verifyTransaction] Updating property ${property._id} (installment) with:`,
-        propertyUpdate,
-      );
       const updateResult = await Property.findByIdAndUpdate(
         property._id,
         propertyUpdate,
         { new: true },
       );
-      console.log(
-        `[verifyTransaction] Property after installment update:`,
-        updateResult,
-      );
-      if (!updateResult) {
-        console.error(
-          `[verifyTransaction] WARNING: Property update returned null/undefined for ID: ${property._id}`,
-        );
-      }
     }
 
     return Response.json({
@@ -292,7 +237,6 @@ export async function POST(req) {
       transactionId: transaction._id,
     });
   } catch (error) {
-    console.error("Error in transaction:", error);
     return Response.json({
       message: "Error in transaction",
       status: 500,

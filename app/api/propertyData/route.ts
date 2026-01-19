@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
           message: "Property type is required",
           data: fallbackPropertyPrices,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -107,7 +107,6 @@ export async function GET(request: NextRequest) {
         propertiesUsed: properties.length,
       });
     } catch (dbError) {
-      console.error("Database error:", dbError);
       // Return fallback prices on database error
       return NextResponse.json({
         success: true,
@@ -120,7 +119,6 @@ export async function GET(request: NextRequest) {
       });
     }
   } catch (error) {
-    console.error("Server error:", error);
     // Return fallback prices on server error
     const { searchParams } = new URL(request.url);
     const propertyType = searchParams.get("propertyType");
@@ -152,7 +150,7 @@ function calculateLandPrices(properties: any[]) {
     (property) =>
       property.size === "Full Plot" ||
       !property.size || // If no size specified, assume full plot
-      (property.price && !property.size) // Price exists but no size
+      (property.price && !property.size), // Price exists but no size
   );
 
   let averageFullPlotPrice = 0;
@@ -160,14 +158,14 @@ function calculateLandPrices(properties: any[]) {
   if (fullPlotProperties.length > 0) {
     const totalPrice = fullPlotProperties.reduce(
       (sum, property) => sum + property.price,
-      0
+      0,
     );
     averageFullPlotPrice = Math.round(totalPrice / fullPlotProperties.length);
   } else {
     // If no full plot properties, calculate average of all land properties
     const totalPrice = properties.reduce(
       (sum, property) => sum + property.price,
-      0
+      0,
     );
     averageFullPlotPrice = Math.round(totalPrice / properties.length);
   }
@@ -272,7 +270,7 @@ export async function POST(request: NextRequest) {
     if (!propertyType || !propertyDetail || !durationMonths) {
       return NextResponse.json(
         { success: false, message: "Missing required fields" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -313,7 +311,7 @@ export async function POST(request: NextRequest) {
           success: false,
           message: "Could not calculate price for selected property",
         },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -349,10 +347,9 @@ export async function POST(request: NextRequest) {
         : "Installment calculation based on current property listings",
     });
   } catch (error) {
-    console.error("Error in POST propertyData:", error);
     return NextResponse.json(
       { success: false, message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

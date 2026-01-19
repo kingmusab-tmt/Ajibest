@@ -28,35 +28,35 @@ export async function GET() {
 
     // Fetch user without populating property data since we store it directly
     const user = await User.findOne({ email }).select(
-      "-password -otp -resetToken -emailToken -favouriteProperties"
+      "-password -otp -resetToken -emailToken -favouriteProperties",
     );
 
     if (!user) {
       return NextResponse.json(
         { success: false, error: "User not Found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     // Calculate property counts using listingPurpose
     const purchasedProperties =
       user.propertyPurOrRented?.filter(
-        (property) => property.listingPurpose === "For Sale"
+        (property) => property.listingPurpose === "For Sale",
       ) || [];
 
     const rentedProperties =
       user.propertyPurOrRented?.filter(
-        (property) => property.listingPurpose === "For Renting"
+        (property) => property.listingPurpose === "For Renting",
       ) || [];
 
     const purchasedUnderPayment =
       user.propertyUnderPayment?.filter(
-        (property) => property.listingPurpose === "For Sale"
+        (property) => property.listingPurpose === "For Sale",
       ) || [];
 
     const rentedUnderPayment =
       user.propertyUnderPayment?.filter(
-        (property) => property.listingPurpose === "For Renting"
+        (property) => property.listingPurpose === "For Renting",
       ) || [];
 
     // Calculate next payment information
@@ -132,11 +132,11 @@ export async function GET() {
             property.paymentHistory?.reduce(
               (sum, payment) =>
                 sum + (payment.paymentCompleted ? payment.amount : 0),
-              0
+              0,
             ) || 0;
 
           const nextPayment = property.paymentHistory?.find(
-            (payment) => !payment.paymentCompleted
+            (payment) => !payment.paymentCompleted,
           );
 
           const totalPayments = property.paymentHistory?.length || 0;
@@ -242,16 +242,15 @@ export async function GET() {
         success: true,
         data: analyticsData,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
-    console.error("Analytics API Error:", error);
     return NextResponse.json(
       {
         success: false,
         error: "Internal server error",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

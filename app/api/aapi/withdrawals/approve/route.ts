@@ -19,10 +19,9 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!userId || !propertyId || typeof approve === "undefined") {
-      // console.log("Missing fields:", { userId, propertyId, approve });
       return NextResponse.json(
         { error: "Missing required fields: userId, propertyId, or approve" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -36,7 +35,7 @@ export async function POST(request: NextRequest) {
     if (!user.propertyWithdrawn || !Array.isArray(user.propertyWithdrawn)) {
       return NextResponse.json(
         { error: "No withdrawal requests found for this user" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -60,7 +59,7 @@ export async function POST(request: NextRequest) {
     if (propertyIndex === -1) {
       return NextResponse.json(
         { error: "Withdrawal request not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -72,7 +71,7 @@ export async function POST(request: NextRequest) {
       // Calculate total money paid by user from paymentHistory
       const totalPaid = withdrawalProperty.paymentHistory.reduce(
         (sum: number, payment: any) => sum + (Number(payment.amount) || 0),
-        0
+        0,
       );
 
       // Get the property price
@@ -81,14 +80,9 @@ export async function POST(request: NextRequest) {
 
       // Validate that we have valid numbers before proceeding
       if (isNaN(totalPaid) || isNaN(propertyPrice)) {
-        console.error("Invalid financial data:", {
-          totalPaid,
-          propertyPrice,
-          propertyPriceField: withdrawalProperty.propertyPrice,
-        });
         return NextResponse.json(
           { error: "Invalid financial data in withdrawal property" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -101,7 +95,7 @@ export async function POST(request: NextRequest) {
       // Only subtract propertyPrice from totalPaymentsGross (not from totalPaymentMade)
       user.totalPaymentsGross = Math.max(
         0,
-        currentTotalPaymentsGross - propertyPrice
+        currentTotalPaymentsGross - propertyPrice,
       );
 
       // Get remaining balance from last payment history entry
@@ -115,14 +109,14 @@ export async function POST(request: NextRequest) {
         // Only subtract remaining balance from totalPaymentToBeMade
         user.totalPaymentToBeMade = Math.max(
           0,
-          currentTotalPaymentToBeMade - remainingBalance
+          currentTotalPaymentToBeMade - remainingBalance,
         );
       } else {
         // If no remaining balance in payment history, calculate it
         const calculatedRemainingBalance = propertyPrice - totalPaid;
         user.totalPaymentToBeMade = Math.max(
           0,
-          currentTotalPaymentToBeMade - calculatedRemainingBalance
+          currentTotalPaymentToBeMade - calculatedRemainingBalance,
         );
       }
 
@@ -135,20 +129,15 @@ export async function POST(request: NextRequest) {
         isNaN(user.totalPaymentToBeMade) ||
         isNaN(user.remainingBalance)
       ) {
-        console.error("NaN detected in user financial fields:", {
-          totalPaymentsGross: user.totalPaymentsGross,
-          totalPaymentToBeMade: user.totalPaymentToBeMade,
-          remainingBalance: user.remainingBalance,
-        });
         return NextResponse.json(
           { error: "Invalid financial calculation" },
-          { status: 500 }
+          { status: 500 },
         );
       }
 
       // Create refund schedule based on payment history
       const refundSchedule = createRefundSchedule(
-        withdrawalProperty.paymentHistory
+        withdrawalProperty.paymentHistory,
       );
 
       // Create and save refund request
@@ -183,7 +172,7 @@ export async function POST(request: NextRequest) {
             ? propertyId.toString()
             : String(propertyId);
           return propId === searchId;
-        }
+        },
       );
 
       if (underPaymentIndex !== -1) {
@@ -218,13 +207,12 @@ export async function POST(request: NextRequest) {
           ? savedRefundRequest._id
           : undefined,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
-    console.error("Approve withdrawal error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -244,7 +232,7 @@ function createRefundSchedule(paymentHistory: any[]) {
   // Sort payment history by date
   const sortedPayments = [...paymentHistory].sort(
     (a, b) =>
-      new Date(a.paymentDate).getTime() - new Date(b.paymentDate).getTime()
+      new Date(a.paymentDate).getTime() - new Date(b.paymentDate).getTime(),
   );
 
   // Start refunds one month from now

@@ -23,13 +23,6 @@ export async function POST(req) {
   const body = await req.json();
   const { amount, email, reference, propertyId } = body;
 
-  console.log(`[subsequent-payment] Request received:`, {
-    amount,
-    email,
-    reference,
-    propertyId,
-  });
-
   try {
     const user = await User.findOne({ email });
     if (!user) {
@@ -84,13 +77,6 @@ export async function POST(req) {
     const remainingBalanceForProperty =
       Number(propertyUnderPayment.propertyPrice) - totalPaymentMadeForProperty;
     const isPaymentCompleted = remainingBalanceForProperty <= 0;
-
-    console.log(`[subsequent-payment] Payment calculation:`, {
-      totalPaymentMadeForProperty,
-      propertyPrice: propertyUnderPayment.propertyPrice,
-      remainingBalanceForProperty,
-      isPaymentCompleted,
-    });
 
     // Calculate next payment date (30 days from now)
     const nextPaymentDate = new Date();
@@ -168,21 +154,11 @@ export async function POST(req) {
               status: "sold",
             };
 
-      console.log(
-        `[subsequent-payment] Updating property ${propertyId} with:`,
-        propertyUpdate,
-      );
       const updateResult = await Property.findByIdAndUpdate(
         propertyId,
         propertyUpdate,
         { new: true },
       );
-      console.log(`[subsequent-payment] Property after update:`, updateResult);
-      if (!updateResult) {
-        console.error(
-          `[subsequent-payment] WARNING: Property update returned null/undefined for ID: ${propertyId}`,
-        );
-      }
     } else {
       // Update propertyUnderPayment with new payment history
       await User.findOneAndUpdate(
@@ -212,7 +188,6 @@ export async function POST(req) {
       isPaymentCompleted,
     });
   } catch (error) {
-    console.error("Error in subsequent payment:", error);
     return Response.json({
       message: "Error in payment processing",
       status: 500,

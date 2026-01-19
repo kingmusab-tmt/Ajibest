@@ -131,6 +131,21 @@ export const authOptions = {
     error: "/auth/error",
   },
   callbacks: {
+    async signIn({ user }: any) {
+      try {
+        await connectDB();
+        if (user?.email) {
+          await User.updateOne(
+            { email: user.email },
+            { $set: { lastLoginTime: new Date() } },
+          );
+        }
+      } catch (err) {
+        console.error("⚠️ [AUTH SIGNIN] Failed to update lastLoginTime", err);
+      }
+      return true;
+    },
+
     async redirect({ url, baseUrl }) {
       return baseUrl + "/userDashboard";
     },
@@ -203,7 +218,7 @@ export const authOptions = {
         }
         return session;
       } catch (error) {
-        console.error("❌ [AUTH SESSION] Session callback error:", error);
+        console.error("  [AUTH SESSION] Session callback error:", error);
         throw error;
       }
     },

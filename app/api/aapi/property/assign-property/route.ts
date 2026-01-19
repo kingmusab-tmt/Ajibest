@@ -206,7 +206,6 @@ export async function POST(req: Request) {
       { status: 200 },
     );
   } catch (error) {
-    console.error("Error assigning property:", error);
     return NextResponse.json(
       {
         success: false,

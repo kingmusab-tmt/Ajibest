@@ -15,6 +15,7 @@ import DashboardPage from "./admindashboard";
 import ProtectedRoute from "../components/generalcomponents/ProtectedRoute";
 import ManageWebContent from "./manageWebContent/page";
 import ManageAuditLogs from "./manageAuditLogs/page";
+import PropertyRequestsPage from "./manageProperty/propertyRequests/page";
 import LoadingSpinner from "../components/generalcomponents/loadingSpinner";
 
 interface Notification {
@@ -56,11 +57,11 @@ const AdminPage = () => {
         const filteredNotifications = fetchedNotifications.data.filter(
           (notification) =>
             notification.recipient === "all" ||
-            notification.recipient === session?.user?.email
+            notification.recipient === session?.user?.email,
         );
         setNotifications(filteredNotifications);
       } catch (error) {
-        console.error("Error fetching notifications:", error);
+        // Failed to fetch notifications
       }
     };
     if (status === "authenticated") {
@@ -122,6 +123,8 @@ const AdminPage = () => {
         return <ManageWebContent />;
       case "ManageAuditLogs":
         return <ManageAuditLogs />;
+      case "PropertyRequestsPage":
+        return <PropertyRequestsPage />;
       // case "UpdateProfile":
       //   return <UpdateProfile />;
       default:

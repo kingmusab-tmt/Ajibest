@@ -3,6 +3,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/utils/connectDB";
 import Property from "@/models/properties";
+import PropertyVisit from "@/models/propertyVisit";
 
 export const dynamic = "force-dynamic";
 
@@ -209,26 +210,24 @@ export async function GET(request: NextRequest) {
       filter.rented = { $ne: true };
       filter.purchased = { $ne: true };
 
+      // Get properties that are currently under scheduled visits
+      const scheduledVisits = await PropertyVisit.find({
+        status: "scheduled",
+      }).distinct("propertyId");
+
+      // Exclude properties under scheduled visits
+      if (scheduledVisits.length > 0) {
+        filter._id = { $nin: scheduledVisits };
+      }
+
       // Get total count for pagination
       const total = await Property.countDocuments(filter);
-
-      console.log("[getproperties] Filter:", JSON.stringify(filter, null, 2));
-      console.log("[getproperties] Total matching properties:", total);
 
       // Fetch properties with filters and pagination
       let properties = await Property.find(filter)
         .skip(skip)
         .limit(limit)
         .sort({ createdAt: -1 });
-
-      console.log(`[getproperties] Returned ${properties.length} properties`);
-      if (properties.length > 0) {
-        console.log(
-          "[getproperties] First property rented/purchased:",
-          properties[0].rented,
-          properties[0].purchased,
-        );
-      }
 
       // If no properties found in database, use filtered fallback
       if (!properties || properties.length === 0) {
@@ -267,8 +266,6 @@ export async function GET(request: NextRequest) {
         isFallback: false,
       });
     } catch (dbError) {
-      console.error("Database error:", dbError);
-
       // Apply filters to fallback data on database error
       const filteredFallback = filterProperties(fallbackProperties, {
         state,
@@ -293,8 +290,6 @@ export async function GET(request: NextRequest) {
       });
     }
   } catch (error) {
-    console.error("Server error:", error);
-
     // Return filtered fallback properties on server error
     const { searchParams } = new URL(request.url);
     const state = searchParams.get("state");

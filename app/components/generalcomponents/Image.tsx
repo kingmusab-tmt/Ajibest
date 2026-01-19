@@ -72,7 +72,7 @@ const EditableImage: React.FC<EditableImageProps> = ({ link, setLink }) => {
           error: "Upload error",
         });
       } catch (error) {
-        console.error("[EditableImage] Upload failed:", error);
+        // Upload failed
       } finally {
         setIsUploading(false);
       }

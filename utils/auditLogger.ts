@@ -37,10 +37,10 @@ function getLogsDirectory(): string {
     if (!fs.existsSync(logsDir)) {
       console.log("📁 [AUDIT LOGGER] Creating logs directory:", logsDir);
       fs.mkdirSync(logsDir, { recursive: true, mode: 0o777 });
-      console.log("✅ [AUDIT LOGGER] Logs directory created successfully");
+      console.log("  [AUDIT LOGGER] Logs directory created successfully");
     }
   } catch (err) {
-    console.error("❌ [AUDIT LOGGER] Failed to create logs directory:", err);
+    console.error("  [AUDIT LOGGER] Failed to create logs directory:", err);
     console.error("Attempted path:", logsDir);
     console.error("Current working directory:", process.cwd());
   }
@@ -85,13 +85,13 @@ export async function logAudit(params: AuditLogParams): Promise<void> {
     try {
       fs.appendFileSync(filePath, logLine, "utf8");
     } catch (writeErr) {
-      console.error("❌ [AUDIT LOG] Failed to write to file:", writeErr);
+      console.error("  [AUDIT LOG] Failed to write to file:", writeErr);
       console.error("File path:", filePath);
       throw writeErr;
     }
 
     // Log to console for testing
-    console.log("✅ [AUDIT LOG] New entry logged:", {
+    console.log("  [AUDIT LOG] New entry logged:", {
       id: logEntry._id,
       timestamp: logEntry.timestamp,
       action: logEntry.action,
@@ -103,7 +103,7 @@ export async function logAudit(params: AuditLogParams): Promise<void> {
   } catch (error) {
     // Don't throw errors for audit logging failures
     // Log to console for debugging
-    console.error("❌ [AUDIT LOG ERROR] Audit logging failed:", error);
+    console.error("  [AUDIT LOG ERROR] Audit logging failed:", error);
     if (error instanceof Error) {
       console.error("Error details:", {
         message: error.message,
@@ -144,7 +144,7 @@ export function getUserAgent(req: NextRequest): string | undefined {
 export async function logFailedLogin(
   email: string,
   reason: string,
-  req?: NextRequest
+  req?: NextRequest,
 ): Promise<void> {
   console.log("🔒 [LOGIN FAILED] Logging failed login attempt:", {
     email,
@@ -170,9 +170,9 @@ export async function logSuccessfulLogin(
   email: string,
   name: string,
   role: string,
-  req?: NextRequest
+  req?: NextRequest,
 ): Promise<void> {
-  console.log("✅ [LOGIN SUCCESS] Logging successful login:", {
+  console.log("  [LOGIN SUCCESS] Logging successful login:", {
     userId,
     email,
     name,
@@ -196,7 +196,7 @@ export async function logSuccessfulLogin(
  */
 export async function logPasswordResetRequest(
   email: string,
-  req?: NextRequest
+  req?: NextRequest,
 ): Promise<void> {
   await logAudit({
     userEmail: email,
@@ -213,7 +213,7 @@ export async function logPasswordResetRequest(
  */
 export async function logPasswordResetComplete(
   email: string,
-  req?: NextRequest
+  req?: NextRequest,
 ): Promise<void> {
   await logAudit({
     userEmail: email,
@@ -237,7 +237,7 @@ export async function logAdminAction(
   resourceId?: string,
   targetUserEmail?: string,
   details?: Record<string, any>,
-  req?: NextRequest
+  req?: NextRequest,
 ): Promise<void> {
   await logAudit({
     userId: adminUserId,
@@ -265,7 +265,7 @@ export async function logSensitiveDataAccess(
   dataType: string,
   targetUserId?: string,
   targetUserEmail?: string,
-  req?: NextRequest
+  req?: NextRequest,
 ): Promise<void> {
   await logAudit({
     userId,
@@ -294,7 +294,7 @@ export async function logTransactionModification(
   previousStatus?: string,
   newStatus?: string,
   details?: Record<string, any>,
-  req?: NextRequest
+  req?: NextRequest,
 ): Promise<void> {
   await logAudit({
     userId,
@@ -324,7 +324,7 @@ export async function logUnauthorizedAccess(
   userId?: string,
   userEmail?: string,
   userRole?: string,
-  req?: NextRequest
+  req?: NextRequest,
 ): Promise<void> {
   await logAudit({
     userId,
@@ -345,7 +345,7 @@ export async function logUnauthorizedAccess(
 export async function logUserRegistration(
   email: string,
   name: string,
-  req?: NextRequest
+  req?: NextRequest,
 ): Promise<void> {
   await logAudit({
     userEmail: email,
@@ -366,7 +366,7 @@ export async function logPropertyWithdrawal(
   userEmail: string,
   propertyId: string,
   reason: string,
-  req?: NextRequest
+  req?: NextRequest,
 ): Promise<void> {
   await logAudit({
     userId,

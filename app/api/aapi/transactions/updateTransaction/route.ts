@@ -15,7 +15,7 @@ export async function PUT(req) {
   if (!session?.user || session?.user?.role !== "Admin") {
     return NextResponse.json(
       { success: false, error: "Unauthorized" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -27,7 +27,7 @@ export async function PUT(req) {
     if (!transaction) {
       return NextResponse.json(
         { success: false, message: "Transaction not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -39,7 +39,7 @@ export async function PUT(req) {
         // Subtract amount from totalPaymentMade
         user.totalPaymentMade = Math.max(
           0,
-          user.totalPaymentMade - transaction.amount
+          user.totalPaymentMade - transaction.amount,
         );
 
         // Add amount to totalPaymentToBeMade and remainingBalance
@@ -61,7 +61,7 @@ export async function PUT(req) {
                   new Date(payment.paymentDate).getTime() ===
                     new Date(transaction.createdAt).getTime()
                 );
-              }
+              },
             );
 
             // Recalculate the property's payment totals after removal
@@ -85,7 +85,7 @@ export async function PUT(req) {
     const updatedTransaction = await Transaction.findByIdAndUpdate(
       transactionId,
       { status: status },
-      { new: true }
+      { new: true },
     );
 
     // Log transaction modification
@@ -99,7 +99,7 @@ export async function PUT(req) {
       transaction.status,
       status,
       { transactionEmail: transaction.email },
-      req
+      req,
     );
 
     return NextResponse.json(
@@ -111,13 +111,12 @@ export async function PUT(req) {
         },
         userUpdated: status === "failed", // Indicate if user was updated
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
-    console.error("Error updating transaction:", error);
     return NextResponse.json(
       { success: false, message: "Failed to update Transaction Status" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }

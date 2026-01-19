@@ -5,7 +5,7 @@ import { getClientIp } from "@/utils/ipUtils";
 
 // Type guard for MongoDB duplicate key error
 function isMongoDuplicateError(
-  error: unknown
+  error: unknown,
 ): error is { code: number; name: string } {
   return (
     typeof error === "object" &&
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     if (!email) {
       return NextResponse.json(
         { success: false, message: "Email is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { success: false, message: "Please provide a valid email address" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
             message: "This email is already subscribed to our newsletter",
             data: { email: existingSubscription.email },
           },
-          { status: 409 }
+          { status: 409 },
         );
       } else {
         // Resubscribe previously unsubscribed email
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
               subscribedAt: existingSubscription.subscribedAt,
             },
           },
-          { status: 200 }
+          { status: 200 },
         );
       }
     }
@@ -110,11 +110,9 @@ export async function POST(req: NextRequest) {
           subscribedAt: newSubscription.subscribedAt,
         },
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error: unknown) {
-    console.error("Newsletter subscription error:", error);
-
     // Handle duplicate key error (MongoDB)
     if (
       isMongoDuplicateError(error) &&
@@ -122,13 +120,13 @@ export async function POST(req: NextRequest) {
     ) {
       return NextResponse.json(
         { success: false, message: "This email is already subscribed" },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
     return NextResponse.json(
       { success: false, message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -187,13 +185,12 @@ export async function GET(req: NextRequest) {
           },
         },
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error: unknown) {
-    console.error("Error fetching newsletter subscribers:", error);
     return NextResponse.json(
       { success: false, message: "Failed to fetch subscribers" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

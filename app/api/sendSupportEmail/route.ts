@@ -8,7 +8,6 @@ export const POST = async (req, res) => {
   }
 
   const body = await req.json();
-  // console.log(body);
   const { email, name, phone, subject, message } = body;
 
   const transporter = nodemailer.createTransport({
@@ -32,12 +31,12 @@ export const POST = async (req, res) => {
 
     return NextResponse.json(
       { message: "Email sent successfully" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     return NextResponse.json(
       { message: "Error sending email", error },
-      { status: 500 }
+      { status: 500 },
     );
   }
 };

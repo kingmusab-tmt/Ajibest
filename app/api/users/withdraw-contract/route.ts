@@ -26,13 +26,13 @@ export async function POST(request: NextRequest) {
     }
 
     const propertyIndex = user.propertyUnderPayment.findIndex(
-      (property: any) => property.propertyId.toString() === propertyId
+      (property: any) => property.propertyId.toString() === propertyId,
     );
 
     if (propertyIndex === -1) {
       return NextResponse.json(
         { error: "Property not found in your ongoing payments" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     if (property.isWithdrawn) {
       return NextResponse.json(
         { error: "Property already has a withdrawal request" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -89,24 +89,24 @@ export async function POST(request: NextRequest) {
     const totalPaidForProperty =
       property.paymentHistory?.reduce(
         (total: number, payment: any) => total + (payment.amount || 0),
-        0
+        0,
       ) || 0;
 
     const newTotalPaymentMade = Math.max(
       0,
-      user.totalPaymentMade - totalPaidForProperty
+      user.totalPaymentMade - totalPaidForProperty,
     );
     const newTotalPaymentToBeMade = Math.max(
       0,
-      user.totalPaymentToBeMade - (property.propertyPrice || 0)
+      user.totalPaymentToBeMade - (property.propertyPrice || 0),
     );
     const newRemainingBalance = Math.max(
       0,
-      newTotalPaymentToBeMade - newTotalPaymentMade
+      newTotalPaymentToBeMade - newTotalPaymentMade,
     );
     const newTotalPropertyPurchased = Math.max(
       0,
-      user.totalPropertyPurchased - 1
+      user.totalPropertyPurchased - 1,
     );
 
     // Update user document
@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
       userEmail,
       propertyId,
       withdrawalReason,
-      request
+      request,
     );
 
     return NextResponse.json(
@@ -147,13 +147,12 @@ export async function POST(request: NextRequest) {
           totalPropertyPurchased: newTotalPropertyPurchased,
         },
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
-    console.error("Withdrawal error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

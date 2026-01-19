@@ -41,11 +41,13 @@ interface BankAccount {
 
 const BankAccountDetail: React.FC = () => {
   const { data: session, status } = useSession();
-  const [account, setAccount] = useState<BankAccount>({
+  const defaultAccount: BankAccount = {
     userAccountNumber: "",
     userBankName: "",
     userAccountName: "",
-  });
+  };
+
+  const [account, setAccount] = useState<BankAccount>(defaultAccount);
   const [changedFields, setChangedFields] = useState<{
     [key: string]: boolean;
   }>({});
@@ -91,7 +93,7 @@ const BankAccountDetail: React.FC = () => {
     (message: string, severity: "success" | "error") => {
       setSnackbar({ open: true, message, severity });
     },
-    []
+    [],
   );
 
   const fetchAccountDetails = useCallback(async () => {
@@ -109,7 +111,8 @@ const BankAccountDetail: React.FC = () => {
 
       const data = await response.json();
       if (data.data) {
-        setAccount(data.data);
+        // Merge defaults to keep Select/TextField controlled even when API omits fields
+        setAccount({ ...defaultAccount, ...data.data });
       }
     } catch (error) {
       console.error("Error fetching account details:", error);

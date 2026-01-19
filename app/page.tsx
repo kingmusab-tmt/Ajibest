@@ -28,7 +28,7 @@ export default function Home() {
         const heroData = await heroResponse.json();
         setHeroData(heroData);
       } catch (error) {
-        console.error("Failed to fetch initial data:", error);
+        // Failed to fetch initial data
       } finally {
         setIsLoading(false);
       }
