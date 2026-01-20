@@ -1,21 +1,12 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactNode } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Box, useTheme, useMediaQuery, Container } from "@mui/material";
 
 import UserDashboardSidebar from "./adminComponents/adminnav";
 import ProfileTopNavBar from "./adminComponents/profiletopnav";
-import ManageProperty from "./manageProperty/page";
-import ManageUsers from "./manageUser/page";
-import ManageTransactions from "./manageTransactions/page";
-import ManagePayments from "./managePayment/page";
-import RefundRequestsAdminPage from "./manageRefundRequest/page";
-import DashboardPage from "./admindashboard";
 import ProtectedRoute from "../components/generalcomponents/ProtectedRoute";
-import ManageWebContent from "./manageWebContent/page";
-import ManageAuditLogs from "./manageAuditLogs/page";
-import PropertyRequestsPage from "./manageProperty/propertyRequests/page";
 import LoadingSpinner from "../components/generalcomponents/loadingSpinner";
 
 interface Notification {
@@ -31,10 +22,13 @@ interface User {
   isLoggedIn: boolean;
 }
 
-const AdminPage = () => {
+interface AdminLayoutProps {
+  children: ReactNode;
+}
+
+const AdminLayout = ({ children }: AdminLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [selectedComponent, setSelectedComponent] = useState("UserInfo");
   const { data: session, status } = useSession();
   const router = useRouter();
   const theme = useTheme();
@@ -75,19 +69,12 @@ const AdminPage = () => {
     }
   }, [status, router]);
 
-  useEffect(() => {
-    const handleComponentChange = () => {
-      router.replace(`/admin?/${selectedComponent}`);
-    };
-    handleComponentChange();
-  }, [selectedComponent, router]);
-
-  // Handle sidebar auto-close on mobile when clicking on menu items
+  // Handle sidebar auto-close on mobile when route changes
   useEffect(() => {
     if (isMobile && isSidebarOpen) {
       setIsSidebarOpen(false);
     }
-  }, [selectedComponent, isMobile, isSidebarOpen]);
+  }, [isMobile]);
 
   if (status === "loading") {
     return <LoadingSpinner />;
@@ -105,33 +92,6 @@ const AdminPage = () => {
     isLoggedIn: false,
   };
 
-  const renderComponent = () => {
-    switch (selectedComponent) {
-      case "DashboardPage":
-        return <DashboardPage />;
-      case "ManageProperty":
-        return <ManageProperty />;
-      case "ManageUsers":
-        return <ManageUsers />;
-      case "ManageTransactions":
-        return <ManageTransactions />;
-      case "ManagePayments":
-        return <ManagePayments />;
-      case "RefundRequestsAdminPage":
-        return <RefundRequestsAdminPage />;
-      case "ManageWebContent":
-        return <ManageWebContent />;
-      case "ManageAuditLogs":
-        return <ManageAuditLogs />;
-      case "PropertyRequestsPage":
-        return <PropertyRequestsPage />;
-      // case "UpdateProfile":
-      //   return <UpdateProfile />;
-      default:
-        return <DashboardPage />;
-    }
-  };
-
   return (
     <ProtectedRoute roles={["Admin"]}>
       <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
@@ -139,7 +99,6 @@ const AdminPage = () => {
           user={user}
           isOpen={isSidebarOpen}
           toggleSidebar={toggleSidebar}
-          setSelectedComponent={setSelectedComponent}
         />
 
         {/* Main Content Area */}
@@ -163,11 +122,7 @@ const AdminPage = () => {
             },
           }}
         >
-          <ProfileTopNavBar
-            user={user}
-            notifications={notifications}
-            setSelectedComponent={setSelectedComponent}
-          />
+          <ProfileTopNavBar user={user} notifications={notifications} />
 
           <Container
             maxWidth={false}
@@ -179,7 +134,7 @@ const AdminPage = () => {
               maxHeight: "calc(100vh - 64px)", // Subtract AppBar height
             }}
           >
-            {renderComponent()}
+            {children}
           </Container>
         </Box>
       </Box>
@@ -187,4 +142,4 @@ const AdminPage = () => {
   );
 };
 
-export default AdminPage;
+export default AdminLayout;

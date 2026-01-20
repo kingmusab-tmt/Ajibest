@@ -1,5 +1,7 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import companyimage from "@/public/ajibestlogo.jpg";
 import { signOut } from "next-auth/react";
 import {
@@ -27,6 +29,7 @@ import {
   Adjust as AdjustIcon,
   MoneyOffCsredSharp,
   Assessment as AssessmentIcon,
+  Receipt as ReceiptIcon,
 } from "@mui/icons-material";
 
 interface User {
@@ -38,64 +41,60 @@ interface UserDashboardSidebarProps {
   user: User;
   isOpen: boolean;
   toggleSidebar: () => void;
-  setSelectedComponent: (component: string) => void;
 }
 
 const UserDashboardSidebar: React.FC<UserDashboardSidebarProps> = ({
   user,
   isOpen,
   toggleSidebar,
-  setSelectedComponent,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
-  const handleLinkClick = (component: string) => {
-    setSelectedComponent(component);
-    if (isMobile) {
-      toggleSidebar();
-    }
-  };
+  const pathname = usePathname();
 
   const menuItems = [
-    { icon: <HomeIcon />, label: "Dashboard", component: "UserInfo" },
+    { icon: <HomeIcon />, label: "Dashboard", href: "/admin/dashboard" },
     {
       icon: <LandscapeIcon />,
       label: "Manage Property",
-      component: "ManageProperty",
+      href: "/admin/manageProperty",
     },
     {
       icon: <HistoryIcon />,
       label: "Property Requests",
-      component: "PropertyRequestsPage",
+      href: "/admin/manageProperty/propertyRequests",
     },
-    { icon: <PersonIcon />, label: "Manage User", component: "ManageUsers" },
+    { icon: <PersonIcon />, label: "Manage User", href: "/admin/manageUser" },
     {
       icon: <HistoryIcon />,
       label: "Manage Transaction",
-      component: "ManageTransactions",
+      href: "/admin/manageTransactions",
     },
     {
       icon: <CreditCardIcon />,
       label: "Manage Payment",
-      component: "ManagePayments",
+      href: "/admin/managePayment",
     },
     {
       icon: <MoneyOffCsredSharp />,
       label: "Manage Refund Requests",
-      component: "RefundRequestsAdminPage",
+      href: "/admin/manageRefundRequest",
     },
     {
       icon: <AdjustIcon />,
       label: "Manage Web Content",
-      component: "ManageWebContent",
+      href: "/admin/manageWebContent",
+    },
+    {
+      icon: <ReceiptIcon />,
+      label: "Manage Receipts",
+      href: "/admin/manageReciept",
     },
     {
       icon: <AssessmentIcon />,
       label: "Audit Logs",
-      component: "ManageAuditLogs",
+      href: "/admin/manageAuditLogs",
     },
-    // { icon: <PersonIcon />, label: "Profile", component: "UpdateProfile" },
   ];
 
   const drawerContent = (
@@ -161,9 +160,15 @@ const UserDashboardSidebar: React.FC<UserDashboardSidebarProps> = ({
           {menuItems.map((item, index) => (
             <ListItem key={index} disablePadding sx={{ mb: 0.5 }}>
               <ListItemButton
-                onClick={() => handleLinkClick(item.component)}
+                component={Link}
+                href={item.href}
+                onClick={() => isMobile && toggleSidebar()}
                 sx={{
                   borderRadius: 1,
+                  backgroundColor:
+                    pathname === item.href
+                      ? "rgba(255, 255, 255, 0.15)"
+                      : "transparent",
                   "&:hover": {
                     backgroundColor: "rgba(255, 255, 255, 0.1)",
                   },

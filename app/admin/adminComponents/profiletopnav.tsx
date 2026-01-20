@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   AppBar,
@@ -38,20 +39,19 @@ interface ProfileTopNavBarProps {
     image?: string;
   };
   notifications: Array<{ _id: string; message: string }>;
-  setSelectedComponent: (component: string) => void;
 }
 
 const ProfileTopNavBar: React.FC<ProfileTopNavBarProps> = ({
   user,
   notifications,
-  setSelectedComponent,
 }) => {
   const [profileAnchorEl, setProfileAnchorEl] = useState<null | HTMLElement>(
-    null
+    null,
   );
   const [notificationsAnchorEl, setNotificationsAnchorEl] =
     useState<null | HTMLElement>(null);
   const { data: session } = useSession();
+  const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -64,18 +64,13 @@ const ProfileTopNavBar: React.FC<ProfileTopNavBarProps> = ({
   };
 
   const handleNotificationsMenuOpen = (
-    event: React.MouseEvent<HTMLElement>
+    event: React.MouseEvent<HTMLElement>,
   ) => {
     setNotificationsAnchorEl(event.currentTarget);
   };
 
   const handleNotificationsMenuClose = () => {
     setNotificationsAnchorEl(null);
-  };
-
-  const handleLinkClick = (component: string) => {
-    setSelectedComponent(component);
-    handleProfileMenuClose();
   };
 
   const isUrl = (str: string) => {
@@ -222,12 +217,22 @@ const ProfileTopNavBar: React.FC<ProfileTopNavBarProps> = ({
           },
         }}
       >
-        <MenuItem onClick={() => handleLinkClick("UpdateProfile")}>
+        <MenuItem
+          onClick={() => {
+            router.push("/admin/profile");
+            handleProfileMenuClose();
+          }}
+        >
           <EditIcon sx={{ mr: 2, fontSize: 20 }} />
           Edit Profile
         </MenuItem>
 
-        <MenuItem onClick={() => handleLinkClick("ContactSupport")}>
+        <MenuItem
+          onClick={() => {
+            router.push("/admin/support");
+            handleProfileMenuClose();
+          }}
+        >
           <SupportIcon sx={{ mr: 2, fontSize: 20 }} />
           Provide Support
         </MenuItem>
