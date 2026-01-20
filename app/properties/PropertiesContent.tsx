@@ -42,6 +42,7 @@ import {
 } from "@mui/icons-material";
 import Link from "next/link";
 import LoadingSpinner from "../components/generalcomponents/loadingSpinner";
+import PropertyFilters from "./PropertyFilters";
 
 interface Property {
   _id: string;
@@ -249,7 +250,7 @@ const PropertiesContent = () => {
 
   return (
     <Container
-      maxWidth="lg"
+      maxWidth="xl"
       sx={{ py: { xs: 2, md: 4 }, px: { xs: 1, sm: 2 }, mt: 6 }}
     >
       {/* Header Section */}
@@ -331,424 +332,461 @@ const PropertiesContent = () => {
         </Alert>
       )}
 
-      {/* Filter Summary */}
-      {getFilterSummary().length > 0 && (
-        <Paper
-          elevation={0}
-          sx={{
-            p: { xs: 2, md: 3 },
-            mb: { xs: 3, md: 4 },
-            background: alpha(theme.palette.primary.main, 0.05),
-            border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-            borderRadius: 2,
-          }}
-        >
+      {/* Main Content Grid - Filters + Properties */}
+      <Grid container spacing={3} sx={{ mb: 4 }}>
+        {/* Filters Sidebar */}
+        <Grid size={{ xs: 12, md: 3 }}>
+          <PropertyFilters isMobile={isMobile} />
+        </Grid>
+
+        {/* Properties Grid */}
+        <Grid size={{ xs: 12, md: 9 }}>
+          {/* Filter Summary */}
+          {getFilterSummary().length > 0 && (
+            <Paper
+              elevation={0}
+              sx={{
+                p: { xs: 2, md: 3 },
+                mb: { xs: 3, md: 4 },
+                background: alpha(theme.palette.primary.main, 0.05),
+                border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+                borderRadius: 2,
+              }}
+            >
+              <Typography
+                variant="h6"
+                gutterBottom
+                sx={{ fontSize: { xs: "1.1rem", md: "1.25rem" } }}
+              >
+                Active Filters:
+              </Typography>
+              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                {getFilterSummary().map((filter, index) => (
+                  <Chip
+                    key={index}
+                    label={filter}
+                    variant="filled"
+                    color="primary"
+                    size={isMobile ? "small" : "medium"}
+                    sx={{ mb: 1 }}
+                  />
+                ))}
+                <Button
+                  component={Link}
+                  href="/properties"
+                  variant="outlined"
+                  size={isMobile ? "small" : "medium"}
+                  sx={{ mb: 1 }}
+                >
+                  Clear All
+                </Button>
+              </Stack>
+            </Paper>
+          )}
+
+          {/* Results Count */}
           <Typography
             variant="h6"
-            gutterBottom
-            sx={{ fontSize: { xs: "1.1rem", md: "1.25rem" } }}
+            sx={{
+              mb: 3,
+              fontSize: { xs: "1.1rem", md: "1.25rem" },
+              color: "text.secondary",
+            }}
           >
-            Active Filters:
+            Found {pagination.total} propert
+            {pagination.total === 1 ? "y" : "ies"}
+            {pagination.pages > 1 &&
+              ` • Page ${pagination.page} of ${pagination.pages}`}
           </Typography>
-          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-            {getFilterSummary().map((filter, index) => (
-              <Chip
-                key={index}
-                label={filter}
-                variant="filled"
-                color="primary"
-                size={isMobile ? "small" : "medium"}
-                sx={{ mb: 1 }}
+
+          {properties.length === 0 ? (
+            <Paper
+              elevation={0}
+              sx={{
+                p: { xs: 4, md: 6 },
+                textAlign: "center",
+                background: alpha(theme.palette.background.paper, 0.5),
+                borderRadius: 3,
+              }}
+            >
+              <Home
+                sx={{ fontSize: 64, color: theme.palette.text.disabled, mb: 2 }}
               />
-            ))}
-            <Button
-              component={Link}
-              href="/properties"
-              variant="outlined"
-              size={isMobile ? "small" : "medium"}
-              sx={{ mb: 1 }}
-            >
-              Clear All
-            </Button>
-          </Stack>
-        </Paper>
-      )}
-
-      {/* Results Count */}
-      <Typography
-        variant="h6"
-        sx={{
-          mb: 3,
-          fontSize: { xs: "1.1rem", md: "1.25rem" },
-          color: "text.secondary",
-        }}
-      >
-        Found {pagination.total} propert{pagination.total === 1 ? "y" : "ies"}
-        {pagination.pages > 1 &&
-          ` • Page ${pagination.page} of ${pagination.pages}`}
-      </Typography>
-
-      {properties.length === 0 ? (
-        <Paper
-          elevation={0}
-          sx={{
-            p: { xs: 4, md: 6 },
-            textAlign: "center",
-            background: alpha(theme.palette.background.paper, 0.5),
-            borderRadius: 3,
-          }}
-        >
-          <Home
-            sx={{ fontSize: 64, color: theme.palette.text.disabled, mb: 2 }}
-          />
-          <Typography
-            variant="h5"
-            gutterBottom
-            sx={{ fontSize: { xs: "1.4rem", md: "1.75rem" } }}
-          >
-            No properties found
-          </Typography>
-          <Typography
-            variant="body1"
-            color="text.secondary"
-            sx={{ mb: 3, fontSize: { xs: "0.9rem", md: "1rem" } }}
-          >
-            {getFilterSummary().length > 0
-              ? "Try adjusting your filters or browse all properties"
-              : "No properties available at the moment"}
-          </Typography>
-          {getFilterSummary().length > 0 ? (
-            <Button
-              component={Link}
-              href="/properties"
-              variant="contained"
-              size={isMobile ? "medium" : "large"}
-              startIcon={<FilterList />}
-            >
-              Clear Filters
-            </Button>
-          ) : (
-            <Button
-              component={Link}
-              href="/"
-              variant="contained"
-              size={isMobile ? "medium" : "large"}
-              startIcon={<ArrowBack />}
-            >
-              Back to Home
-            </Button>
-          )}
-        </Paper>
-      ) : (
-        <>
-          {/* Properties Grid/List */}
-          <Grid container spacing={isMobile ? 2 : 3} sx={{ mb: 4 }}>
-            {properties.map((property) => (
-              <Grid
-                size={{
-                  xs: 12,
-                  sm: viewMode === "grid" ? 6 : 12,
-                  md: viewMode === "grid" ? 4 : 12,
-                }}
-                key={property._id}
+              <Typography
+                variant="h5"
+                gutterBottom
+                sx={{ fontSize: { xs: "1.4rem", md: "1.75rem" } }}
               >
-                <Card
-                  sx={{
-                    height: "100%",
-                    display: "flex",
-                    flexDirection:
-                      viewMode === "list" && !isMobile ? "row" : "column",
-                    transition: "all 0.3s ease",
-                    "&:hover": {
-                      transform: "translateY(-4px)",
-                      boxShadow: theme.shadows[8],
-                    },
-                    borderRadius: 2,
-                    overflow: "hidden",
-                  }}
+                No properties found
+              </Typography>
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                sx={{ mb: 3, fontSize: { xs: "0.9rem", md: "1rem" } }}
+              >
+                {getFilterSummary().length > 0
+                  ? "Try adjusting your filters or browse all properties"
+                  : "No properties available at the moment"}
+              </Typography>
+              {getFilterSummary().length > 0 ? (
+                <Button
+                  component={Link}
+                  href="/properties"
+                  variant="contained"
+                  size={isMobile ? "medium" : "large"}
+                  startIcon={<FilterList />}
                 >
-                  <CardActionArea
-                    component={Link}
-                    href={`/login`}
-                    sx={{
-                      display: "flex",
-                      flexDirection:
-                        viewMode === "list" && !isMobile ? "row" : "column",
-                      alignItems: "stretch",
-                      flex: 1,
+                  Clear Filters
+                </Button>
+              ) : (
+                <Button
+                  component={Link}
+                  href="/"
+                  variant="contained"
+                  size={isMobile ? "medium" : "large"}
+                  startIcon={<ArrowBack />}
+                >
+                  Back to Home
+                </Button>
+              )}
+            </Paper>
+          ) : (
+            <>
+              {/* Properties Grid/List */}
+              <Grid container spacing={isMobile ? 2 : 3} sx={{ mb: 4 }}>
+                {properties.map((property) => (
+                  <Grid
+                    size={{
+                      xs: 12,
+                      sm: viewMode === "grid" ? 6 : 12,
+                      md: viewMode === "grid" ? 4 : 12,
                     }}
+                    key={property._id}
                   >
-                    {/* Property Image */}
-                    <Box
+                    <Card
                       sx={{
-                        position: "relative",
-                        width:
-                          viewMode === "list" && !isMobile ? "40%" : "100%",
-                        minHeight: viewMode === "list" && !isMobile ? 200 : 220,
-                      }}
-                    >
-                      <CardMedia
-                        component="img"
-                        image={getImageUrl(property.image)}
-                        alt={property.title}
-                        sx={{
-                          height: "100%",
-                          objectFit: "cover",
-                        }}
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = "/images/placeholder-property.jpg";
-                        }}
-                      />
-
-                      {/* Overlay Badges */}
-                      <Box sx={{ position: "absolute", top: 12, left: 12 }}>
-                        <Chip
-                          label={
-                            property.listingPurpose === "sale"
-                              ? "For Sale"
-                              : "For Rent"
-                          }
-                          color={
-                            property.listingPurpose === "sale"
-                              ? "success"
-                              : "primary"
-                          }
-                          size="small"
-                          sx={{
-                            fontWeight: "bold",
-                            backdropFilter: "blur(10px)",
-                          }}
-                        />
-                      </Box>
-
-                      <Box sx={{ position: "absolute", top: 12, right: 12 }}>
-                        <IconButton
-                          size="small"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            toggleFavorite(property._id);
-                          }}
-                          sx={{
-                            backgroundColor: "rgba(255,255,255,0.9)",
-                            "&:hover": { backgroundColor: "white" },
-                          }}
-                        >
-                          {favorites.has(property._id) ? (
-                            <Favorite color="error" />
-                          ) : (
-                            <FavoriteBorder />
-                          )}
-                        </IconButton>
-                      </Box>
-                    </Box>
-
-                    {/* Property Content */}
-                    <CardContent
-                      sx={{
-                        flex: 1,
-                        p: { xs: 2, md: 3 },
+                        height: "100%",
                         display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "space-between",
+                        flexDirection:
+                          viewMode === "list" && !isMobile ? "row" : "column",
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                          transform: "translateY(-4px)",
+                          boxShadow: theme.shadows[8],
+                        },
+                        borderRadius: 2,
+                        overflow: "hidden",
                       }}
                     >
-                      <Box>
-                        {/* Title and Rating */}
+                      <CardActionArea
+                        component={Link}
+                        href={`/login`}
+                        sx={{
+                          display: "flex",
+                          flexDirection:
+                            viewMode === "list" && !isMobile ? "row" : "column",
+                          alignItems: "stretch",
+                          flex: 1,
+                        }}
+                      >
+                        {/* Property Image */}
                         <Box
                           sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "flex-start",
-                            mb: 1,
+                            position: "relative",
+                            width:
+                              viewMode === "list" && !isMobile ? "40%" : "100%",
+                            minHeight:
+                              viewMode === "list" && !isMobile ? 200 : 220,
                           }}
                         >
-                          <Typography
-                            variant="h6"
-                            component="h2"
+                          <CardMedia
+                            component="img"
+                            image={getImageUrl(property.image)}
+                            alt={property.title}
                             sx={{
-                              fontSize: { xs: "1.1rem", md: "1.25rem" },
-                              fontWeight: "bold",
-                              lineHeight: 1.2,
+                              height: "100%",
+                              objectFit: "cover",
                             }}
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = "/images/placeholder-property.jpg";
+                            }}
+                          />
+
+                          {/* Overlay Badges */}
+                          <Box sx={{ position: "absolute", top: 12, left: 12 }}>
+                            <Chip
+                              label={
+                                property.listingPurpose === "sale"
+                                  ? "For Sale"
+                                  : "For Rent"
+                              }
+                              color={
+                                property.listingPurpose === "sale"
+                                  ? "success"
+                                  : "primary"
+                              }
+                              size="small"
+                              sx={{
+                                fontWeight: "bold",
+                                backdropFilter: "blur(10px)",
+                              }}
+                            />
+                          </Box>
+
+                          <Box
+                            sx={{ position: "absolute", top: 12, right: 12 }}
                           >
-                            {property.title}
-                          </Typography>
-                          {property.rating && (
+                            <IconButton
+                              size="small"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                toggleFavorite(property._id);
+                              }}
+                              sx={{
+                                backgroundColor: "rgba(255,255,255,0.9)",
+                                "&:hover": { backgroundColor: "white" },
+                              }}
+                            >
+                              {favorites.has(property._id) ? (
+                                <Favorite color="error" />
+                              ) : (
+                                <FavoriteBorder />
+                              )}
+                            </IconButton>
+                          </Box>
+                        </Box>
+
+                        {/* Property Content */}
+                        <CardContent
+                          sx={{
+                            flex: 1,
+                            p: { xs: 2, md: 3 },
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Box>
+                            {/* Title and Rating */}
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "flex-start",
+                                mb: 1,
+                              }}
+                            >
+                              <Typography
+                                variant="h6"
+                                component="h2"
+                                sx={{
+                                  fontSize: { xs: "1.1rem", md: "1.25rem" },
+                                  fontWeight: "bold",
+                                  lineHeight: 1.2,
+                                }}
+                              >
+                                {property.title}
+                              </Typography>
+                              {property.rating && (
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    ml: 1,
+                                  }}
+                                >
+                                  <Rating
+                                    value={property.rating}
+                                    size="small"
+                                    readOnly
+                                  />
+                                  <Typography
+                                    variant="body2"
+                                    color="text.secondary"
+                                    sx={{ ml: 0.5 }}
+                                  >
+                                    ({property.reviews})
+                                  </Typography>
+                                </Box>
+                              )}
+                            </Box>
+
+                            {/* Location */}
                             <Box
                               sx={{
                                 display: "flex",
                                 alignItems: "center",
-                                ml: 1,
+                                mb: 2,
                               }}
                             >
-                              <Rating
-                                value={property.rating}
-                                size="small"
-                                readOnly
+                              <LocationOn
+                                color="action"
+                                sx={{ fontSize: 20, mr: 0.5 }}
                               />
                               <Typography
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ ml: 0.5 }}
                               >
-                                ({property.reviews})
+                                {property.location}
+                                {property.state && `, ${property.state}`}
                               </Typography>
                             </Box>
-                          )}
-                        </Box>
 
-                        {/* Location */}
-                        <Box
-                          sx={{ display: "flex", alignItems: "center", mb: 2 }}
-                        >
-                          <LocationOn
-                            color="action"
-                            sx={{ fontSize: 20, mr: 0.5 }}
-                          />
-                          <Typography variant="body2" color="text.secondary">
-                            {property.location}
-                            {property.state && `, ${property.state}`}
-                          </Typography>
-                        </Box>
+                            {/* Description */}
+                            <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              sx={{
+                                mb: 2,
+                                display: { xs: "none", sm: "block" },
+                                fontSize: { xs: "0.8rem", md: "0.875rem" },
+                              }}
+                            >
+                              {truncateDescription(
+                                property.description,
+                                viewMode === "list" ? 120 : 80,
+                              )}
+                            </Typography>
 
-                        {/* Description */}
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          sx={{
-                            mb: 2,
-                            display: { xs: "none", sm: "block" },
-                            fontSize: { xs: "0.8rem", md: "0.875rem" },
-                          }}
-                        >
-                          {truncateDescription(
-                            property.description,
-                            viewMode === "list" ? 120 : 80,
-                          )}
-                        </Typography>
+                            {/* Features */}
+                            <Stack
+                              direction="row"
+                              spacing={1}
+                              flexWrap="wrap"
+                              sx={{ mb: 2 }}
+                            >
+                              <Chip
+                                label={formatType(property.propertyType)}
+                                size="small"
+                                color="primary"
+                                variant="outlined"
+                                sx={{ mb: 1 }}
+                              />
+                              {property.size && (
+                                <Chip
+                                  icon={<SquareFoot sx={{ fontSize: 16 }} />}
+                                  label={property.size}
+                                  size="small"
+                                  variant="outlined"
+                                  sx={{ mb: 1 }}
+                                />
+                              )}
+                              {property.bedrooms && (
+                                <Chip
+                                  icon={<Bed sx={{ fontSize: 16 }} />}
+                                  label={`${property.bedrooms} Bed`}
+                                  size="small"
+                                  variant="outlined"
+                                  sx={{ mb: 1 }}
+                                />
+                              )}
+                              {property.bathrooms && (
+                                <Chip
+                                  icon={<Bathroom sx={{ fontSize: 16 }} />}
+                                  label={`${property.bathrooms} Bath`}
+                                  size="small"
+                                  variant="outlined"
+                                  sx={{ mb: 1 }}
+                                />
+                              )}
+                              {property.amenities && (
+                                <Chip
+                                  icon={
+                                    <LocalPostOffice sx={{ fontSize: 16 }} />
+                                  }
+                                  label={property.amenities}
+                                  size="small"
+                                  variant="outlined"
+                                  sx={{ mb: 1 }}
+                                />
+                              )}
+                              {property.utilities && (
+                                <Chip
+                                  icon={
+                                    <BuildCircleOutlined
+                                      sx={{ fontSize: 16 }}
+                                    />
+                                  }
+                                  label={property.utilities}
+                                  size="small"
+                                  variant="outlined"
+                                  sx={{ mb: 1 }}
+                                />
+                              )}
+                            </Stack>
+                          </Box>
 
-                        {/* Features */}
-                        <Stack
-                          direction="row"
-                          spacing={1}
-                          flexWrap="wrap"
-                          sx={{ mb: 2 }}
-                        >
-                          <Chip
-                            label={formatType(property.propertyType)}
-                            size="small"
-                            color="primary"
-                            variant="outlined"
-                            sx={{ mb: 1 }}
-                          />
-                          {property.size && (
-                            <Chip
-                              icon={<SquareFoot sx={{ fontSize: 16 }} />}
-                              label={property.size}
-                              size="small"
-                              variant="outlined"
-                              sx={{ mb: 1 }}
-                            />
-                          )}
-                          {property.bedrooms && (
-                            <Chip
-                              icon={<Bed sx={{ fontSize: 16 }} />}
-                              label={`${property.bedrooms} Bed`}
-                              size="small"
-                              variant="outlined"
-                              sx={{ mb: 1 }}
-                            />
-                          )}
-                          {property.bathrooms && (
-                            <Chip
-                              icon={<Bathroom sx={{ fontSize: 16 }} />}
-                              label={`${property.bathrooms} Bath`}
-                              size="small"
-                              variant="outlined"
-                              sx={{ mb: 1 }}
-                            />
-                          )}
-                          {property.amenities && (
-                            <Chip
-                              icon={<LocalPostOffice sx={{ fontSize: 16 }} />}
-                              label={property.amenities}
-                              size="small"
-                              variant="outlined"
-                              sx={{ mb: 1 }}
-                            />
-                          )}
-                          {property.utilities && (
-                            <Chip
-                              icon={
-                                <BuildCircleOutlined sx={{ fontSize: 16 }} />
+                          {/* Price and Action */}
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              pt: 1,
+                              borderTop: `1px solid ${theme.palette.divider}`,
+                            }}
+                          >
+                            <Typography
+                              variant="h6"
+                              color="primary"
+                              sx={{
+                                fontSize: { xs: "1.1rem", md: "1.25rem" },
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {formatPrice(property.price)}
+                              {property.listingPurpose === "For Renting" &&
+                                "/mo"}
+                            </Typography>
+                            <Button
+                              variant="contained"
+                              size={isMobile ? "small" : "medium"}
+                              sx={{ borderRadius: 2 }}
+                              disabled={property.status !== "available"}
+                              title={
+                                property.status !== "available"
+                                  ? property.status === "sold"
+                                    ? "This property has been sold"
+                                    : "This property has been rented"
+                                  : ""
                               }
-                              label={property.utilities}
-                              size="small"
-                              variant="outlined"
-                              sx={{ mb: 1 }}
-                            />
-                          )}
-                        </Stack>
-                      </Box>
-
-                      {/* Price and Action */}
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          pt: 1,
-                          borderTop: `1px solid ${theme.palette.divider}`,
-                        }}
-                      >
-                        <Typography
-                          variant="h6"
-                          color="primary"
-                          sx={{
-                            fontSize: { xs: "1.1rem", md: "1.25rem" },
-                            fontWeight: "bold",
-                          }}
-                        >
-                          {formatPrice(property.price)}
-                          {property.listingPurpose === "rent" && "/mo"}
-                        </Typography>
-                        <Button
-                          variant="contained"
-                          size={isMobile ? "small" : "medium"}
-                          sx={{ borderRadius: 2 }}
-                        >
-                          Buy Now
-                        </Button>
-                      </Box>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
+                            >
+                              {property.status === "available"
+                                ? "Buy Now"
+                                : "Not Available"}
+                            </Button>
+                          </Box>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                  </Grid>
+                ))}
               </Grid>
-            ))}
-          </Grid>
 
-          {/* Pagination */}
-          {pagination.pages > 1 && (
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-              <Pagination
-                count={pagination.pages}
-                page={pagination.page}
-                onChange={handlePageChange}
-                color="primary"
-                size={isSmallMobile ? "small" : "medium"}
-                sx={{
-                  "& .MuiPaginationItem-root": {
-                    borderRadius: 2,
-                    fontSize: { xs: "0.8rem", md: "0.875rem" },
-                  },
-                }}
-              />
-            </Box>
+              {/* Pagination */}
+              {pagination.pages > 1 && (
+                <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+                  <Pagination
+                    count={pagination.pages}
+                    page={pagination.page}
+                    onChange={handlePageChange}
+                    color="primary"
+                    size={isSmallMobile ? "small" : "medium"}
+                    sx={{
+                      "& .MuiPaginationItem-root": {
+                        borderRadius: 2,
+                        fontSize: { xs: "0.8rem", md: "0.875rem" },
+                      },
+                    }}
+                  />
+                </Box>
+              )}
+            </>
           )}
-        </>
-      )}
+        </Grid>
+      </Grid>
 
       {/* Floating Action Button for Mobile */}
       {isMobile && properties.length > 0 && (

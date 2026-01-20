@@ -571,7 +571,7 @@ function ReceiptView({
             ...styles.headerBlue,
           }}
         >
-          A.A AJIBEST LAND VENDORS LIMITED
+          A.A AJIBEST LAND VENDORS LTD
         </Typography>
         <Typography
           variant="subtitle2"

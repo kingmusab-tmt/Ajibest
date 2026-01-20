@@ -139,7 +139,7 @@ const Contactus = () => {
         message,
       });
       setSuccess(
-        "Your message has been sent successfully! We'll get back to you within 24 hours."
+        "Your message has been sent successfully! We'll get back to you within 24 hours.",
       );
       setActiveStep(3); // Success step
       // Reset form after success
@@ -229,7 +229,7 @@ const Contactus = () => {
               p: { xs: 3, md: 4 },
               background: `linear-gradient(135deg, ${alpha(
                 theme.palette.primary.main,
-                0.05
+                0.05,
               )} 0%, ${alpha(theme.palette.primary.main, 0.1)} 100%)`,
               borderRadius: 3,
               height: "100%",
@@ -242,8 +242,8 @@ const Contactus = () => {
                 <Image
                   src={logo}
                   alt="A.A AJIBEST LAND VENDORS LIMITED Logo"
-                  width={140}
-                  height={140}
+                  width={100}
+                  height={100}
                   style={{ borderRadius: "12px", boxShadow: theme.shadows[4] }}
                 />
               </Box>
@@ -649,67 +649,67 @@ const Contactus = () => {
               )}
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
 
-      {/* Quick Contact Footer */}
-      <Paper
-        elevation={0}
-        sx={{
-          mt: 4,
-          p: { xs: 3, md: 4 },
-          background: `linear-gradient(135deg, ${alpha(
-            theme.palette.primary.main,
-            0.05
-          )} 0%, ${alpha(theme.palette.primary.main, 0.1)} 100%)`,
-          borderRadius: 3,
-          textAlign: "center",
-        }}
-      >
-        <Typography
-          variant="h6"
-          gutterBottom
-          fontWeight="bold"
-          color="primary.main"
-        >
-          Prefer Direct Contact?
-        </Typography>
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={2}
-          justifyContent="center"
-          sx={{ mt: 2 }}
-        >
-          <Button
-            variant="contained"
-            startIcon={<Phone />}
-            href="tel:+1234567890"
-            sx={{ borderRadius: 2 }}
-          >
-            Call Now
-          </Button>
-          <Button
-            variant="contained"
-            startIcon={<Email />}
-            href="mailto:emailaddress@gmail.com"
-            sx={{ borderRadius: 2 }}
-          >
-            Email Directly
-          </Button>
-          <Button
-            variant="contained"
-            startIcon={<WhatsApp />}
-            href="https://wa.me/+2348162552901"
+          {/* Quick Contact below the form */}
+          <Paper
+            elevation={0}
             sx={{
-              borderRadius: 2,
-              bgcolor: "#25D366",
-              "&:hover": { bgcolor: "#1da851" },
+              mt: 3,
+              p: { xs: 3, md: 4 },
+              background: `linear-gradient(135deg, ${alpha(
+                theme.palette.primary.main,
+                0.05,
+              )} 0%, ${alpha(theme.palette.primary.main, 0.1)} 100%)`,
+              borderRadius: 3,
+              textAlign: "center",
             }}
           >
-            WhatsApp
-          </Button>
-        </Stack>
-      </Paper>
+            <Typography
+              variant="h6"
+              gutterBottom
+              fontWeight="bold"
+              color="primary.main"
+            >
+              Prefer Direct Contact?
+            </Typography>
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              spacing={2}
+              justifyContent="center"
+              sx={{ mt: 2 }}
+            >
+              <Button
+                variant="contained"
+                startIcon={<Phone />}
+                href="tel:+1234567890"
+                sx={{ borderRadius: 2 }}
+              >
+                Call Now
+              </Button>
+              <Button
+                variant="contained"
+                startIcon={<Email />}
+                href="mailto:emailaddress@gmail.com"
+                sx={{ borderRadius: 2 }}
+              >
+                Email Directly
+              </Button>
+              <Button
+                variant="contained"
+                startIcon={<WhatsApp />}
+                href="https://wa.me/+2348162552901"
+                sx={{
+                  borderRadius: 2,
+                  bgcolor: "#25D366",
+                  "&:hover": { bgcolor: "#1da851" },
+                }}
+              >
+                WhatsApp
+              </Button>
+            </Stack>
+          </Paper>
+        </Grid>
+      </Grid>
     </Container>
   );
 };

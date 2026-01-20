@@ -10,8 +10,6 @@ import { SiAppstore, SiGoogleplay } from "react-icons/si";
 import logo from "../../../public/ajibestlogo.png";
 import Image from "next/image";
 import Link from "next/link";
-
-// Material UI imports
 import {
   Box,
   Container,
@@ -22,72 +20,13 @@ import {
   useTheme,
   useMediaQuery,
   Button,
-  TextField,
-  Paper,
   Chip,
-  Alert,
-  Snackbar,
-  CircularProgress,
 } from "@mui/material";
-import { useState } from "react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
-  // Newsletter subscription state
-  const [email, setEmail] = useState("");
-  const [newsletterLoading, setNewsletterLoading] = useState(false);
-  const [newsletterMessage, setNewsletterMessage] = useState("");
-  const [newsletterSeverity, setNewsletterSeverity] = useState<
-    "success" | "error"
-  >("success");
-  const [showNewsletterAlert, setShowNewsletterAlert] = useState(false);
-
-  const handleNewsletterSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!email) {
-      setNewsletterMessage("Please enter your email address");
-      setNewsletterSeverity("error");
-      setShowNewsletterAlert(true);
-      return;
-    }
-
-    setNewsletterLoading(true);
-
-    try {
-      const response = await fetch("/api/newsletter/subscribe", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          subscriptionSource: "website",
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setNewsletterMessage(data.message);
-        setNewsletterSeverity("success");
-        setEmail(""); // Clear the input
-      } else {
-        setNewsletterMessage(data.message);
-        setNewsletterSeverity("error");
-      }
-    } catch (error: unknown) {
-      console.error("Newsletter subscription error:", error);
-      setNewsletterMessage("Failed to subscribe. Please try again.");
-      setNewsletterSeverity("error");
-    } finally {
-      setNewsletterLoading(false);
-      setShowNewsletterAlert(true);
-    }
-  };
 
   return (
     <Box
@@ -101,129 +40,13 @@ const Footer = () => {
     >
       <Container maxWidth="lg">
         <Grid container spacing={4}>
-          {/* Services */}
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
-              Our Services
-            </Typography>
-            <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0 }}>
-              {[
-                "Buy Property",
-                "Sell Property",
-                "Rent Property",
-                "Property Listings",
-              ].map((item) => (
-                <li key={item}>
-                  <MuiLink
-                    component={Link}
-                    href="/services"
-                    sx={{
-                      display: "block",
-                      py: 0.5,
-                      color: "text.secondary",
-                      "&:hover": { color: "primary.main" },
-                    }}
-                  >
-                    {item}
-                  </MuiLink>
-                </li>
-              ))}
-            </Box>
-          </Grid>
-
-          {/* Company */}
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
-              Company
-            </Typography>
-            <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0 }}>
-              {["About Us", "How It Works", "Testimonials", "Careers"].map(
-                (item) => (
-                  <li key={item}>
-                    <MuiLink
-                      component={Link}
-                      href={
-                        item === "About Us"
-                          ? "/about"
-                          : item === "How It Works"
-                          ? "/#howitworks"
-                          : item === "Testimonials"
-                          ? "/#testimonials"
-                          : "/careers"
-                      }
-                      sx={{
-                        display: "block",
-                        py: 0.5,
-                        color: "text.secondary",
-                        "&:hover": { color: "primary.main" },
-                      }}
-                    >
-                      {item}
-                    </MuiLink>
-                  </li>
-                )
-              )}
-            </Box>
-          </Grid>
-
-          {/* Support */}
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
-              Support
-            </Typography>
-            <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0 }}>
-              {["Contact Us", "FAQs", "Help Center", "Live Chat"].map(
-                (item) => (
-                  <li key={item}>
-                    <MuiLink
-                      component={Link}
-                      href={
-                        item === "Contact Us"
-                          ? "/contact"
-                          : item === "FAQs"
-                          ? "/#faq"
-                          : item === "Help Center"
-                          ? "/help"
-                          : "#"
-                      }
-                      sx={{
-                        display: "block",
-                        py: 0.5,
-                        color: "text.secondary",
-                        "&:hover": { color: "primary.main" },
-                      }}
-                    >
-                      {item}
-                    </MuiLink>
-                  </li>
-                )
-              )}
-            </Box>
-
-            <Box sx={{ mt: 2 }}>
-              <Typography
-                variant="subtitle2"
-                gutterBottom
-                sx={{ fontWeight: "bold" }}
-              >
-                System Status
-              </Typography>
-              <Chip
-                icon={<FaShieldAlt />}
-                label="All Systems Operational"
-                color="success"
-                size="small"
-              />
-            </Box>
-          </Grid>
-
-          {/* Contact & Legal */}
+          {/* Contact Info */}
           <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                alignItems: isMobile ? "flex-start" : "flex-start",
+                alignItems: "flex-start",
                 textAlign: "left",
               }}
             >
@@ -246,14 +69,14 @@ const Footer = () => {
               </Typography>
 
               <MuiLink
-                href="mailto:support@ajibestlandvendors.com"
+                href="mailto:support@ajibestlandvendors.com.ng"
                 sx={{
                   color: "primary.main",
                   "&:hover": { textDecoration: "underline" },
                   mb: 1,
                 }}
               >
-                support@ajibestlandvendors.com
+                support@ajibestlandvendors.com.ng
               </MuiLink>
 
               <MuiLink
@@ -286,11 +109,135 @@ const Footer = () => {
               </Box>
             </Box>
           </Grid>
+
+          {/* Support */}
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
+              Support
+            </Typography>
+            <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0 }}>
+              {["Contact Us", "FAQs", "Help Center", "Live Chat"].map(
+                (item) => (
+                  <li key={item}>
+                    <MuiLink
+                      component={Link}
+                      href={
+                        item === "Contact Us"
+                          ? "/contact"
+                          : item === "FAQs"
+                            ? "/#faq"
+                            : item === "Help Center"
+                              ? "/help"
+                              : "#"
+                      }
+                      sx={{
+                        display: "block",
+                        py: 0.5,
+                        color: "text.secondary",
+                        "&:hover": { color: "primary.main" },
+                      }}
+                    >
+                      {item}
+                    </MuiLink>
+                  </li>
+                ),
+              )}
+            </Box>
+
+            <Box sx={{ mt: 2 }}>
+              <Typography
+                variant="subtitle2"
+                gutterBottom
+                sx={{ fontWeight: "bold" }}
+              >
+                System Status
+              </Typography>
+              <Chip
+                icon={<FaShieldAlt />}
+                label="All Systems Operational"
+                color="success"
+                size="small"
+              />
+            </Box>
+          </Grid>
+
+          {/* Company */}
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
+              Company
+            </Typography>
+            <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0 }}>
+              {["About Us", "How It Works", "Testimonials", "Careers"].map(
+                (item) => (
+                  <li key={item}>
+                    <MuiLink
+                      component={Link}
+                      href={
+                        item === "About Us"
+                          ? "/about"
+                          : item === "How It Works"
+                            ? "/#howitworks"
+                            : item === "Testimonials"
+                              ? "/#testimonials"
+                              : "/careers"
+                      }
+                      sx={{
+                        display: "block",
+                        py: 0.5,
+                        color: "text.secondary",
+                        "&:hover": { color: "primary.main" },
+                      }}
+                    >
+                      {item}
+                    </MuiLink>
+                  </li>
+                ),
+              )}
+            </Box>
+          </Grid>
+
+          {/* Legal & Compliance */}
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
+              Legal & Compliance
+            </Typography>
+            <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0 }}>
+              {[
+                "Privacy Policy",
+                "Terms of Service",
+                "Legal Disclaimers",
+                "Accessibility Statement",
+              ].map((item) => (
+                <li key={item}>
+                  <MuiLink
+                    component={Link}
+                    href={
+                      item === "Privacy Policy"
+                        ? "/privacy"
+                        : item === "Terms of Service"
+                          ? "/terms"
+                          : item === "Legal Disclaimers"
+                            ? "/disclaimers"
+                            : "/accessibility"
+                    }
+                    sx={{
+                      display: "block",
+                      py: 0.5,
+                      color: "text.secondary",
+                      "&:hover": { color: "primary.main" },
+                    }}
+                  >
+                    {item}
+                  </MuiLink>
+                </li>
+              ))}
+            </Box>
+          </Grid>
         </Grid>
 
         <Divider sx={{ my: 4 }} />
 
-        {/* Legal & Trust Section */}
+        {/* Trust Badge and Socials */}
         <Grid container spacing={3}>
           <Grid size={{ xs: 12, md: 6 }}>
             <Typography
@@ -298,99 +245,8 @@ const Footer = () => {
               gutterBottom
               sx={{ fontWeight: "bold" }}
             >
-              Legal & Compliance
+              Stay Secure
             </Typography>
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
-              {[
-                "Privacy Policy",
-                "Terms of Service",
-                "Legal Disclaimers",
-                "Accessibility Statement",
-              ].map((item) => (
-                <MuiLink
-                  key={item}
-                  component={Link}
-                  href={
-                    item === "Privacy Policy"
-                      ? "/privacy"
-                      : item === "Terms of Service"
-                      ? "/terms"
-                      : item === "Legal Disclaimers"
-                      ? "/disclaimers"
-                      : "/accessibility"
-                  }
-                  sx={{
-                    fontSize: "0.8rem",
-                    color: "text.secondary",
-                    "&:hover": { color: "primary.main" },
-                  }}
-                >
-                  {item}
-                </MuiLink>
-              ))}
-            </Box>
-
-            <Alert severity="info" sx={{ fontSize: "0.75rem", mb: 2 }}>
-              A.A. Ajibest Land Vendors Ltd. is a registered real estate
-              company. All transactions are protected by our comprehensive
-              security protocols.
-            </Alert>
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Typography
-              variant="subtitle2"
-              gutterBottom
-              sx={{ fontWeight: "bold" }}
-            >
-              Stay Connected
-            </Typography>
-
-            {/* Newsletter Signup */}
-            <Box
-              component="form"
-              onSubmit={handleNewsletterSubmit}
-              sx={{ mb: 2 }}
-            >
-              <Box sx={{ display: "flex" }}>
-                <TextField
-                  placeholder="Your email"
-                  size="small"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  type="email"
-                  required
-                  disabled={newsletterLoading}
-                  sx={{
-                    mr: 1,
-                    flexGrow: 1,
-                    "& .MuiOutlinedInput-root": {
-                      fontSize: "0.8rem",
-                    },
-                  }}
-                />
-                <Button
-                  variant="contained"
-                  size="small"
-                  type="submit"
-                  disabled={newsletterLoading}
-                >
-                  {newsletterLoading ? (
-                    <CircularProgress size={20} />
-                  ) : (
-                    "Subscribe"
-                  )}
-                </Button>
-              </Box>
-              <Typography
-                variant="caption"
-                sx={{ color: "text.secondary", mt: 0.5, display: "block" }}
-              >
-                Subscribe to our newsletter for property updates and tips
-              </Typography>
-            </Box>
-
-            {/* Social Media */}
             <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
               {[
                 { icon: <FaFacebookF />, href: "#" },
@@ -414,15 +270,14 @@ const Footer = () => {
               ))}
             </Box>
 
-            {/* Security Badge */}
-            <Paper
-              elevation={1}
+            <Box
               sx={{
                 p: 1,
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: "flex-start",
                 backgroundColor: theme.palette.grey[100],
+                borderRadius: 1,
               }}
             >
               <FaShieldAlt
@@ -431,7 +286,22 @@ const Footer = () => {
               <Typography variant="caption" sx={{ fontWeight: "bold" }}>
                 Secured by Advanced Encryption
               </Typography>
-            </Paper>
+            </Box>
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Typography
+              variant="subtitle2"
+              gutterBottom
+              sx={{ fontWeight: "bold" }}
+            >
+              Compliance
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              A.A. Ajibest Land Vendors Ltd. is a registered real estate
+              company. All transactions are protected by our comprehensive
+              security protocols.
+            </Typography>
           </Grid>
         </Grid>
 
@@ -469,22 +339,6 @@ const Footer = () => {
             </MuiLink>
           </Typography>
         </Box>
-
-        {/* Newsletter Subscription Alert */}
-        <Snackbar
-          open={showNewsletterAlert}
-          autoHideDuration={6000}
-          onClose={() => setShowNewsletterAlert(false)}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        >
-          <Alert
-            onClose={() => setShowNewsletterAlert(false)}
-            severity={newsletterSeverity}
-            sx={{ width: "100%" }}
-          >
-            {newsletterMessage}
-          </Alert>
-        </Snackbar>
       </Container>
     </Box>
   );

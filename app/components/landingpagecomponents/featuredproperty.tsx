@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -17,6 +17,7 @@ import {
   alpha,
   Fade,
   Zoom,
+  IconButton,
 } from "@mui/material";
 import {
   CheckCircle,
@@ -25,6 +26,8 @@ import {
   Hotel,
   Bathtub,
   LocationOn,
+  ChevronLeft,
+  ChevronRight,
 } from "@mui/icons-material";
 
 interface IProperty {
@@ -39,6 +42,9 @@ interface IProperty {
   bedrooms?: number;
   rentalDuration?: number;
   bathrooms?: number;
+  city?: string;
+  state?: string;
+
   amenities?: string;
   utilities?: string;
   purchased: boolean;
@@ -69,6 +75,8 @@ const FeaturedProperties: React.FC = () => {
   const [properties, setProperties] = useState<IProperty[]>([]);
   const [loading, setLoading] = useState(true);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const theme = useTheme();
   const router = useRouter();
 
@@ -80,14 +88,14 @@ const FeaturedProperties: React.FC = () => {
     try {
       setLoading(true);
       const response = await axios.get<ApiResponse>(
-        "/api/property/getproperties"
+        "/api/property/getproperties",
       );
 
       if (response.data.success && response.data.data) {
-        // Filter to only show available properties and limit to 8 for gallery
-        const availableProperties = response.data.data
-          .filter((property) => property.status === "available")
-          .slice(0, 8);
+        // Filter to only show available properties - show ALL available properties
+        const availableProperties = response.data.data.filter(
+          (property) => property.status === "available",
+        );
         setProperties(availableProperties);
       } else {
         throw new Error("Failed to fetch properties");
@@ -156,6 +164,28 @@ const FeaturedProperties: React.FC = () => {
     return PLACEHOLDER_IMAGE;
   };
 
+  const handleScroll = (direction: "left" | "right") => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 400; // Scroll by card width + gap
+      const newPosition =
+        direction === "left"
+          ? Math.max(scrollPosition - scrollAmount, 0)
+          : scrollPosition + scrollAmount;
+
+      scrollContainerRef.current.scrollTo({
+        left: newPosition,
+        behavior: "smooth",
+      });
+      setScrollPosition(newPosition);
+    }
+  };
+
+  const canScrollLeft = scrollPosition > 0;
+  const canScrollRight =
+    scrollContainerRef.current &&
+    scrollContainerRef.current.scrollWidth >
+      scrollContainerRef.current.clientWidth + scrollPosition + 100;
+
   if (loading) {
     return <GallerySkeleton />;
   }
@@ -165,7 +195,7 @@ const FeaturedProperties: React.FC = () => {
       sx={{
         background: `linear-gradient(135deg, ${alpha(
           theme.palette.primary.main,
-          0.02
+          0.02,
         )} 0%, ${alpha(theme.palette.secondary.main, 0.02)} 100%)`,
         py: { xs: 6, md: 10 },
         position: "relative",
@@ -183,7 +213,7 @@ const FeaturedProperties: React.FC = () => {
           borderRadius: "50%",
           background: `radial-gradient(circle, ${alpha(
             theme.palette.primary.main,
-            0.1
+            0.1,
           )} 0%, transparent 70%)`,
           zIndex: 0,
         }}
@@ -233,13 +263,49 @@ const FeaturedProperties: React.FC = () => {
             </Typography>
           </Box>
         ) : (
-          <Zoom in timeout={800}>
-            <Grid container spacing={3} justifyContent="center">
+          <Box sx={{ position: "relative" }}>
+            {/* Left Navigation Button */}
+            <IconButton
+              onClick={() => handleScroll("left")}
+              disabled={!canScrollLeft}
+              sx={{
+                position: "absolute",
+                left: -60,
+                top: "50%",
+                transform: "translateY(-50%)",
+                zIndex: 10,
+                backgroundColor: alpha(theme.palette.primary.main, 0.9),
+                color: "white",
+                "&:hover": {
+                  backgroundColor: theme.palette.primary.main,
+                },
+                "&:disabled": {
+                  backgroundColor: alpha(theme.palette.divider, 0.5),
+                  color: alpha(theme.palette.text.primary, 0.3),
+                },
+                transition: "all 0.3s ease",
+              }}
+            >
+              <ChevronLeft sx={{ fontSize: 32 }} />
+            </IconButton>
+
+            {/* Carousel Container */}
+            <Box
+              ref={scrollContainerRef}
+              sx={{
+                display: "flex",
+                gap: 3,
+                overflowX: "hidden",
+                pb: 3,
+                px: 1,
+                scrollBehavior: "smooth",
+              }}
+            >
               {properties.map((property, index) => (
-                <Grid
-                  size={{ xs: 12, sm: 6, lg: 3 }}
+                <Box
                   key={property._id}
                   sx={{
+                    flex: "0 0 350px",
                     transition: "transform 0.3s ease-in-out",
                     "&:hover": {
                       transform: "translateY(-8px)",
@@ -256,10 +322,35 @@ const FeaturedProperties: React.FC = () => {
                     }
                     animationDelay={index * 100}
                   />
-                </Grid>
+                </Box>
               ))}
-            </Grid>
-          </Zoom>
+            </Box>
+
+            {/* Right Navigation Button */}
+            <IconButton
+              onClick={() => handleScroll("right")}
+              disabled={!canScrollRight}
+              sx={{
+                position: "absolute",
+                right: -60,
+                top: "50%",
+                transform: "translateY(-50%)",
+                zIndex: 10,
+                backgroundColor: alpha(theme.palette.primary.main, 0.9),
+                color: "white",
+                "&:hover": {
+                  backgroundColor: theme.palette.primary.main,
+                },
+                "&:disabled": {
+                  backgroundColor: alpha(theme.palette.divider, 0.5),
+                  color: alpha(theme.palette.text.primary, 0.3),
+                },
+                transition: "all 0.3s ease",
+              }}
+            >
+              <ChevronRight sx={{ fontSize: 32 }} />
+            </IconButton>
+          </Box>
         )}
       </Container>
     </Box>
@@ -349,11 +440,11 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
               background: isHovered
                 ? `linear-gradient(to bottom, ${alpha(
                     theme.palette.common.black,
-                    0.2
+                    0.2,
                   )} 0%, ${alpha(theme.palette.common.black, 0.6)} 100%)`
                 : `linear-gradient(to bottom, transparent 0%, ${alpha(
                     theme.palette.common.black,
-                    0.3
+                    0.3,
                   )} 100%)`,
               transition: "all 0.3s ease-in-out",
             }}
@@ -469,6 +560,23 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
             </Typography>
           </Box>
 
+          {/* Location Info */}
+          <Box
+            sx={{
+              mb: 2,
+              pb: 1.5,
+              borderBottom: `1px solid ${alpha(theme.palette.divider, 0.2)}`,
+            }}
+          >
+            <Typography
+              variant="caption"
+              sx={{ color: "text.secondary", fontWeight: "bold" }}
+            >
+              Location: {property.city ? `${property.city}, ` : ""}
+              {property.state || "N/A"}
+            </Typography>
+          </Box>
+
           {/* Features Grid */}
           <Grid container spacing={1} sx={{ mb: 2 }}>
             {property.bedrooms && (
@@ -518,8 +626,68 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
             )}
           </Grid>
 
+          {/* Amenities and Utilities */}
+          {(property.amenities ||
+            property.utilities ||
+            property.rentalDuration) && (
+            <Box
+              sx={{
+                mb: 2,
+                pb: 1.5,
+                borderBottom: `1px solid ${alpha(theme.palette.divider, 0.2)}`,
+              }}
+            >
+              {property.amenities && (
+                <Typography
+                  variant="caption"
+                  sx={{
+                    display: "block",
+                    color: "text.secondary",
+                    mb: 0.5,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <strong>Amenities:</strong> {property.amenities}
+                </Typography>
+              )}
+              {property.utilities && (
+                <Typography
+                  variant="caption"
+                  sx={{
+                    display: "block",
+                    color: "text.secondary",
+                    mb: 0.5,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <strong>Utilities:</strong> {property.utilities}
+                </Typography>
+              )}
+              {property.rentalDuration &&
+                property.listingPurpose === "For Renting" && (
+                  <Typography
+                    variant="caption"
+                    sx={{ display: "block", color: "text.secondary" }}
+                  >
+                    <strong>Duration:</strong> {property.rentalDuration} months
+                  </Typography>
+                )}
+            </Box>
+          )}
+
           {/* Additional Badges */}
-          <Box sx={{ display: "flex", justifyContent: "center", gap: 1 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: 0.8,
+            }}
+          >
             {property.instalmentAllowed && (
               <Chip
                 label="Installment Available"
@@ -546,6 +714,8 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
 };
 
 const GallerySkeleton = () => {
+  const theme = useTheme();
+
   return (
     <Box
       sx={{
@@ -569,9 +739,17 @@ const GallerySkeleton = () => {
           />
         </Box>
 
-        <Grid container spacing={3} justifyContent="center">
-          {Array.from({ length: 8 }).map((_, index) => (
-            <Grid size={{ xs: 12, sm: 6, lg: 3 }} key={index}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 3,
+            overflowX: "auto",
+            pb: 3,
+            px: 1,
+          }}
+        >
+          {Array.from({ length: 6 }).map((_, index) => (
+            <Box key={index} sx={{ flex: "0 0 350px" }}>
               <Card
                 sx={{
                   height: "100%",
@@ -612,9 +790,9 @@ const GallerySkeleton = () => {
                   />
                 </CardContent>
               </Card>
-            </Grid>
+            </Box>
           ))}
-        </Grid>
+        </Box>
       </Container>
     </Box>
   );

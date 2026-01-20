@@ -12,7 +12,6 @@ import { useSession, signOut } from "next-auth/react";
 import { useContext, useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import logo from "@/public/ajibestlogo.png";
-import LayoutContext from "../generalcomponents/LayoutContext";
 import LoadingSpinner from "../generalcomponents/loadingSpinner";
 
 // Material UI imports
@@ -36,7 +35,6 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
-  const { openModal } = useContext(LayoutContext);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -57,21 +55,10 @@ const Navbar = () => {
   }, [pathname]);
 
   const handleNavigation = (item) => {
-    // Show loading spinner
-    // setLoading(true);
-
     // Close mobile drawer if open
     if (menuOpen) {
       setMenuOpen(false);
     }
-
-    // If item has custom onClick (like modal), execute it and don't wait for navigation
-    if (item.onClick) {
-      item.onClick();
-      setLoading(false); // Hide spinner immediately for modal actions
-    }
-
-    // For regular navigation, the useEffect above will handle hiding the spinner
   };
 
   const handleSignOut = async () => {
@@ -101,11 +88,11 @@ const Navbar = () => {
 
   // Navigation items
   const navItems = [
+    { label: "Home", href: "/" },
     { label: "About Us", href: "/about" },
-    { label: "Services", href: "/#services", scroll: true },
+    { label: "Services", href: "/services" },
     { label: "Properties", href: "/properties" },
     { label: "FAQs", href: "/#faq", scroll: true },
-    { label: "Payment Calculator", onClick: openModal },
     { label: "Contact Us", href: "/contact" },
   ];
 
@@ -125,7 +112,7 @@ const Navbar = () => {
         {navItems.map((item) => (
           <ListItem
             key={item.label}
-            component={item.onClick ? "div" : Link}
+            component={Link}
             href={item.href}
             onClick={() => handleNavigation(item)}
             sx={{
@@ -292,7 +279,7 @@ const Navbar = () => {
             {navItems.map((item) => (
               <Button
                 key={item.label}
-                component={item.onClick ? "div" : Link}
+                component={Link}
                 href={item.href}
                 scroll={item.scroll}
                 onClick={() => handleNavigation(item)}
